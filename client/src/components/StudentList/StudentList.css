@@ -28,7 +28,7 @@
 }
 
 .student-list-table th {
-  background-color: var(--orange);
+  background-color: var(--darker-purple);
   color: var(--pure-white);
   position: sticky;
   top: 0;

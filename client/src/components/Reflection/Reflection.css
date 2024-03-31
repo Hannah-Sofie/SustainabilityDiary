@@ -1,71 +1,90 @@
 .main-reflection {
-  position: relative;
-  padding: 20px;
   width: 100%;
 }
-.main-reflection .container-reflection {
-  margin-top: 20px;
-  text-transform: capitalize;
+
+.container-reflection {
+  padding: 10px 10px 10px 20px;
 }
-.main-reflection .reflection-box {
-  width: 100%;
-  height: 300px;
-  padding: 10px 10px 30px 10px;
-  margin-top: 10px;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+.container-reflection h1 {
+  margin: 20px 10px;
 }
-.main-reflection .reflection-box ul {
-  list-style: none;
+.container-reflection .search_bar {
   display: flex;
-}
-.main-reflection .reflection-box ul li {
-  margin: 10px;
-  color: gray;
-  cursor: pointer;
-}
-.main-reflection .reflection-box ul .active {
-  color: #000;
-  border-bottom: 1px solid #000;
-}
-.main-reflection .reflection-box .reflection {
-  display: flex;
-}
-.main-reflection .box {
-  width: 33%;
   padding: 10px;
-  margin: 10px;
-  border-radius: 10px;
-  background: rgb(235, 233, 233);
-  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+  justify-content: space-between;
 }
-.main-reflection .box p {
-  font-size: 12px;
-  margin-top: 5px;
-}
-.main-reflection .box button {
-  background: #000;
-  color: #fff;
-  padding: 7px 10px;
+.container-reflection .search_bar input {
+  width: 50%;
+  padding: 10px;
+  border: 1px solid var(--medium-gray);
   border-radius: 10px;
-  margin-top: 3rem;
+}
+.container-reflection .search_bar input:focus {
+  border: 1px solid var(--darker-purple);
+}
+.container-reflection .search_bar select {
+  border: 1px solid var(--medium-gray);
+  padding: 10px;
+  margin-left: 2rem;
+  border-radius: 10px;
+}
+.container-reflection .search_bar .filter {
+  width: 300px;
+  border-radius: 10px;
+}
+
+.row-reflections {
+  display: flex;
+  padding: 10px;
+  margin-top: 1.3rem;
+  justify-content: space-between;
+}
+.row-reflections p {
+  color: var(--gray);
+  font-size: 15px;
+}
+.row-reflections p span {
+  color: var(--darker-purple);
+}
+.reflection_card {
+  width: 100%;
+  padding: 15px;
   cursor: pointer;
+  display: flex;
+  border-radius: 10px;
+  background: var(--pure-white);
+  margin-bottom: 15px;
+  justify-content: space-between;
+  border: 2px solid var(--medium-gray);
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.1);
 }
-.main-reflection .box button:hover {
-  background: rgba(0, 0, 0, 0.842);
+.reflection_details {
+  display: flex;
 }
-.main-reflection .box i {
-  font-size: 7rem;
-  float: right;
-  margin: -20px 20px 20px 0;
+.reflection_details .img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.main-reflection .html {
-  color: rgb(25, 94, 54);
+.reflection_details .img i {
+  width: 70px;
+  font-size: 3rem;
+  margin-left: 1rem;
+  padding: 10px;
+  color: var(--darker-purple);
+  background: var(--light-purple);
 }
-.main-reflection .css {
-  color: rgb(104, 179, 35);
+.reflection_details .text {
+  margin-left: 2.3rem;
 }
-.main-reflection .js {
-  color: rgb(28, 98, 179);
+.reflection_details .text span {
+  color: var(--light-gray);
+}
+.reflection_salary {
+  text-align: right;
+  color: var(--gray);
+}
+.reflection_card:active {
+  border: 2px solid var(--darker-purple);
+  transition: 0.4s;
 }
