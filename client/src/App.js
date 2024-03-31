@@ -5,6 +5,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./config/axiosConfig";
 import "./App.css";
+import LoadingIndicator from "./components/LoadingIndicator/LoadingIndicator";
 
 // Import layout, protected route components, and other components
 import Layout from "./components/Layout/Layout";
@@ -27,7 +28,7 @@ const Students = lazy(() => import("./pages/Students/Students"));
 function App() {
   return (
     <UserProvider>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<LoadingIndicator />}>
         <Routes>
           {/* Routes without Layout */}
           <Route path="/" element={<Home />} />
@@ -47,9 +48,30 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="reflections" element={<Reflections />} />
-            <Route path="classroom" element={<Classroom />} />
-            <Route path="students" element={<Students />} />
+            <Route
+              path="reflections"
+              element={
+                <ProtectedRoute>
+                  <Reflections />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="classroom"
+              element={
+                <ProtectedRoute>
+                  <Classroom />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="students"
+              element={
+                <ProtectedRoute>
+                  <Students />
+                </ProtectedRoute>
+              }
+            />
           </Route>
         </Routes>
         <ToastContainer />
