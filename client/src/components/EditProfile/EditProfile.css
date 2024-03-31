@@ -1,0 +1,85 @@
+/* EditProfile.css */
+.profile-container {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: var(--pure-white);
+}
+
+.profile-container form,
+.profile-container div {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-container label {
+  margin-top: 20px;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--gray);
+}
+
+.profile-container input[type="text"],
+.profile-container input[type="email"],
+.profile-container input[type="password"] {
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid var(--light-gray);
+  font-size: 16px;
+}
+
+.profile-container input[type="email"] {
+  background-color: var(--lighter-gray);
+}
+
+.profile-container .save-changes,
+.profile-container .edit-profile,
+.profile-container .cancel {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: 2px solid var(--darker-purple);
+  color: var(--pure-white);
+  background-color: var(--darker-purple);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.profile-container .save-changes:hover,
+.profile-container .edit-profile:hover {
+  background-color: transparent;
+  border: 2px solid var(--darker-purple);
+  color: var(--darker-purple);
+}
+
+.profile-container .cancel {
+  background-color: var(--light-gray);
+  border: 2px solid var(--light-gray);
+}
+
+.profile-container .cancel:hover {
+  background-color: transparent;
+  color: var(--light-gray);
+}
+
+.profile-view {
+  padding: 20px;
+  text-align: center;
+}
+
+.profile-view p {
+  margin: 10px 0;
+  font-size: 18px;
+  color: var(--gray);
+}
+
+.profile-view p span {
+  font-weight: 600;
+}
+
+.profile-view button {
+  margin-top: 20px;
+}

@@ -39,7 +39,7 @@ function Login() {
             name="⬅ Back to home"
             to="/"
             backgroundColor="var(--darker-purple)"
-            color="var(--white)"
+            color="var(--pure-white)"
             hoverBackgroundColor="transparent"
             hoverColor="var(--darker-purple)"
             hoverBorderColor="var(--darker-purple)"

@@ -14,9 +14,6 @@ const Layout = () => {
       {userData?.role === "teacher" ? <SidebarTeacher /> : <SidebarStudent />}
 
       <main className="main-content">
-        <div className="main-top">
-          <i className="fas fa-user-cog"></i>
-        </div>
         <Outlet />
       </main>
     </div>

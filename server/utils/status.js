@@ -1,3 +1,5 @@
+const User = require("../models/userSchema");
+
 // status endpoint to check user's authentication status
 const status = async (req, res) => {
   try {
