@@ -1,0 +1,71 @@
+.main-reflection {
+  position: relative;
+  padding: 20px;
+  width: 100%;
+}
+.main-reflection .container-reflection {
+  margin-top: 20px;
+  text-transform: capitalize;
+}
+.main-reflection .reflection-box {
+  width: 100%;
+  height: 300px;
+  padding: 10px 10px 30px 10px;
+  margin-top: 10px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+.main-reflection .reflection-box ul {
+  list-style: none;
+  display: flex;
+}
+.main-reflection .reflection-box ul li {
+  margin: 10px;
+  color: gray;
+  cursor: pointer;
+}
+.main-reflection .reflection-box ul .active {
+  color: #000;
+  border-bottom: 1px solid #000;
+}
+.main-reflection .reflection-box .reflection {
+  display: flex;
+}
+.main-reflection .box {
+  width: 33%;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+  background: rgb(235, 233, 233);
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+.main-reflection .box p {
+  font-size: 12px;
+  margin-top: 5px;
+}
+.main-reflection .box button {
+  background: #000;
+  color: #fff;
+  padding: 7px 10px;
+  border-radius: 10px;
+  margin-top: 3rem;
+  cursor: pointer;
+}
+.main-reflection .box button:hover {
+  background: rgba(0, 0, 0, 0.842);
+}
+.main-reflection .box i {
+  font-size: 7rem;
+  float: right;
+  margin: -20px 20px 20px 0;
+}
+.main-reflection .html {
+  color: rgb(25, 94, 54);
+}
+.main-reflection .css {
+  color: rgb(104, 179, 35);
+}
+.main-reflection .js {
+  color: rgb(28, 98, 179);
+}

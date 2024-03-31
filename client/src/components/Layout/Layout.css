@@ -1,0 +1,20 @@
+.layout-container {
+  display: flex;
+}
+
+.main-content {
+  background: var(--light-purple);
+  flex-grow: 1;
+}
+
+.main-content .main-top {
+  display: flex;
+  width: 100%;
+}
+.main-content .main-top i {
+  position: absolute;
+  right: 0;
+  margin: 10px 30px;
+  color: var(--light-gray);
+  cursor: pointer;
+}

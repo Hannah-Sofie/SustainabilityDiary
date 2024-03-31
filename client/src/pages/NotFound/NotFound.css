@@ -1,0 +1,28 @@
+.notFoundContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+  color: var(--darker-purple);
+  background-color: var(--white);
+}
+
+.notFoundText {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.homeLink {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border-radius: 20px;
+  text-decoration: none;
+  color: var(--white);
+  background-color: var(--darker-purple);
+  font-weight: bold;
+}
+
+.homeLink:hover {
+  background-color: var(--dark-purple);
+}

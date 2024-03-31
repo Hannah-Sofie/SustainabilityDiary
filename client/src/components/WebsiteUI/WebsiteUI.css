@@ -1,0 +1,76 @@
+.bg-animation {
+  color: var(--pure-white);
+  height: 100vh;
+  background-color: var(--darker-purple);
+}
+
+.main-websiteui {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.container-websiteui {
+  display: flex;
+}
+.container-websiteui nav {
+  padding: 10px;
+}
+.container-websiteui .logo {
+  text-align: center;
+  margin-top: 15px;
+}
+.container-websiteui .logo img {
+  width: 60px;
+  height: 60px;
+}
+
+.container-websiteui ul li {
+  transform: rotate(-90deg);
+  display: block;
+  margin-top: 30px;
+  padding-top: 20px;
+  height: 60px;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.container-websiteui .line {
+  border: 1px solid var(--white);
+  height: 100vh;
+  margin-left: 10px;
+}
+
+.section-websiteui {
+  padding: 20px 40px;
+  margin-top: 20px;
+}
+.section-websiteui h4 {
+  margin-top: 3rem;
+  color: var(--white);
+  font-size: 1.5rem;
+}
+.section-websiteui h1 {
+  text-transform: uppercase;
+  margin-top: 10px;
+  font-size: 3.8rem;
+}
+.section-websiteui span {
+  color: var(--orange);
+}
+.section-websiteui p {
+  font-size: 1.2rem;
+  color: var(--white);
+  padding: 20px 0;
+}
+
+.buttons-websiteui {
+  display: flex;
+  gap: 30px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.buttons-websiteui .left-button,
+.buttons-websiteui .right-button {
+  font-size: 20px;
+}
