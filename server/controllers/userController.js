@@ -125,6 +125,31 @@ const logoutUser = (req, res) => {
   res.status(200).json({ message: "Logged out successfully" });
 };
 
+// Example using Express.js
+const updateUser = async (req, res) => {
+  const { userId } = req; // Assuming you have middleware to extract userId
+  const { name, password } = req.body;
+
+  try {
+    // Find user and update information. Password change logic is simplified here.
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        name,
+        ...(password && { password: bcrypt.hashSync(password, 10) }),
+      },
+      { new: true }
+    );
+
+    // Exclude sensitive fields
+    const { password: _, ...userWithoutPassword } = updatedUser.toObject();
+
+    res.json(userWithoutPassword);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update user." });
+  }
+};
+
 // const forgotPassword = async (req, res, next) => {
 //   const { email } = req.body;
 //   const user = await User.findOne({ email });
@@ -202,6 +227,7 @@ module.exports = {
   loginUser,
   logoutUser,
   fetchStudents,
+  updateUser,
   // forgotPassword,
   // resetPassword,
 };

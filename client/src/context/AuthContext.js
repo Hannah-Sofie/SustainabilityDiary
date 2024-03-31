@@ -7,22 +7,19 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true); // Add a loading state
 
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/status`,
-          {
-            withCredentials: true,
-          }
+          { withCredentials: true }
         );
         if (response.data.isAuthenticated) {
-          // Determine role based on email domain
           const role = response.data.user.email.endsWith("@ntnu.no")
             ? "teacher"
             : "student";
-          // Include role in userData
           setUserData({ ...response.data.user, role });
           setIsAuthenticated(true);
         } else {
@@ -32,6 +29,8 @@ export const AuthProvider = ({ children }) => {
       } catch (error) {
         setIsAuthenticated(false);
         setUserData(null);
+      } finally {
+        setLoading(false); // Set loading to false once the check is done
       }
     };
 
@@ -88,7 +87,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ userData, isAuthenticated, login, logout }}>
+    <AuthContext.Provider
+      value={{ userData, isAuthenticated, login, logout, loading }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -5,6 +5,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./config/axiosConfig";
 import "./App.css";
+import { useAuth } from "./context/AuthContext";
 import LoadingIndicator from "./components/LoadingIndicator/LoadingIndicator";
 
 // Import layout, protected route components, and other components
@@ -24,8 +25,15 @@ const ForgotPassword = lazy(() =>
 );
 const ResetPassword = lazy(() => import("./pages/ResetPassword/ResetPassword"));
 const Students = lazy(() => import("./pages/Students/Students"));
+const Profile = lazy(() => import("./pages/Profile/Profile"));
 
 function App() {
+  const { loading } = useAuth();
+
+  if (loading) {
+    // Show a loading indicator while checking auth status
+    return <LoadingIndicator />;
+  }
   return (
     <UserProvider>
       <Suspense fallback={<LoadingIndicator />}>
@@ -69,6 +77,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Students />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
                 </ProtectedRoute>
               }
             />
