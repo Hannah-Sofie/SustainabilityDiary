@@ -1,0 +1,111 @@
+.main-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: var(--light-purple);
+  flex-direction: column;
+}
+
+.main-login .home-button {
+  margin-left: 690px;
+  margin-bottom: 20px;
+}
+
+.container-login {
+  width: 100%;
+  display: flex;
+  max-width: 850px;
+  background: var(--pure-white);
+  border-radius: 15px;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+.login {
+  width: 400px;
+}
+.login form {
+  width: 250px;
+  margin: 60px auto;
+  margin-top: 30px;
+}
+.login h1 {
+  margin: 20px;
+  text-align: center;
+  font-weight: bolder;
+  text-transform: uppercase;
+}
+
+.login p {
+  text-align: center;
+  margin: 20px 10px 10px 10px;
+}
+
+.login hr {
+  border-top: 2px solid var(--light-purple);
+}
+
+.login-pic img {
+  width: 450px;
+  height: 100%;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+.login form label {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 5px;
+}
+.login input {
+  width: 100%;
+  margin: 2px;
+  border: none;
+  outline: none;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid var(--gray);
+}
+.login button {
+  border: none;
+  outline: none;
+  padding: 8px;
+  width: 252px;
+  color: var(--pure-white);
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+  border-radius: 5px;
+  background: var(--orange);
+  color: var(--white);
+  border: 2px solid var(--orange);
+  text-transform: uppercase;
+  font-weight: 600;
+  border-radius: 20px;
+}
+.login button:hover {
+  background: transparent;
+  border: 2px solid var(--orange);
+  color: var(--orange);
+  transition: 0.3s;
+}
+.login .no-account {
+  margin: 20px;
+  font-size: 12px;
+}
+
+.login .forgot-password {
+  text-align: end;
+  margin: 0;
+  font-size: 12px;
+  color: var(--darker-purple);
+}
+
+.login a {
+  color: var(--darker-purple);
+  text-decoration: none;
+}
+
+.login a:hover {
+  text-decoration: underline;
+}
