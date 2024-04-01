@@ -1,0 +1,24 @@
+.search_bar {
+  display: flex;
+  padding: 10px;
+  justify-content: space-between;
+}
+.search_bar input {
+  width: 50%;
+  padding: 10px;
+  border: 1px solid var(--medium-gray);
+  border-radius: 10px;
+}
+.search_bar input:focus {
+  border: 1px solid var(--darker-purple);
+}
+.search_bar select {
+  border: 1px solid var(--medium-gray);
+  padding: 10px;
+  margin-left: 2rem;
+  border-radius: 10px;
+}
+.search_bar .filter {
+  width: 300px;
+  border-radius: 10px;
+}

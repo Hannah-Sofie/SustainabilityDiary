@@ -11,6 +11,8 @@ import LoadingIndicator from "./components/LoadingIndicator/LoadingIndicator";
 // Import layout, protected route components, and other components
 import Layout from "./components/Layout/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import NewReflectionEntry from "./components/Reflection/NewReflectionEntry";
+import ReflectionEntries from "./components/Reflection/ReflectionEntries";
 
 // Lazy load pages
 const Dashboard = lazy(() => import("./pages/Dashboard/Dashboard"));
@@ -85,6 +87,22 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="new-reflection-entry"
+              element={
+                <ProtectedRoute>
+                  <NewReflectionEntry />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="reflection-entries"
+              element={
+                <ProtectedRoute>
+                  <ReflectionEntries />
                 </ProtectedRoute>
               }
             />

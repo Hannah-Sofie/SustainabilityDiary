@@ -1,0 +1,94 @@
+.container-new-entry form {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: var(--light-white);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 100px;
+}
+
+.container-new-entry form div {
+  margin-bottom: 1rem;
+}
+
+.container-new-entry label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--gray);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.container-new-entry input[type="text"],
+.container-new-entry textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--light-gray);
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #333;
+  background-color: var(--pure-white);
+  transition: border-color 0.3s;
+}
+
+.container-new-entry input[type="text"]:focus,
+.container-new-entry textarea:focus {
+  border-color: var(--darker-purple);
+  outline: none;
+}
+
+.container-new-entry textarea {
+  height: 150px;
+  resize: vertical;
+}
+
+.container-new-entry .form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.container-new-entry button[type="submit"] {
+  display: inline-block;
+  background-color: var(--darker-purple);
+  color: #fff;
+  padding: 0.5rem 1.5rem;
+  border: 2px solid var(--darker-purple);
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 1rem;
+  text-transform: uppercase;
+  transition: background-color 0.3s;
+  font-weight: 600;
+}
+
+.container-new-entry button[type="submit"]:hover {
+  background-color: transparent;
+  color: var(--darker-purple);
+}
+
+.container-new-entry input[type="text"]:hover,
+.container-new-entry textarea:hover,
+.container-new-entry input[type="text"]:focus,
+.container-new-entry textarea:focus {
+  border-color: var(--darker-purple);
+}
+
+.container-new-entry .cancel-button {
+  background-color: var(--light-gray);
+  color: var(--white);
+  padding: 0.5rem 1.5rem;
+  border: 2px solid var(--light-gray);
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 1rem;
+  text-transform: uppercase;
+  transition: background-color 0.3s, color 0.3s;
+  font-weight: 600;
+}
+
+.container-new-entry .cancel-button:hover {
+  background-color: transparent;
+  color: var(--light-gray);
+}

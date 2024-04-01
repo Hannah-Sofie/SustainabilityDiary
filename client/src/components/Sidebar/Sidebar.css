@@ -1,5 +1,9 @@
 .container-sidebar {
   display: flex;
+  position: sticky;
+  top: 0; /* Adjust this value based on your needs */
+  height: 100vh;
+  overflow-y: auto;
 }
 .container-sidebar nav {
   position: relative;

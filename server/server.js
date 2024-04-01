@@ -1,10 +1,14 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const cookieParser = require("cookie-parser"); // Import cookie-parser
+const cookieParser = require("cookie-parser");
 const app = express();
 const connectDB = require("./dbconnect");
 const PORT = process.env.PORT || 8002;
+
+// Import routes
+const userRoutes = require("./routes/userRoutes");
+const reflectionEntryRoutes = require("./routes/reflectionEntryRoutes"); // Import reflection entry routes
 
 // Adjust CORS Middleware for Specific Origin and Credentials
 const corsOptions = {
@@ -12,15 +16,16 @@ const corsOptions = {
   credentials: true, // Allow sending cookies and headers with requests
 };
 
-app.use(cors(corsOptions)); // Use CORS options here
+app.use(cors(corsOptions));
 app.use(express.json());
-app.use(cookieParser()); // Use cookie-parser middleware here
-
-// Routes
-app.use("/", require("./routes/userRoutes"));
+app.use(cookieParser());
 
 // Connect to MongoDB
 connectDB();
+
+// Use routes
+app.use("/", userRoutes); // Use user routes
+app.use("/reflections", reflectionEntryRoutes); // Use reflection entry routes
 
 // Global error handler
 app.use((err, req, res, next) => {

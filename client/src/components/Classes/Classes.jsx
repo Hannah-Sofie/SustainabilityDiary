@@ -6,7 +6,6 @@ function Classes() {
     <div>
       <div className="main-class">
         <section className="container-class">
-          <h1>Classrooms</h1>
           <div className="class-box">
             <ul>
               <li className="active">All classes</li>

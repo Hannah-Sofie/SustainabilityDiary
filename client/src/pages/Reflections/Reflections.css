@@ -1,0 +1,19 @@
+.main-reflection {
+  width: 100%;
+}
+
+.main-reflection h1 {
+  font-size: 2rem;
+}
+
+.container-reflection {
+  padding: 10px 40px;
+}
+.container-reflection h1 {
+  margin: 20px 10px;
+}
+.container-reflection .new-reflection {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
