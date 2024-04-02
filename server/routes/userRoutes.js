@@ -13,7 +13,10 @@ const { status } = require("../utils/status");
 const router = express.Router();
 
 // Define your routes
-router.post("/register", registerUser);
+router.post("/register", (req, res, next) => {
+  console.log("register called");
+  registerUser(req, res, next);
+});
 router.post("/login", loginUser);
 router.post("/logout", logoutUser);
 router.get("/status", verifyToken, status); // Use the verifyToken middleware and status function

@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --inspect=0.0.0.0 --test",
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
@@ -15,12 +15,15 @@
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "docker-compose": "^0.24.7",
     "dotenv": "^16.4.5",
     "express": "^4.19.1",
     "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.5.0",
     "mongoose": "^8.2.3",
     "nodemailer": "^6.9.13",
     "nodemailer-mailgun-transport": "^2.1.5",
+    "supertest": "^6.3.4",
     "validator": "^13.11.0"
   }
 }

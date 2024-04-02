@@ -12,7 +12,7 @@ const reflectionEntryRoutes = require("./routes/reflectionEntryRoutes"); // Impo
 
 // Adjust CORS Middleware for Specific Origin and Credentials
 const corsOptions = {
-  origin: "http://localhost:3000", // Allow your frontend origin
+  origin: ["http://localhost:3000", "http://localhost:8083"], // Allow your frontend origin
   credentials: true, // Allow sending cookies and headers with requests
 };
 
@@ -42,3 +42,5 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+module.exports = app;
