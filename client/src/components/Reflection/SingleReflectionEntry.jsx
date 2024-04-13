@@ -4,14 +4,8 @@ import "./ReflectionEntries.css";
 function SingleReflectionEntry({ entry }) {
   // Function to format date
   const formatDate = (dateString) => {
-    const options = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+    const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+    return new Date(dateString).toLocaleDateString("en-GB", options);
   };
 
   // Function to truncate text
