@@ -1,3 +1,4 @@
+const { get } = require("mongoose");
 const ReflectionEntry = require("../models/reflectionEntrySchema");
 const createError = require("../utils/appError");
 
@@ -8,6 +9,22 @@ const getAllReflectionEntries = async (req, res, next) => {
     res.json(entries);
   } catch (error) {
     next(createError("Failed to fetch entries", 500));
+  }
+};
+
+// Get one reflection entry by ID
+const getReflectionEntry = async (req, res, next) => {
+  try {
+    const entry = await ReflectionEntry.findOne({
+      _id: req.params.id,
+      userId: req.userId,
+    });
+    if (!entry) {
+      return next(createError("Entry not found", 404));
+    }
+    res.json(entry);
+  } catch (error) {
+    next(createError("Failed to fetch the entry", 500));
   }
 };
 
@@ -33,10 +50,14 @@ const createReflectionEntry = async (req, res, next) => {
 // Update a reflection entry
 const updateReflectionEntry = async (req, res, next) => {
   try {
-    const entry = await ReflectionEntry.findOneAndUpdate({
-      _id: req.params.id,
-      userId: req.userId,
-    }, req.body, { new: true });
+    const entry = await ReflectionEntry.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        userId: req.userId,
+      },
+      req.body,
+      { new: true }
+    );
 
     if (!entry) {
       return next(createError("Entry not found or permission denied", 404));
@@ -68,6 +89,7 @@ const deleteReflectionEntry = async (req, res, next) => {
 
 module.exports = {
   getAllReflectionEntries,
+  getReflectionEntry,
   createReflectionEntry,
   updateReflectionEntry,
   deleteReflectionEntry,

@@ -41,3 +41,31 @@
   border: 2px solid var();
   transition: 0.4s;
 }
+
+.reflection_card:hover {
+  border: 2px solid var(--darker-purple);
+  transition: 0.4s;
+}
+
+.reflection_card .action-buttons {
+  display: flex;
+  gap: 20px;
+}
+
+.reflection_card .edit-button,
+.reflection_card .delete-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--black);
+  background-color: transparent;
+  font-size: 1.2rem;
+}
+
+.reflection_card .delete-button:hover {
+  color: var(--red);
+}
+
+.reflection_card .edit-button:hover {
+  color: var(--yellow);
+}

@@ -13,6 +13,7 @@ import Layout from "./components/Layout/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NewReflectionEntry from "./components/Reflection/NewReflectionEntry";
 import ReflectionEntries from "./components/Reflection/ReflectionEntries";
+import EditReflectionEntry from "./components/Reflection/EditReflectionEntry";
 
 // Lazy load pages
 const Dashboard = lazy(() => import("./pages/Dashboard/Dashboard"));
@@ -103,6 +104,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <ReflectionEntries />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/edit-reflection/:id"
+              element={
+                <ProtectedRoute>
+                  <EditReflectionEntry />
                 </ProtectedRoute>
               }
             />
