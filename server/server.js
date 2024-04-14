@@ -23,6 +23,9 @@ app.use(cookieParser());
 // Connect to MongoDB
 connectDB();
 
+// Static file serving for uploaded images
+app.use("/uploads", express.static("uploads"));
+
 // Use routes
 app.use("/", userRoutes); // Use user routes
 app.use("/reflections", reflectionEntryRoutes); // Use reflection entry routes

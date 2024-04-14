@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { Link } from "react-router-dom";
 import "./LoginForm.css";
-import LoginImage from "./img/login-img.png";
+import LoginImage from "../../assets/img/login-img.png";
 import CustomButton from "../CustomButton/CustomButton";
 
 function Login() {
@@ -23,10 +23,9 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const success = await login(credentials); // Awaits the promise from login
+    const success = await login(credentials);
     if (success) {
-      console.log("Navigating to dashboard");
-      navigate("/dashboard"); // Manually navigate if login was successful
+      navigate("/dashboard");
     } else {
       console.log("Login failed, not navigating");
     }

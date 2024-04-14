@@ -3,8 +3,6 @@ const User = require("../models/userSchema");
 const createError = require("../utils/appError");
 const { hashPassword, comparePassword } = require("../utils/password");
 const validator = require("validator");
-// const crypto = require("crypto");
-// const sendEmail = require("../utils/sendEmail");
 
 // Register user
 const registerUser = async (req, res, next) => {
@@ -48,12 +46,11 @@ const registerUser = async (req, res, next) => {
 
     const hashedPassword = await hashPassword(password);
 
-    // Include role in the newUser creation
     const newUser = await User.create({
       name,
       email,
       password: hashedPassword,
-      role, // Set the role here
+      role,
     });
 
     // Don't send password hash back
@@ -119,19 +116,18 @@ const logoutUser = (req, res) => {
   res.cookie("token", "", {
     httpOnly: true,
     expires: new Date(0),
-    secure: process.env.NODE_ENV === "production", // match the settings from set
+    secure: process.env.NODE_ENV === "production",
     sameSite: "Strict",
   });
   res.status(200).json({ message: "Logged out successfully" });
 };
 
-// Example using Express.js
+// Update user
 const updateUser = async (req, res) => {
-  const { userId } = req; // Assuming you have middleware to extract userId
+  const { userId } = req;
   const { name, password } = req.body;
 
   try {
-    // Find user and update information. Password change logic is simplified here.
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       {
@@ -150,68 +146,6 @@ const updateUser = async (req, res) => {
   }
 };
 
-// const forgotPassword = async (req, res, next) => {
-//   const { email } = req.body;
-//   const user = await User.findOne({ email });
-//   if (!user) {
-//     return res.status(404).json({ error: "User not found" });
-//   }
-
-//   // Generate a 4-digit code
-//   const resetCode = Math.floor(1000 + Math.random() * 9000).toString();
-
-//   // Optionally hash the reset code for storage
-//   const hashedResetCode = crypto
-//     .createHash("sha256")
-//     .update(resetCode)
-//     .digest("hex");
-
-//   user.passwordResetCode = hashedResetCode;
-//   user.passwordResetExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
-//   await user.save();
-
-//   const message = `Your password reset code is: ${resetCode}\nThis code is valid for 10 minutes.`;
-
-//   try {
-//     await sendEmail({
-//       to: user.email,
-//       subject: "Password Reset Code",
-//       text: message,
-//     });
-
-//     res.json({ message: "Password reset code sent to your email." });
-//   } catch (error) {
-//     console.error(error);
-//     user.passwordResetCode = undefined;
-//     user.passwordResetExpires = undefined;
-//     await user.save();
-
-//     res.status(500).json({ error: "Error sending password reset code" });
-//   }
-// };
-
-// const resetPassword = async (req, res, next) => {
-//   const { email, code, newPassword } = req.body;
-//   const hashedCode = crypto.createHash("sha256").update(code).digest("hex");
-
-//   const user = await User.findOne({
-//     email,
-//     passwordResetCode: hashedCode,
-//     passwordResetExpires: { $gt: Date.now() },
-//   });
-
-//   if (!user) {
-//     return res.status(400).json({ error: "Invalid or expired reset code" });
-//   }
-
-//   user.password = await bcrypt.hash(newPassword, 12); // or use your hashPassword function
-//   user.passwordResetCode = undefined;
-//   user.passwordResetExpires = undefined;
-//   await user.save();
-
-//   res.json({ message: "Password has been reset successfully." });
-// };
-
 const fetchStudents = async (req, res) => {
   try {
     const students = await User.find({ role: "student" });
@@ -228,6 +162,4 @@ module.exports = {
   logoutUser,
   fetchStudents,
   updateUser,
-  // forgotPassword,
-  // resetPassword,
 };

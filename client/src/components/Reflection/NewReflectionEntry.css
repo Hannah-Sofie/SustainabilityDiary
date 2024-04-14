@@ -16,7 +16,7 @@
   display: block;
   margin-bottom: 0.5rem;
   color: var(--gray);
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 600;
 }
 
@@ -91,4 +91,44 @@
 .container-new-entry .cancel-button:hover {
   background-color: transparent;
   color: var(--light-gray);
+}
+
+.container-new-entry .privacy {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.container-new-entry .privacy-toggle {
+  background-color: transparent;
+  border: none;
+  color: var(--darker-purple);
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.container-new-entry .privacy-toggle:hover {
+  text-decoration: underline;
+}
+
+.container-new-entry .file-upload-label {
+  background-color: var(--darker-purple);
+  color: var(--pure-white);
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-block;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+.container-new-entry .file-upload-label:hover {
+  background-color: var(--dark-purple);
+}
+
+.container-new-entry .file-name {
+  margin-top: 10px;
+  color: var(--darker-purple);
 }

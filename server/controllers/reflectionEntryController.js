@@ -12,6 +12,19 @@ const getAllReflectionEntries = async (req, res, next) => {
   }
 };
 
+// Get all public reflection entries
+const getAllPublicReflectionEntries = async (req, res, next) => {
+  try {
+    const entries = await ReflectionEntry.find({ isPublic: true }).populate(
+      "userId",
+      "name"
+    ); // Only return public entries
+    res.json(entries);
+  } catch (error) {
+    next(createError("Failed to fetch public entries", 500));
+  }
+};
+
 // Get one reflection entry by ID
 const getReflectionEntry = async (req, res, next) => {
   try {
@@ -30,16 +43,16 @@ const getReflectionEntry = async (req, res, next) => {
 
 // Create a new reflection entry
 const createReflectionEntry = async (req, res, next) => {
-  const { title, body } = req.body;
-  if (!title || !body) {
-    return next(createError("Title and body are required", 400));
-  }
+  const { title, body, isPublic } = req.body;
+  const photo = req.file ? req.file.filename : null;
 
   try {
     const newEntry = await ReflectionEntry.create({
       userId: req.userId,
       title,
       body,
+      isPublic,
+      photo,
     });
     res.status(201).json(newEntry);
   } catch (error) {
@@ -49,20 +62,16 @@ const createReflectionEntry = async (req, res, next) => {
 
 // Update a reflection entry
 const updateReflectionEntry = async (req, res, next) => {
+  const { title, body, isPublic } = req.body;
   try {
     const entry = await ReflectionEntry.findOneAndUpdate(
-      {
-        _id: req.params.id,
-        userId: req.userId,
-      },
-      req.body,
+      { _id: req.params.id, userId: req.userId },
+      { title, body, isPublic },
       { new: true }
     );
-
     if (!entry) {
       return next(createError("Entry not found or permission denied", 404));
     }
-
     res.json(entry);
   } catch (error) {
     next(createError("Failed to update entry", 500));
@@ -89,6 +98,7 @@ const deleteReflectionEntry = async (req, res, next) => {
 
 module.exports = {
   getAllReflectionEntries,
+  getAllPublicReflectionEntries,
   getReflectionEntry,
   createReflectionEntry,
   updateReflectionEntry,

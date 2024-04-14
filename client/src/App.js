@@ -4,7 +4,6 @@ import { UserProvider } from "./context/UserContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./config/axiosConfig";
-import "./App.css";
 import { useAuth } from "./context/AuthContext";
 import LoadingIndicator from "./components/LoadingIndicator/LoadingIndicator";
 

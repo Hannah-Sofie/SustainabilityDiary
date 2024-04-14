@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import "./RegisterForm.css";
-import RegisterImage from "./img/register-img.png";
+import RegisterImage from "../../assets/img/register-img.png";
 import CustomButton from "../CustomButton/CustomButton";
 
 function Register() {
@@ -13,7 +13,7 @@ function Register() {
     email: "",
     password: "",
   });
-  const [isLoading, setIsLoading] = useState(false); // Notice we no longer manage error state here
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -30,7 +30,6 @@ function Register() {
         formData
       );
       setIsLoading(false);
-      // Display success message with react-toastify
       toast.success(data.message || "Registration successful! Please log in.");
       navigate("/login");
     } catch (error) {
@@ -38,7 +37,6 @@ function Register() {
       const errorMessage =
         error.response?.data?.error ||
         "An unexpected error occurred. Please try again.";
-      // Display error message with react-toastify instead of setting an error state
       toast.error(errorMessage);
     }
   };

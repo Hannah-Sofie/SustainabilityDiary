@@ -11,7 +11,6 @@ function DashboardStudent() {
   useEffect(() => {
     const fetchReflections = async () => {
       try {
-        // Replace with your actual API URL
         const { data } = await axios.get(
           `${process.env.REACT_APP_API_URL}/reflections`,
           { withCredentials: true }
@@ -25,7 +24,6 @@ function DashboardStudent() {
         }
       } catch (error) {
         console.error("Error fetching reflections:", error);
-        // Handle error (e.g., show an error message)
       }
     };
 

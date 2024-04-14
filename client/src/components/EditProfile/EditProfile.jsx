@@ -14,7 +14,6 @@ function Profile() {
   });
 
   useEffect(() => {
-    // Assuming userData contains the current user's info
     setUserInfo({ name: userData?.name, email: userData?.email });
   }, [userData]);
 

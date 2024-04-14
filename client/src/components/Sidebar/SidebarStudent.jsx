@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "./Sidebar.css";
-import Logo from "./img/logo.png";
+import Logo from "../../assets/img/logo.png";
 
 function Sidebar() {
   const { logout } = useAuth();

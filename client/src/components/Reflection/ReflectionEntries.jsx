@@ -2,8 +2,16 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faPencilAlt,
+  faTrash,
+  faLock,
+  faLockOpen,
+} from "@fortawesome/free-solid-svg-icons";
+import DefaultImage from "../../assets/img/default-image.jpg";
 import "./ReflectionEntries.css";
-import ReflectionModal from "./ReflectionModal"; // Import the modal component
+import ReflectionModal from "./ReflectionModal";
 
 function ReflectionEntries() {
   const [entries, setEntries] = useState([]);
@@ -12,6 +20,7 @@ function ReflectionEntries() {
 
   useEffect(() => {
     fetchEntries();
+    console.log(entries);
   }, []);
 
   const fetchEntries = async () => {
@@ -71,7 +80,15 @@ function ReflectionEntries() {
         >
           <div className="reflection_details">
             <div className="img">
-              <i className="fab fa-google-drive"></i>
+              <img
+                src={
+                  entry.photo
+                    ? `${process.env.REACT_APP_API_URL}/uploads/${entry.photo}`
+                    : DefaultImage
+                }
+                alt="Reflection"
+                style={{ objectFit: "cover" }}
+              />
             </div>
             <div className="text">
               <h3>{entry.title}</h3>
@@ -87,17 +104,21 @@ function ReflectionEntries() {
             </p>
           </div>
           <div className="action-buttons">
+            <FontAwesomeIcon
+              icon={entry.isPublic ? faLockOpen : faLock}
+              className="privacy-icon"
+            />
             <button
               onClick={(e) => handleEdit(entry._id, e)}
               className="edit-button"
             >
-              <i className="fas fa-pencil-alt"></i>
+              <FontAwesomeIcon icon={faPencilAlt} />
             </button>
             <button
               onClick={(e) => deleteEntry(entry._id, e)}
               className="delete-button"
             >
-              <i className="fas fa-trash"></i>
+              <FontAwesomeIcon icon={faTrash} />
             </button>
           </div>
         </div>

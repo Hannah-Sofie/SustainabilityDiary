@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./StudentList.css";
-import { toast } from "react-toastify"; // Import toast
+import { toast } from "react-toastify";
 
 function StudentList() {
   const [students, setStudents] = useState([]);
@@ -18,7 +18,6 @@ function StudentList() {
         setStudents(sortedData);
       } catch (error) {
         console.error("Failed to fetch students:", error);
-        // Display an error message to the user with react-toastify
         toast.error("Failed to fetch students. Please try again later.");
       }
     };

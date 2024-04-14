@@ -25,7 +25,7 @@ function SingleReflectionEntry({ entry }) {
         </div>
         <div className="text">
           <h3>{entry.title}</h3>
-          <p>{truncateText(entry.body, 50)}</p> {/* Truncate body text */}
+          <p>{truncateText(entry.body, 50)}</p>
         </div>
       </div>
       <div className="reflection_date">

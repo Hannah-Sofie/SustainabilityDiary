@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { isEmail } = require("validator"); // npm install validator
+const { isEmail } = require("validator");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -26,7 +26,6 @@ const userSchema = new mongoose.Schema({
   passwordResetExpires: Date,
 });
 
-// Add a 'pre' save middleware to determine the user's role based on their email domain
 userSchema.pre("save", function (next) {
   this.role = this.email.endsWith("@stud.ntnu.no") ? "student" : "teacher";
   next();

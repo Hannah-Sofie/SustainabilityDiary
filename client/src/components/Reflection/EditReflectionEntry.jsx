@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLock, faLockOpen } from "@fortawesome/free-solid-svg-icons";
 import "./NewReflectionEntry.css";
 
 function EditReflectionEntry() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [entry, setEntry] = useState({ title: "", body: "" });
+  const [entry, setEntry] = useState({ title: "", body: "", isPublic: false });
 
   useEffect(() => {
     const fetchEntry = async () => {
@@ -25,8 +27,19 @@ function EditReflectionEntry() {
     fetchEntry();
   }, [id]);
 
+  const togglePublic = () => {
+    setEntry((prev) => ({
+      ...prev,
+      isPublic: !prev.isPublic,
+    }));
+    toast.info(
+      `Entry will be set to ${entry.isPublic ? "private" : "public"}.`
+    );
+  };
+
   const handleChange = (e) => {
-    setEntry({ ...entry, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setEntry({ ...entry, [name]: value });
   };
 
   const handleSubmit = async (e) => {
@@ -48,6 +61,16 @@ function EditReflectionEntry() {
   return (
     <div className="container-new-entry">
       <form onSubmit={handleSubmit}>
+        <div className="privacy">
+          <button
+            type="button"
+            onClick={togglePublic}
+            className="privacy-toggle"
+          >
+            <FontAwesomeIcon icon={entry.isPublic ? faLockOpen : faLock} />
+            {entry.isPublic ? " Public" : " Private"}
+          </button>
+        </div>
         <div>
           <label>Title:</label>
           <input
@@ -67,6 +90,7 @@ function EditReflectionEntry() {
             required
           />
         </div>
+
         <div className="form-actions">
           <button
             type="button"

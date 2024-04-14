@@ -1,6 +1,6 @@
 import React from "react";
 import "./WebsiteUI.css";
-import Logo from "./img/logo.png";
+import Logo from "../../assets/img/logo.png";
 import BackgroundAnimation from "../BackgroundAnimation/BackgroundAnimation";
 import CustomButton from "../CustomButton/CustomButton";
 
@@ -32,28 +32,27 @@ function WebsiteUI() {
                 tomorrow. 🌱✨
               </p>
               <div className="buttons-websiteui">
-              <CustomButton
-                name="Get started"
-                to="/login"
-                backgroundColor="var(--orange)"
-                color="var(--white)"
-                hoverBackgroundColor="transparent"
-                hoverColor="var(--orange)"
-                hoverBorderColor="var(--orange)"
-                className="left-button"
-              />
-              <CustomButton
-                name="Join now"
-                to="/register"
-                backgroundColor="var(--pink)"
-                color="var(--white)"
-                hoverBackgroundColor="transparent"
-                hoverColor="var(--pink)"
-                hoverBorderColor="var(--pink)"
-                className="right-button"
-              />
+                <CustomButton
+                  name="Get started"
+                  to="/login"
+                  backgroundColor="var(--orange)"
+                  color="var(--white)"
+                  hoverBackgroundColor="transparent"
+                  hoverColor="var(--orange)"
+                  hoverBorderColor="var(--orange)"
+                  className="left-button"
+                />
+                <CustomButton
+                  name="Join now"
+                  to="/register"
+                  backgroundColor="var(--pink)"
+                  color="var(--white)"
+                  hoverBackgroundColor="transparent"
+                  hoverColor="var(--pink)"
+                  hoverBorderColor="var(--pink)"
+                  className="right-button"
+                />
               </div>
-              
             </section>
           </div>
         </div>
