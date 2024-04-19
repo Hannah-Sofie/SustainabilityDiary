@@ -1,25 +1,22 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/userSchema");
 
-// Middleware to verify the JWT token
-const verifyToken = (req, res, next) => {
-  console.log(req.cookies);
-  const token = req.cookies ? req.cookies.token : null;
-
-  if (!token) {
-    return res
-      .status(403)
-      .json({ isAuthenticated: false, message: "No token provided." });
-  }
-
+const verifyToken = async (req, res, next) => {
   try {
+    const token = req.cookies.token;
+    if (!token) {
+      return res
+        .status(401)
+        .json({ error: "Access Denied / Unauthorized request" });
+    }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = decoded.id;
+    req.user = await User.findById(decoded.id); // Assuming the ID is stored in decoded.id
+    if (!req.user) {
+      return res.status(404).json({ error: "User not found" });
+    }
     next();
   } catch (error) {
-    return res
-      .status(401)
-      .json({ isAuthenticated: false, message: "Unauthorized!" });
+    res.status(400).json({ error: "Invalid Token" });
   }
 };
 

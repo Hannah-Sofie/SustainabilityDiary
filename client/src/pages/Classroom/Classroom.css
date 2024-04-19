@@ -1,4 +1,33 @@
+.main-classroom {
+  display: flex;
+  flex-direction: column;
+}
+
 .main-classroom h1 {
   margin: 40px 0 0 45px;
   font-weight: bolder;
+}
+
+.main-classroom .button-container {
+  margin-top: auto;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.main-classroom button {
+  margin: 20px 45px 0 0;
+  padding: 10px 20px;
+  background-color: var(--darker-purple);
+  color: var(--pure-white);
+  border: 2px solid var(--darker-purple);
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.main-classroom button:hover {
+  background-color: transparent;
+  border: 2px solid var(--darker-purple);
+  color: var(--darker-purple);
 }

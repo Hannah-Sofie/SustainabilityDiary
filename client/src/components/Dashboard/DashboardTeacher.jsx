@@ -8,7 +8,6 @@ function DashboardTeacher() {
     <div>
       <Greeting />
       <div className="active-classes">
-        <h2>Your classes</h2>
         <Classes />
       </div>
     </div>

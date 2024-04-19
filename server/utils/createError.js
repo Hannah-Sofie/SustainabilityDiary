@@ -1,4 +1,5 @@
-class createError extends Error {
+// /utils/createError.js
+class CreateError extends Error {
   constructor(message, statusCode) {
     super(message);
     this.statusCode = statusCode;
@@ -9,4 +10,4 @@ class createError extends Error {
   }
 }
 
-module.exports = createError;
+module.exports = CreateError;

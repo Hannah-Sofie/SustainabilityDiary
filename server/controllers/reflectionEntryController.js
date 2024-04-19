@@ -1,6 +1,5 @@
-const { get } = require("mongoose");
 const ReflectionEntry = require("../models/reflectionEntrySchema");
-const createError = require("../utils/appError");
+const createError = require("../utils/createError");
 
 // Get all reflection entries from one ID
 const getAllReflectionEntries = async (req, res, next) => {

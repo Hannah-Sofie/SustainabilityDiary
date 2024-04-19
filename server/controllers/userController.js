@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/userSchema");
-const createError = require("../utils/appError");
+const createError = require("../utils/createError");
 const { hashPassword, comparePassword } = require("../utils/password");
 const validator = require("validator");
 
@@ -82,9 +82,13 @@ const loginUser = async (req, res, next) => {
     }
 
     // Assign JWT token and set as HTTP-only cookie
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRES_IN,
-    });
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: process.env.JWT_EXPIRES_IN,
+      }
+    );
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // only send over HTTPS in production

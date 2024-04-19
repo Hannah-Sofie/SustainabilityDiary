@@ -3,69 +3,91 @@
   padding: 0 40px;
   width: 100%;
 }
+
 .main-class .container-class {
   margin-top: 20px;
   text-transform: capitalize;
 }
+
 .main-class .class-box {
   width: 100%;
-  height: 300px;
-  padding: 10px 10px 30px 10px;
-  margin-top: 10px;
-  background: #fff;
+  padding: 10px;
+  background: var(--pure-white);
   border-radius: 10px;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
 }
+
 .main-class .class-box ul {
   list-style: none;
   display: flex;
 }
+
 .main-class .class-box ul li {
   margin: 10px;
   color: gray;
   cursor: pointer;
 }
+
 .main-class .class-box ul .active {
   color: #000;
   border-bottom: 1px solid #000;
 }
+
 .main-class .class-box .class {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 }
+
 .main-class .box {
-  width: 33%;
-  padding: 10px;
-  margin: 10px;
+  flex: 1 1 20%;
+  max-width: 22%;
+  padding: 30px 20px;
+  margin: 20px;
   border-radius: 10px;
   background: rgb(235, 233, 233);
-  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 300px;
+  box-sizing: border-box;
 }
+
+.main-class .box h3,
 .main-class .box p {
-  font-size: 12px;
-  margin-top: 5px;
+  text-align: center;
+  width: 100%;
 }
+
 .main-class .box button {
-  background: #000;
-  color: #fff;
-  padding: 7px 10px;
-  border-radius: 10px;
-  margin-top: 3rem;
+  background: var(--darker-purple);
+  color: var(--pure-white);
+  width: 80%;
+  align-self: center;
   cursor: pointer;
+  margin: 10px 0;
+  border: 2px solid var(--darker-purple);
 }
+
 .main-class .box button:hover {
-  background: rgba(0, 0, 0, 0.842);
+  background: transparent;
+  color: var(--darker-purple);
 }
-.main-class .box i {
-  font-size: 7rem;
-  float: right;
-  margin: -20px 20px 20px 0;
+
+.main-class .classroom-icon {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin-bottom: 10px;
 }
-.main-class .html {
-  color: rgb(25, 94, 54);
-}
-.main-class .css {
-  color: rgb(104, 179, 35);
-}
-.main-class .js {
-  color: rgb(28, 98, 179);
+
+.no-classrooms {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 2rem;
+  color: #000;
 }
