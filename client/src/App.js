@@ -14,6 +14,7 @@ import NewReflectionEntry from "./components/Reflection/NewReflectionEntry";
 import ReflectionEntries from "./components/Reflection/ReflectionEntries";
 import EditReflectionEntry from "./components/Reflection/EditReflectionEntry";
 import CreateClassroom from "./components/Classroom/CreateClassroom";
+import ClassroomDetail from "./components/Classroom/ClassroomDetail";
 
 // Lazy load pages
 const Dashboard = lazy(() => import("./pages/Dashboard/Dashboard"));
@@ -115,16 +116,25 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/create-classroom"
+              element={
+                <ProtectedRoute>
+                  <CreateClassroom />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/classroom/:id"
+              element={
+                <ProtectedRoute>
+                  <ClassroomDetail />
+                </ProtectedRoute>
+              }
+            />
           </Route>
-          <Route
-            path="/create-classroom"
-            element={
-              <ProtectedRoute>
-                <CreateClassroom />
-              </ProtectedRoute>
-            }
-          />
         </Routes>
+
         <ToastContainer />
       </Suspense>
     </UserProvider>

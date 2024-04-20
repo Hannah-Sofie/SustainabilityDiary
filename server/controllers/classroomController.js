@@ -27,25 +27,32 @@ const createClassroom = async (req, res, next) => {
 };
 
 const joinClassroom = async (req, res, next) => {
+  const { classCode } = req.body;
+  const userId = req.user._id; // Assuming user's ID is attached to the request via middleware
+
   try {
-    const { classCode } = req.body;
-    const classroom = await Classroom.findOne({ classCode }).populate(
-      "students"
-    );
+    const classroom = await Classroom.findOneAndUpdate(
+      { classCode },
+      { $addToSet: { students: userId } }, // Use $addToSet to avoid duplicates
+      { new: true }
+    ).populate("students");
+
     if (!classroom) {
-      return next(new CreateError("Classroom not found", 404));
+      return res.status(404).json({ message: "Classroom not found" });
     }
-    classroom.students.push(req.user._id);
-    await classroom.save();
+
     res.status(200).json(classroom);
   } catch (error) {
-    next(new CreateError("Failed to join classroom", 500));
+    next(error);
   }
 };
 
 const getClassrooms = async (req, res, next) => {
   try {
-    const classrooms = await Classroom.find({ teacher: req.user._id });
+    // Fetch classrooms where the current user is either the teacher or listed as a student
+    const classrooms = await Classroom.find({
+      $or: [{ teacher: req.user._id }, { students: req.user._id }],
+    }).populate("students");
     res.json(classrooms);
   } catch (error) {
     next(new CreateError("Failed to get classrooms", 500));
@@ -66,9 +73,31 @@ const getClassroomById = async (req, res, next) => {
   }
 };
 
+const removeStudent = async (req, res) => {
+  const { classroomId, studentId } = req.params; // Make sure these match the route parameters
+
+  try {
+    const classroom = await Classroom.findByIdAndUpdate(
+      classroomId,
+      { $pull: { students: studentId } },
+      { new: true }
+    ).populate("students");
+
+    if (!classroom) {
+      return res.status(404).json({ message: "Classroom not found" });
+    }
+
+    res.status(200).json(classroom);
+  } catch (error) {
+    console.error("Error removing student:", error);
+    res.status(500).json({ message: "Failed to remove student" });
+  }
+};
+
 module.exports = {
   createClassroom,
   joinClassroom,
   getClassrooms,
   getClassroomById,
+  removeStudent,
 };

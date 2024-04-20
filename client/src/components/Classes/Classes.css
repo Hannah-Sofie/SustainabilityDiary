@@ -61,17 +61,22 @@
   width: 100%;
 }
 
-.main-class .box button {
+.main-class .button-link {
+  display: inline-block;
   background: var(--darker-purple);
   color: var(--pure-white);
+  padding: 7px 10px;
+  text-align: center;
   width: 80%;
-  align-self: center;
-  cursor: pointer;
-  margin: 10px 0;
   border: 2px solid var(--darker-purple);
+  border-radius: 20px;
+  cursor: pointer;
+  text-decoration: none;
+  align-self: center;
+  margin: 10px 0;
 }
 
-.main-class .box button:hover {
+.main-class .button-link:hover {
   background: transparent;
   color: var(--darker-purple);
 }

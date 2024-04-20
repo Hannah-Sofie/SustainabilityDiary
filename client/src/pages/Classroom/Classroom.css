@@ -1,6 +1,7 @@
 .main-classroom {
   display: flex;
   flex-direction: column;
+  margin-bottom: 100px;
 }
 
 .main-classroom h1 {
@@ -30,4 +31,10 @@
   background-color: transparent;
   border: 2px solid var(--darker-purple);
   color: var(--darker-purple);
+}
+
+.main-classroom .join-classroom {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 40px;
 }

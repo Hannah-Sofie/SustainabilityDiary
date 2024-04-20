@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Classes.css";
 import DefaultImage from "../../assets/img/default-classroom.png";
 
@@ -30,7 +31,12 @@ function Classes({ classrooms }) {
                 />
                 <h3>{classroom.title}</h3>
                 <p>{classroom.description}</p>
-                <button>Open</button>
+                <Link
+                  to={`/classroom/${classroom._id}`}
+                  className="button-link"
+                >
+                  Open
+                </Link>
               </div>
             ))}
           </div>

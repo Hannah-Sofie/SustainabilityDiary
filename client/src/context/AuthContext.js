@@ -12,10 +12,12 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
+        console.log("Checking authentication status...");
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/status`,
           { withCredentials: true }
         );
+        console.log("Auth status response:", response);
         if (response.data.isAuthenticated) {
           const role = response.data.user.email.endsWith("@ntnu.no")
             ? "teacher"
@@ -27,10 +29,11 @@ export const AuthProvider = ({ children }) => {
           setUserData(null);
         }
       } catch (error) {
+        console.error("Error checking auth status:", error);
         setIsAuthenticated(false);
         setUserData(null);
       } finally {
-        setLoading(false); // Set loading to false once the check is done
+        setLoading(false);
       }
     };
 

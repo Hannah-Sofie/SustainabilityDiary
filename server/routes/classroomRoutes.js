@@ -8,6 +8,7 @@ const {
   joinClassroom,
   getClassrooms,
   getClassroomById,
+  removeStudent,
 } = require("../controllers/classroomController");
 
 // Configure storage for multer
@@ -26,5 +27,11 @@ router.post("/create", upload.single("photo"), verifyToken, createClassroom);
 router.post("/join", verifyToken, joinClassroom);
 router.get("/", verifyToken, getClassrooms);
 router.get("/:id", verifyToken, getClassroomById);
+router.delete(
+  "/:classroomId/students/:studentId",
+  verifyToken,
+  isTeacher,
+  removeStudent
+);
 
 module.exports = router;
