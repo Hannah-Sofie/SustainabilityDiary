@@ -1,5 +1,4 @@
 .classroom-detail-container {
-  color: var(--pure-white);
   padding: 40px;
   position: relative;
 }
@@ -31,22 +30,28 @@
   justify-content: center;
   border-radius: 10px;
   margin-bottom: 20px;
+  color: var(--pure-white);
 }
 
 .classroom-content {
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.7);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.classroom-content h1 {
+  color: var(--pure-white);
+}
+
 .classroom-detail-text {
   margin-bottom: 20px;
   text-align: left;
+  color: var(--pure-white);
 }
 
 .classroom-detail-text span {
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .classroom-detail-button {
@@ -58,11 +63,75 @@
   cursor: pointer;
   font-size: 1rem;
   display: block;
-  width: 20%;
   margin-top: 10px;
   font-weight: 500;
+  width: auto;
+  align-self: center;
 }
 
 .classroom-detail-button:hover {
   background-color: var(--dark-green);
+}
+
+.students-in {
+  margin-bottom: 20px;
+}
+
+.student-table {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.student-header,
+.student-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.student-header span:last-child {
+  color: var(--pure-white);
+}
+
+.student-header span,
+.student-info span {
+  text-align: left;
+  flex-basis: 30%;
+  flex-grow: 1;
+  flex-shrink: 0;
+}
+
+.student-header {
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.student-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.student-row {
+  align-items: center;
+  display: flex;
+  padding: 5px 0;
+}
+
+.student-info {
+  display: flex;
+  width: 100%;
+}
+
+.remove-student-button {
+  padding: 5px 10px;
+  background-color: var(--red);
+  color: var(--pure-white);
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.remove-student-button:hover {
+  background-color: var(--dark-red);
 }
