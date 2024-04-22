@@ -1,4 +1,3 @@
-// /utils/createError.js
 class CreateError extends Error {
   constructor(message, statusCode) {
     super(message);

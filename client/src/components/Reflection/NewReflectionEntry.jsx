@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -17,8 +17,29 @@ function NewReflectionEntry() {
     isPublic: false,
     photo: null,
     photoName: "",
+    selectedClassroom: "",
   });
+  const [classrooms, setClassrooms] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchClassrooms = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/classrooms`,
+          {
+            withCredentials: true,
+          }
+        );
+        setClassrooms(response.data);
+      } catch (error) {
+        console.error("Failed to fetch classrooms:", error);
+        toast.error("Failed to fetch classrooms.");
+      }
+    };
+
+    fetchClassrooms();
+  }, []);
 
   const togglePublic = () => {
     setEntry((prev) => ({
@@ -33,11 +54,15 @@ function NewReflectionEntry() {
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (files) {
+      const file = files[0];
       setEntry((prev) => ({
         ...prev,
-        photo: files[0],
-        photoName: files[0].name,
+        photo: file,
+        photoName: file.name,
       }));
+      // Optionally set a temporary URL to display the image before upload
+      const localImageUrl = URL.createObjectURL(file);
+      setEntry((prev) => ({ ...prev, photoUrl: localImageUrl }));
     } else {
       setEntry((prev) => ({ ...prev, [name]: value }));
     }
@@ -49,10 +74,15 @@ function NewReflectionEntry() {
     formData.append("title", entry.title);
     formData.append("body", entry.body);
     formData.append("isPublic", entry.isPublic);
-    if (entry.photo) formData.append("photo", entry.photo);
+    if (entry.isPublic) {
+      formData.append("classroomId", entry.selectedClassroom);
+    }
+    if (entry.photo) {
+      formData.append("photo", entry.photo);
+    }
 
     try {
-      await axios.post(
+      const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/reflections/create`,
         formData,
         {
@@ -63,6 +93,11 @@ function NewReflectionEntry() {
         }
       );
       toast.success("Reflection entry created successfully!");
+
+      // Assuming the server response includes the path for the uploaded photo
+      const newImageUrl = `${process.env.REACT_APP_API_URL}/uploads/${response.data.photo}`;
+      setEntry((prev) => ({ ...prev, photoUrl: newImageUrl }));
+
       navigate("/reflections");
     } catch (error) {
       console.error("Failed to create reflection entry:", error);
@@ -71,11 +106,12 @@ function NewReflectionEntry() {
   };
 
   const handleCancel = () => {
-    const isConfirmed = window.confirm(
-      "Are you sure you want to cancel? Any unsaved changes will be lost."
-    );
-    if (isConfirmed) {
-      navigate("/reflections"); // Redirect to the reflections list
+    if (
+      window.confirm(
+        "Are you sure you want to cancel? Any unsaved changes will be lost."
+      )
+    ) {
+      navigate("/reflections");
     }
   };
 
@@ -111,6 +147,23 @@ function NewReflectionEntry() {
             required
           />
         </div>
+        <div>
+          <label>Public to Classroom:</label>
+          <select
+            name="selectedClassroom"
+            disabled={!entry.isPublic}
+            value={entry.selectedClassroom}
+            onChange={handleChange}
+            required={entry.isPublic}
+          >
+            <option value="">Select Classroom</option>
+            {classrooms.map((classroom) => (
+              <option key={classroom._id} value={classroom._id}>
+                {classroom.title}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="file-upload">
           <label htmlFor="photo-upload" className="file-upload-label">
             <FontAwesomeIcon icon={faUpload} /> Upload Photo
@@ -123,6 +176,7 @@ function NewReflectionEntry() {
             accept="image/*"
             style={{ display: "none" }}
           />
+
           {entry.photoName && (
             <div className="file-name">{entry.photoName}</div>
           )}

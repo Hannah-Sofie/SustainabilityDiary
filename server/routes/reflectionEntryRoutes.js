@@ -1,11 +1,22 @@
+// routes/reflectionRoutes.js
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
+const validateReflection = require("../middlewares/validateReflection");
+const {
+  getAllReflectionEntries,
+  getAllPublicReflectionEntries,
+  getReflectionsByClassroom,
+  createReflectionEntry,
+  updateReflectionEntry,
+  deleteReflectionEntry,
+} = require("../controllers/reflectionEntryController");
+const { verifyToken } = require("../utils/verifyToken");
 
-// Set up storage
+// Set up storage for file uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./uploads/"); // Ensure this directory exists and is writable
+    cb(null, "./uploads/");
   },
   filename: function (req, file, cb) {
     const date = new Date().toISOString().replace(/:/g, "-");
@@ -14,7 +25,6 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  // Accept images only
   if (file.mimetype.startsWith("image")) {
     cb(null, true);
   } else {
@@ -25,32 +35,26 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 1024 * 1024 * 5, // 5 MB limit
+    fileSize: 1024 * 1024 * 5,
   },
   fileFilter: fileFilter,
 });
 
-const {
-  getAllReflectionEntries,
-  getAllPublicReflectionEntries,
-  getReflectionEntry,
-  createReflectionEntry,
-  updateReflectionEntry,
-  deleteReflectionEntry,
-} = require("../controllers/reflectionEntryController");
-const { verifyToken } = require("../utils/verifyToken");
-
-// Routes setup
 router.get("/", verifyToken, getAllReflectionEntries);
 router.get("/public", getAllPublicReflectionEntries);
-router.get("/:id", verifyToken, getReflectionEntry);
+router.get(
+  "/classroom/:classroomId/public",
+  verifyToken,
+  getReflectionsByClassroom
+);
 router.post(
   "/create",
   verifyToken,
   upload.single("photo"),
+  validateReflection,
   createReflectionEntry
 );
-router.put("/:id", verifyToken, updateReflectionEntry);
+router.put("/:id", verifyToken, validateReflection, updateReflectionEntry);
 router.delete("/:id", verifyToken, deleteReflectionEntry);
 
 module.exports = router;

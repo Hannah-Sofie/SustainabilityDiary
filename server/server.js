@@ -1,25 +1,31 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
 const cookieParser = require("cookie-parser");
-const app = express();
+const morgan = require("morgan");
 const connectDB = require("./dbconnect");
+const app = express();
 const PORT = process.env.PORT || 8002;
 
-// Import routes
-const userRoutes = require("./routes/userRoutes");
-const reflectionEntryRoutes = require("./routes/reflectionEntryRoutes"); // Import reflection entry routes
-const classroomRoutes = require("./routes/classroomRoutes"); // Import classroom routes
-
-// Adjust CORS Middleware for Specific Origin and Credentials
+// CORS configuration for different environments
+const whitelist = ["http://localhost:3000", "http://localhost:8083"];
 const corsOptions = {
-  origin: ["http://localhost:3000", "http://localhost:8083"], // Allow your frontend origin
-  credentials: true, // Allow sending cookies and headers with requests
+  origin: (origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
+app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
+app.use(morgan("tiny"));
 
 // Connect to MongoDB
 connectDB();
@@ -27,33 +33,32 @@ connectDB();
 // Static file serving for uploaded images
 app.use("/uploads", express.static("uploads"));
 
-// Use routes
-app.use("/", userRoutes); // Use user routes
-app.use("/reflections", reflectionEntryRoutes); // Use reflection entry routes
-app.use("/api/classrooms", classroomRoutes); // Use classroom routes
+// Routes
+const userRoutes = require("./routes/userRoutes");
+const reflectionEntryRoutes = require("./routes/reflectionEntryRoutes");
+const classroomRoutes = require("./routes/classroomRoutes");
 
-// Global error handler
+app.use("/api/users", userRoutes);
+app.use("/reflections", reflectionEntryRoutes);
+app.use("/api/classrooms", classroomRoutes);
+
+// Error handling middleware
 app.use((err, req, res, next) => {
-  err.statusCode = err.statusCode || 500;
-  err.status = err.status || "error";
-
-  res.status(err.statusCode).json({
-    status: err.status,
-    message: err.message,
+  console.error(err);
+  const statusCode = err.statusCode || 500;
+  res.status(statusCode).json({
+    status: statusCode >= 500 ? "error" : "fail",
+    message: err.message || "Internal Server Error",
   });
 });
 
 // Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-// Listen for SIGINT signal (e.g., from pressing Ctrl+C) to gracefully shutdown the server
+// Graceful shutdown
 process.on("SIGINT", async () => {
   console.log("Shutting down gracefully...");
-  await mongoose.connection.close(); // Close MongoDB connection
+  await mongoose.connection.close();
   console.log("MongoDB connection closed.");
-  process.exit(0); // Exit the process
+  process.exit(0);
 });
-
-module.exports = app;

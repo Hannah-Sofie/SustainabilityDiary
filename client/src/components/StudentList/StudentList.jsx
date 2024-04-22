@@ -10,7 +10,7 @@ function StudentList() {
     const fetchStudents = async () => {
       try {
         const { data } = await axios.get(
-          `${process.env.REACT_APP_API_URL}/students`,
+          `${process.env.REACT_APP_API_URL}/api/users/students`,
           { withCredentials: true }
         );
         // Sort students by name alphabetically

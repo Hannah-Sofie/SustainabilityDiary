@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
       try {
         console.log("Checking authentication status...");
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/status`,
+          `${process.env.REACT_APP_API_URL}/api/users/status`,
           { withCredentials: true }
         );
         console.log("Auth status response:", response);
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/login`,
+        `${process.env.REACT_APP_API_URL}/api/users/login`,
         credentials,
         { withCredentials: true }
       );
@@ -76,7 +76,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await axios.post(
-        `${process.env.REACT_APP_API_URL}/logout`,
+        `${process.env.REACT_APP_API_URL}/api/users/logout`,
         {},
         { withCredentials: true }
       );

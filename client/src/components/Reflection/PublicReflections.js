@@ -4,25 +4,28 @@ import { toast } from "react-toastify";
 import ReflectionModal from "./ReflectionModal";
 import "./PublicReflections.css";
 
-const PublicReflections = () => {
+const PublicReflections = ({ classroomId }) => {
   const [publicEntries, setPublicEntries] = useState([]);
   const [selectedEntry, setSelectedEntry] = useState(null);
 
   useEffect(() => {
     const fetchPublicEntries = async () => {
       try {
-        const { data } = await axios.get(
-          `${process.env.REACT_APP_API_URL}/reflections/public`,
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/reflections/classroom/${classroomId}/public`,
           { withCredentials: true }
         );
-        setPublicEntries(data);
+        setPublicEntries(response.data);
       } catch (error) {
         console.error("Failed to fetch public entries:", error);
         toast.error("Failed to fetch public entries.");
       }
     };
-    fetchPublicEntries();
-  }, []);
+
+    if (classroomId) {
+      fetchPublicEntries();
+    }
+  }, [classroomId]);
 
   const openModal = (entry) => {
     setSelectedEntry(entry);

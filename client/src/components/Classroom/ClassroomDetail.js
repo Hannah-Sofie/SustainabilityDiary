@@ -19,7 +19,7 @@ function ClassroomDetail() {
     axios
       .get(`/api/classrooms/${id}`)
       .then((response) => {
-        console.log(response.data); // Log to see what data is received
+        // console.log("API Response:", JSON.stringify(response.data, null, 2));
         setClassroom(response.data);
       })
       .catch((error) => {
@@ -119,7 +119,7 @@ function ClassroomDetail() {
         </Modal>
 
         <h1>Public Reflections</h1>
-        <PublicReflections />
+        <PublicReflections classroomId={id} />
       </div>
     </div>
   );
