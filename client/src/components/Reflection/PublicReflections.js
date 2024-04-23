@@ -3,6 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import ReflectionModal from "./ReflectionModal";
 import "./PublicReflections.css";
+import DefaultImage from "../../assets/img/default-image.jpg";
 
 const PublicReflections = ({ classroomId }) => {
   const [publicEntries, setPublicEntries] = useState([]);
@@ -43,6 +44,16 @@ const PublicReflections = ({ classroomId }) => {
           className="public-entry"
           onClick={() => openModal(entry)}
         >
+          <div className="entry-image">
+            <img
+              src={
+                entry.photo
+                  ? `${process.env.REACT_APP_API_URL}/uploads/${entry.photo}`
+                  : DefaultImage
+              }
+              alt="Reflection"
+            />
+          </div>
           <h3>{entry.title}</h3>
           <p>{entry.body}</p>
           <p className="author">By: {entry.userId.name}</p>

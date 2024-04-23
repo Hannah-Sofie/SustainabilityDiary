@@ -78,7 +78,9 @@ function Login() {
               <p className="forgot-password">
                 <Link to="/forgot-password">Forgot password?</Link>
               </p>
-              <button type="submit">Login</button>
+              <button type="submit" id="login-button">
+                Login
+              </button>
               <p className="no-account">
                 Don't have an account yet? <br />
                 <Link to="/register ">Register here</Link>

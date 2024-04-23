@@ -3,6 +3,7 @@ const User = require("../models/userSchema");
 const createError = require("../utils/createError");
 const { hashPassword, comparePassword } = require("../utils/password");
 const validator = require("validator");
+const bcrypt = require("bcrypt");
 
 // Register user
 const registerUser = async (req, res, next) => {
@@ -128,25 +129,36 @@ const logoutUser = (req, res) => {
 
 // Update user
 const updateUser = async (req, res) => {
+  // Assuming userId is correctly attached to req object via middleware
   const { userId } = req;
   const { name, password } = req.body;
 
+  // Initialize the update object with any new data provided
+  const updateData = { name }; // Directly set the name if it's part of the request
+
   try {
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10); // Hash new password if provided
+      updateData.password = hashedPassword; // Add hashed password to update data
+    }
+
+    // Update the user in the database
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      {
-        name,
-        ...(password && { password: bcrypt.hashSync(password, 10) }),
-      },
-      { new: true }
+      updateData,
+      { new: true, select: "-password" } // Ensure new data is returned without the password
     );
 
-    // Exclude sensitive fields
-    const { password: _, ...userWithoutPassword } = updatedUser.toObject();
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found." }); // User not found
+    }
 
-    res.json(userWithoutPassword);
+    res.json({ status: "success", user: updatedUser });
   } catch (error) {
-    res.status(500).json({ message: "Failed to update user." });
+    console.error("Update error:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to update user.", error: error.message });
   }
 };
 

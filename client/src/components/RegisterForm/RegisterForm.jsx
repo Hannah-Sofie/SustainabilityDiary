@@ -26,7 +26,7 @@ function Register() {
 
     try {
       const { data } = await axios.post(
-        `${process.env.REACT_APP_API_URL}/register`,
+        `${process.env.REACT_APP_API_URL}/api/users/register`,
         formData
       );
       setIsLoading(false);

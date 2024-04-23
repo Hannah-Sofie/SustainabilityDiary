@@ -22,15 +22,44 @@ const getAllPublicReflectionEntries = async (req, res, next) => {
   }
 };
 
+const getReflectionById = async (req, res, next) => {
+  try {
+    const { id } = req.params; // Get the reflection ID from URL parameters
+    const reflection = await ReflectionEntry.findById(id).populate(
+      "userId",
+      "name email"
+    ); // Optionally populate user details
+
+    if (!reflection) {
+      return next(new CreateError("Reflection not found", 404)); // No reflection found with the given ID
+    }
+
+    // Check if the reflection is public or belongs to the user making the request
+    if (
+      !reflection.isPublic &&
+      reflection.userId._id.toString() !== req.user._id.toString()
+    ) {
+      return next(new CreateError("Access denied", 403)); // User not authorized to access this reflection
+    }
+
+    res.json(reflection); // Send back the found reflection
+  } catch (error) {
+    console.error("Error fetching reflection:", error);
+    next(new CreateError("Failed to fetch reflection", 500)); // Server error
+  }
+};
+
 const getReflectionsByClassroom = async (req, res) => {
+  const classroomId = req.params.classroomId;
   try {
     const reflections = await ReflectionEntry.find({
       isPublic: true,
-      classrooms: { $in: [req.params.classroomId] },
+      classrooms: { $in: [classroomId] },
     }).populate("userId", "name");
 
     res.json(reflections);
   } catch (error) {
+    console.error("Error fetching reflections:", error);
     res.status(500).send({
       message: "Failed to fetch reflections for the classroom",
       error: error.message,
@@ -39,8 +68,9 @@ const getReflectionsByClassroom = async (req, res) => {
 };
 
 const createReflectionEntry = async (req, res, next) => {
-  const { title, body, isPublic, classroomIds } = req.body;
+  const { title, body, isPublic, classroomId } = req.body; // Changed to classroomId
   const photo = req.file ? req.file.filename : null;
+  console.log("Received data:", req.body);
 
   try {
     const newEntry = await ReflectionEntry.create({
@@ -49,12 +79,14 @@ const createReflectionEntry = async (req, res, next) => {
       body,
       isPublic,
       photo,
-      classrooms: isPublic ? classroomIds : [],
+      classrooms: isPublic && classroomId ? [classroomId] : [], // Now adding the classroomId to an array if isPublic is true
     });
+
+    console.log("New Entry:", newEntry); // Log created entry
     res.status(201).json(newEntry);
   } catch (error) {
     console.error("Error creating entry:", error);
-    next(new CreateError("Error creating entry", 500));
+    next(error);
   }
 };
 
@@ -96,6 +128,7 @@ module.exports = {
   getAllReflectionEntries,
   getAllPublicReflectionEntries,
   getReflectionsByClassroom,
+  getReflectionById,
   createReflectionEntry,
   updateReflectionEntry,
   deleteReflectionEntry,

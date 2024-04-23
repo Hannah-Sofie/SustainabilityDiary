@@ -20,7 +20,6 @@ function ReflectionEntries() {
 
   useEffect(() => {
     fetchEntries();
-    console.log(entries);
   }, []);
 
   const fetchEntries = async () => {

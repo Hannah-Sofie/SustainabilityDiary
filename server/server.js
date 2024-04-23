@@ -4,6 +4,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
+const path = require("path");
 const connectDB = require("./dbconnect");
 const app = express();
 const PORT = process.env.PORT || 8002;
@@ -18,7 +19,7 @@ const corsOptions = {
       callback(new Error("Not allowed by CORS"));
     }
   },
-  credentials: true,
+  credentials: true, // This is important for cookies, authorization headers with HTTPS
 };
 
 app.use(cors(corsOptions));
@@ -30,8 +31,16 @@ app.use(morgan("tiny"));
 // Connect to MongoDB
 connectDB();
 
-// Static file serving for uploaded images
-app.use("/uploads", express.static("uploads"));
+// Static file serving for uploaded images with custom CORS
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "uploads"), {
+    setHeaders: function (res, path) {
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+    },
+  })
+);
 
 // Routes
 const userRoutes = require("./routes/userRoutes");
@@ -46,7 +55,7 @@ app.use("/api/classrooms", classroomRoutes);
 app.use((err, req, res, next) => {
   console.error(err);
   const statusCode = err.statusCode || 500;
-  res.status(statusCode).json({
+  res.status(statusyCode).json({
     status: statusCode >= 500 ? "error" : "fail",
     message: err.message || "Internal Server Error",
   });

@@ -24,14 +24,22 @@ function Profile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`${process.env.REACT_APP_API_URL}/update`, userInfo);
-      toast.success("Profile updated successfully!");
-      setEditMode(false);
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/users/update`,
+        userInfo,
+        { withCredentials: true }
+      );
+      if (response.data.status === 'success') {
+        toast.success("Profile updated successfully!");
+        setEditMode(false);
+      } else {
+        throw new Error(response.data.message);
+      }
     } catch (error) {
-      toast.error("Failed to update profile.");
-      console.error(error);
+      toast.error("Failed to update profile: " + (error.response?.data?.message || error.message));
     }
   };
+  
 
   return (
     <div>
