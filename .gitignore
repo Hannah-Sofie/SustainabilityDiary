@@ -7,3 +7,4 @@ notes.md
 .mongo.env
 secrets.folder/*
 .DS_Store
+tests/*
