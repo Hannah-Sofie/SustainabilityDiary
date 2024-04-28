@@ -37,7 +37,7 @@ before(() => {
       console.log("Mongo container is up");
     })
     .then(() => {
-      serverRef = require("../server.js");
+      serverRef = require("../../server.js");
     });
 });
 

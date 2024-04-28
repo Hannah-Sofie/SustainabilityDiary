@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import Login from "../pages/Login"; // Adjust the import path as necessary
 import { BrowserRouter } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext"; // Adjust the import path as necessary
+import { AuthContext } from "../../context/AuthContext"; // Adjust the import path as necessary
 
 // Mock the useAuth hook
 const mockLogin = jest.fn();

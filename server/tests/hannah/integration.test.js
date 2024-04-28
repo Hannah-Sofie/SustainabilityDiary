@@ -7,7 +7,7 @@ const { MongoClient } = require("mongodb");
 const { exec } = require("child_process");
 
 // Assuming you have an Express app exported from your main server file
-const app = require("../server.js");
+const app = require("../../server.js");
 
 const TEST_DB_NAME = "testDbName";
 let mongoClient;

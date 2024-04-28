@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import Login from "../pages/Login/Login";
+import Login from "../../pages/Login/Login";
 
 // Setup mock
 const mock = new MockAdapter(axios);

@@ -3,8 +3,8 @@ package.json
 package-lock.json
 node_modules
 notes.md
-.env
 .mongo.env
 secrets.folder/*
 .DS_Store
 tests/*
+tests
