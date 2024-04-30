@@ -21,7 +21,7 @@ jobs:
           cache: npm
           cache-dependency-path: ${{ matrix.dir }}/package-lock.json
       - name: Change to project directory
-        run: echo $GITHUB_WORKSPACE && cd $GITHUB_WORKSPACE && cd ${{ matrix.dir }}
+        run: cd $GITHUB_WORKSPACE && cd ${{ matrix.dir }} && echo "$(pwd)"
       - run: npm ci
       - name: Linting
         run: npm run lint
