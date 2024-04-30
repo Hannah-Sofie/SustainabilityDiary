@@ -1,6 +1,4 @@
 keys
-package.json
-package-lock.json
 node_modules
 notes.md
 .mongo.env
