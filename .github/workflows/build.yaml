@@ -22,7 +22,7 @@ jobs:
           cache-dependency-path: ${{ matrix.dir }}/package-lock.json
       - name: Change to project directory
         run: cd $GITHUB_WORKSPACE && cd ${{ matrix.dir }} && echo "$(ls)"
-      - run: npm ci
+      - run: npm install
       - name: Linting
         run: npm run lint
       - name: Testing
