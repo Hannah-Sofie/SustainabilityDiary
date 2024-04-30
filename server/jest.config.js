@@ -1,5 +1,5 @@
 module.exports = {
   testEnvironment: "node",
-  testRegex: "/tests/jonhelge/.*\\.test\\.js$",
+  testRegex: "/tests/.*/.*\\.test\\.js$",
   coveragePathIgnorePatterns: ["/node_modules/"],
 };
