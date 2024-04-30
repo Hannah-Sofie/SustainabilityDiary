@@ -35,6 +35,7 @@ function Reflections() {
               to="/new-reflection-entry"
               backgroundColor="var(--darker-purple)"
               color="var(--pure-white)"
+              class="new-reflection-button"
               hoverBackgroundColor="transparent"
               hoverColor="var(--darker-purple)"
               hoverBorderColor="var(--darker-purple)"

@@ -1,4 +1,7 @@
 const express = require("express");
+const router = express.Router();
+const User = require('../models/userSchema'); 
+
 const {
   registerUser,
   loginUser,
@@ -6,19 +9,20 @@ const {
   fetchStudents,
   updateUser,
 } = require("../controllers/userController");
+
 const { verifyToken } = require("../utils/verifyToken");
 const { status } = require("../utils/status");
-const router = express.Router();
 
 // Define your routes
 router.post("/register", (req, res, next) => {
   console.log("register called");
-  registerUser(req, res, next);
+  registerUser(User, req, res, next); 
 });
-router.post("/login", loginUser);
+
+router.post("/login", (req, res, next) => loginUser(User, req, res, next));  
 router.post("/logout", logoutUser);
 router.get("/status", verifyToken, status);
-router.get("/students", verifyToken, fetchStudents);
-router.put("/update", verifyToken, updateUser);
+router.get("/students", verifyToken, (req, res) => fetchStudents(User, req, res));  
+router.put("/update", verifyToken, (req, res) => updateUser(User, req, res));  
 
 module.exports = router;

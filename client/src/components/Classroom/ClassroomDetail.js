@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import DefaultImage from "../../assets/img/default-header.jpeg";
-import PublicReflections from "../Reflection/PublicReflections";
-import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
-import Modal from "../Modal/Modal";
-import { useAuth } from "../../context/AuthContext";
+import PublicReflections from "../Reflection/PublicReflections.js";
+import LoadingIndicator from "../LoadingIndicator/LoadingIndicator.jsx";
+import Modal from "../Modal/Modal.js";
+import { useAuth } from "../../context/AuthContext.js";
 import "./ClassroomDetail.css";
 
 function ClassroomDetail() {

@@ -71,3 +71,5 @@ process.on("SIGINT", async () => {
   console.log("MongoDB connection closed.");
   process.exit(0);
 });
+
+module.exports = app;

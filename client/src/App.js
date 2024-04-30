@@ -1,35 +1,35 @@
 import React, { Suspense, lazy } from "react";
 import { Routes, Route } from "react-router-dom";
-import { UserProvider } from "./context/UserContext";
+import { UserProvider } from "./context/UserContext.js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./config/axiosConfig";
-import { useAuth } from "./context/AuthContext";
-import LoadingIndicator from "./components/LoadingIndicator/LoadingIndicator";
+import "./config/axiosConfig.js";
+import { useAuth } from "./context/AuthContext.js";
+import LoadingIndicator from "./components/LoadingIndicator/LoadingIndicator.jsx";
 
 // Import layout, protected route components, and other components
-import Layout from "./components/Layout/Layout";
-import ProtectedRoute from "./components/ProtectedRoute";
-import NewReflectionEntry from "./components/Reflection/NewReflectionEntry";
-import ReflectionEntries from "./components/Reflection/ReflectionEntries";
-import EditReflectionEntry from "./components/Reflection/EditReflectionEntry";
-import CreateClassroom from "./components/Classroom/CreateClassroom";
-import ClassroomDetail from "./components/Classroom/ClassroomDetail";
+import Layout from "./components/Layout/Layout.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import NewReflectionEntry from "./components/Reflection/NewReflectionEntry.jsx";
+import ReflectionEntries from "./components/Reflection/ReflectionEntries.jsx";
+import EditReflectionEntry from "./components/Reflection/EditReflectionEntry.jsx";
+import CreateClassroom from "./components/Classroom/CreateClassroom.js";
+import ClassroomDetail from "./components/Classroom/ClassroomDetail.js";
 
 // Lazy load pages
-const Dashboard = lazy(() => import("./pages/Dashboard/Dashboard"));
-const Home = lazy(() => import("./pages/Home/Home"));
-const Login = lazy(() => import("./pages/Login/Login"));
-const Register = lazy(() => import("./pages/Register/Register"));
-const NotFound = lazy(() => import("./pages/NotFound/NotFound"));
-const Reflections = lazy(() => import("./pages/Reflections/Reflections"));
-const Classroom = lazy(() => import("./pages/Classroom/Classroom"));
+const Dashboard = lazy(() => import("./pages/Dashboard/Dashboard.jsx"));
+const Home = lazy(() => import("./pages/Home/Home.jsx"));
+const Login = lazy(() => import("./pages/Login/Login.jsx"));
+const Register = lazy(() => import("./pages/Register/Register.jsx"));
+const NotFound = lazy(() => import("./pages/NotFound/NotFound.jsx"));
+const Reflections = lazy(() => import("./pages/Reflections/Reflections.jsx"));
+const Classroom = lazy(() => import("./pages/Classroom/Classroom.jsx"));
 const ForgotPassword = lazy(() =>
-  import("./pages/ForgotPassword/ForgotPassword")
+  import("./pages/ForgotPassword/ForgotPassword.jsx")
 );
-const ResetPassword = lazy(() => import("./pages/ResetPassword/ResetPassword"));
-const Students = lazy(() => import("./pages/Students/Students"));
-const Profile = lazy(() => import("./pages/Profile/Profile"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword/ResetPassword.jsx"));
+const Students = lazy(() => import("./pages/Students/Students.jsx"));
+const Profile = lazy(() => import("./pages/Profile/Profile.jsx"));
 
 function App() {
   const { loading } = useAuth();

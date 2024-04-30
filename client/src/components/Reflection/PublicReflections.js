@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import ReflectionModal from "./ReflectionModal";
+import ReflectionModal from "./ReflectionModal.js";
 import "./PublicReflections.css";
 import DefaultImage from "../../assets/img/default-image.jpg";
 
