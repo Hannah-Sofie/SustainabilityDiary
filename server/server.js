@@ -55,7 +55,7 @@ app.use("/api/classrooms", classroomRoutes);
 app.use((err, req, res, next) => {
   console.error(err);
   const statusCode = err.statusCode || 500;
-  res.status(statusyCode).json({
+  res.status(statusCode).json({
     status: statusCode >= 500 ? "error" : "fail",
     message: err.message || "Internal Server Error",
   });
@@ -63,6 +63,15 @@ app.use((err, req, res, next) => {
 
 // Start the server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// Export the app for testing
+module.exports = app;
+
+// Function to start the server, exported for testing purposes
+module.exports.start = function () {
+  const PORT = process.env.PORT || 8002;
+  return app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+};
 
 // Graceful shutdown
 process.on("SIGINT", async () => {

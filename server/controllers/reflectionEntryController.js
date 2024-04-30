@@ -70,7 +70,18 @@ const getReflectionsByClassroom = async (req, res) => {
 const createReflectionEntry = async (req, res, next) => {
   const { title, body, isPublic, classroomId } = req.body; // Changed to classroomId
   const photo = req.file ? req.file.filename : null;
-  console.log("Received data:", req.body);
+
+  if (title.length === 0 || body.length === 0 || !title || !body) {
+    return next(new CreateError("Title and body are required", 400));
+  }
+
+  if (title.length > 20) {
+    return next(new CreateError("Title is too long", 400));
+  }
+
+  if (body.length > 200) {
+    return next(new CreateError("Body is too long", 400));
+  }
 
   try {
     const newEntry = await ReflectionEntry.create({
@@ -92,6 +103,15 @@ const createReflectionEntry = async (req, res, next) => {
 
 const updateReflectionEntry = async (req, res, next) => {
   const { title, body, isPublic } = req.body;
+  if (title.length === 0 || body.length === 0 || !title || !body) {
+    return next(new CreateError("Title and body are required", 400));
+  }
+  if (title.length > 20) {
+    return next(new CreateError("Title is too long", 400));
+  }
+  if (body.length > 200) {
+    return next(new CreateError("Body is too long", 400));
+  }
   try {
     const entry = await ReflectionEntry.findOneAndUpdate(
       { _id: req.params.id, userId: req.user._id },
