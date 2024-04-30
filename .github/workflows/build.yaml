@@ -25,9 +25,9 @@ jobs:
         run: cd $GITHUB_WORKSPACE && cd ${{ matrix.dir }} && echo "$(ls)"
       - run: cd ${{ matrix.dir }} && npm ci
       - name: Linting
-        run: npm run lint
+        run: cd ${{ matrix.dir }} && npm run lint
       - name: Testing
-        run: npm test
+        run: cd ${{ matrix.dir }} && npm test
 
   build-client:
     runs-on: ubuntu-latest
