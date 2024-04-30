@@ -3,10 +3,10 @@ const assert = require("node:assert");
 const fetch = require("node-fetch");
 const mongo = require("mongodb");
 const nock = require("nock");
-const config = require("../../utils/config");
-const app = require("../../server");
+const config = require("../utils/config");
+const app = require("../server");
 
-const mockApiData = require("./api.mock.response.json");
+const mockApiData = require("./hannah/api.mock.response.json");
 const TEST_DB = "sustainability-db-test";
 const LOCALHOST = "localhost";
 
@@ -39,7 +39,7 @@ before(async () => {
 after(async () => {
   const dbConn = await mongo.MongoClient.connect(
     "mongodb+srv://hannah:sofie@sustainabilitydiary.qjbtcnq.mongodb.net/"
-  ); // fix later
+  ); // Had problems with the config.mongo.url, so hardcoded the connection string
   await dbConn.db().collection("reflectionentries").deleteMany({});
   await dbConn.close();
   await serverRef.close(); // Properly close the server

@@ -1,7 +1,7 @@
 const { describe, it, beforeEach, afterEach } = require("node:test");
 const assert = require("node:assert");
-const { registerUser } = require("../../controllers/userController");
-const User = require("../../models/userSchema");
+const { registerUser } = require("../controllers/userController");
+const User = require("../models/userSchema");
 
 describe("User Registration Tests", () => {
   let mockRequest,
