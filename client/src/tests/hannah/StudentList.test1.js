@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { toast } from "react-toastify";
-import StudentList from "../components/StudentList/StudentList";
+import StudentList from "../../components/StudentList/StudentList";
 
 // Mocking toast functions to avoid side effects in logs
 jest.mock("react-toastify", () => ({

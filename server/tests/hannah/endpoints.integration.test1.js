@@ -3,8 +3,8 @@ const assert = require("node:assert");
 const fetch = require("node-fetch");
 const mongo = require("mongodb");
 const nock = require("nock");
-const config = require("../utils/config");
-const app = require("../server");
+const config = require("../../utils/config");
+const app = require("../../server");
 
 const mockApiData = require("./api.mock.response.json");
 const TEST_DB = "sustainability-db-test";
