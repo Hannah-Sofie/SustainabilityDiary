@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer';
 
 async function forgotPasswordTest() {
-  const browser = await puppeteer.launch({ headless: false, slowMo: 50 }); // Adjust headless and slowMo as needed
+  const browser = await puppeteer.launch({ headless: false, slowMo: 50 }); 
   const page = await browser.newPage();
 
   try {

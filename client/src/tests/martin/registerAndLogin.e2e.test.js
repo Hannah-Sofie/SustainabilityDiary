@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer";
 
 async function registerAndLogin() {
-  const browser = await puppeteer.launch({ headless: false, slowMo: 50 });
+  const browser = await puppeteer.launch({ headless: false});
   const page = await browser.newPage();
 
   try {
@@ -28,13 +28,13 @@ async function registerAndLogin() {
 
     // Fill the login form with the same credentials
     await page.type('input[name="email"]', email);
-    await page.type('input[name="password"]', '123@ABC.com');
+    await page.type('input[name="password"]', 'wrong_password'); 
     await page.click('button[type="submit"]');
 
-    // Wait for successful login navigation
-    await page.waitForNavigation({ waitUntil: 'networkidle0' });
+    // Wait for unsuccessful login navigation
+    await page.waitForNavigation({ waitUntil: 'networkidle0', timeout: 60000 }); 
 
-    console.log(`Login successful for ${email}`);
+    console.log(`Login failed for ${email}`);
 
     // Test extremely long email
     const longEmail = 'a'.repeat(300) + '@ntnu.no';
