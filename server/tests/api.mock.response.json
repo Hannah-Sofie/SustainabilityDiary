@@ -1,0 +1,24 @@
+[
+  {
+    "id": "1",
+    "userId": "12345",
+    "title": "Reflection on New Technology",
+    "body": "Today I explored new advancements in AI and machine learning...",
+    "isPublic": true,
+    "photo": "path/to/image1.jpg",
+    "classrooms": ["54321"],
+    "createdAt": "2022-01-01T00:00:00.000Z",
+    "updatedAt": "2022-01-02T00:00:00.000Z"
+  },
+  {
+    "id": "2",
+    "userId": "12346",
+    "title": "Reflection on Project Management",
+    "body": "Project management requires careful planning and communication...",
+    "isPublic": false,
+    "photo": "path/to/image2.jpg",
+    "classrooms": ["54322"],
+    "createdAt": "2022-02-01T00:00:00.000Z",
+    "updatedAt": "2022-02-02T00:00:00.000Z"
+  }
+]
