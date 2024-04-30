@@ -13,9 +13,18 @@ function StudentList() {
           `${process.env.REACT_APP_API_URL}/api/users/students`,
           { withCredentials: true }
         );
-        // Sort students by name alphabetically
-        const sortedData = data.sort((a, b) => a.name.localeCompare(b.name));
-        setStudents(sortedData);
+        if (Array.isArray(data) && data.length > 0) {
+          // Only sort and set students if data is valid and not empty
+          const sortedData = data.sort((a, b) =>
+            a.name && b.name ? a.name.localeCompare(b.name) : 0
+          );
+          setStudents(sortedData);
+        } else {
+          // Handle cases where data is an empty array or malformed
+          setStudents([]);
+          console.error("No valid student data received:", data);
+          toast.error("No student data available.");
+        }
       } catch (error) {
         console.error("Failed to fetch students:", error);
         toast.error("Failed to fetch students. Please try again later.");
