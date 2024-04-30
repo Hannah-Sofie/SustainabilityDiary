@@ -15,7 +15,7 @@ describe("Authentication Flow Tests", () => {
   before(async () => {
     browser = await puppeteer.launch({
       headless: false, // Set to true for automated testing environments
-      slowMo: 50, // Slow motion delay for visual debugging
+      slowMo: 100, // Slow motion delay for visual debugging
       args: ["--window-size=1440,1000"],
     });
   });
@@ -47,7 +47,7 @@ describe("Authentication Flow Tests", () => {
   it("should allow a user to register", async () => {
     await page.goto("http://localhost:8083/register");
     await page.type("input[name='name']", "Test User");
-    await page.type("input[name='email']", "testuser@ntnu.no");
+    await page.type("input[name='email']", "testuser2@ntnu.no");
     await page.type("input[name='password']", "TestP@ssword123!");
     await page.click("button[type='submit']");
     await page.waitForSelector(".Toastify__toast-body", {
@@ -73,7 +73,7 @@ describe("Authentication Flow Tests", () => {
 
   it("should allow a user to log in and navigate to the dashboard", async () => {
     await page.goto("http://localhost:8083/login");
-    await page.type("#email", "testuser@ntnu.no");
+    await page.type("#email", "testuser2@ntnu.no");
     await page.type("#password", "TestP@ssword123!");
     await page.click("#login-button");
     await page.waitForSelector("#logout-button", {

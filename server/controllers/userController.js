@@ -14,6 +14,10 @@ const registerUser = async (req, res, next) => {
       return res.status(400).json({ error: "Name is required" });
     }
 
+    if (name.length > 50) {
+      return res.status(400).json({error: "Name cannot exceed 50 characters"});
+    }
+
     const isNtnuEmail =
       email.endsWith("@stud.ntnu.no") || email.endsWith("@ntnu.no");
     if (!validator.isEmail(email) || !isNtnuEmail) {

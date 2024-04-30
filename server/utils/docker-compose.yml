@@ -12,7 +12,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - ${APP_PORT}:${APP_PORT}
-    restart: on-failure
     env_file:
       - .env
     logging:
@@ -35,7 +34,6 @@ services:
       dockerfile: Dockerfile
     environment:
       MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/mongo_admin_pwd
-    restart: on-failure
     env_file:
       - .mongo.env
       - .env
@@ -61,6 +59,7 @@ services:
         condition: on-failure
         delay: 3s
         max_attempts: 10
+        window: 15s
       resources:
         limits:
           cpus: "0.75"
