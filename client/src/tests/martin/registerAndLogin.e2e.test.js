@@ -35,6 +35,22 @@ async function registerAndLogin() {
     await page.waitForNavigation({ waitUntil: 'networkidle0' });
 
     console.log(`Login successful for ${email}`);
+
+    // Test extremely long email
+    const longEmail = 'a'.repeat(300) + '@ntnu.no';
+    await page.goto('http://localhost:3000/register');
+    await page.type('input[name="name"]', 'Long Email Test');
+    await page.type('input[name="email"]', longEmail);
+    await page.type('input[name="password"]', '123@ABC.com');
+    await page.click('button[type="submit"]');
+
+    // Test extremely long password
+    const longPassword = 'a'.repeat(300);
+    await page.goto('http://localhost:3000/register');
+    await page.type('input[name="name"]', 'Long Password Test');
+    await page.type('input[name="email"]', `testuser${randomId + 1}@ntnu.no`);
+    await page.type('input[name="password"]', longPassword);
+    await page.click('button[type="submit"]');
   } catch (error) {
     console.error('An error occurred:', error);
   } finally {
