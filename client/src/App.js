@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./config/axiosConfig";
 import { useAuth } from "./context/AuthContext";
 import LoadingIndicator from "./components/LoadingIndicator/LoadingIndicator";
-
+//""""
 // Import layout, protected route components, and other components
 import Layout from "./components/Layout/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -24,8 +24,8 @@ const Register = lazy(() => import("./pages/Register/Register"));
 const NotFound = lazy(() => import("./pages/NotFound/NotFound"));
 const Reflections = lazy(() => import("./pages/Reflections/Reflections"));
 const Classroom = lazy(() => import("./pages/Classroom/Classroom"));
-const ForgotPassword = lazy(() =>
-  import("./pages/ForgotPassword/ForgotPassword")
+const ForgotPassword = lazy(
+  () => import("./pages/ForgotPassword/ForgotPassword"),
 );
 const ResetPassword = lazy(() => import("./pages/ResetPassword/ResetPassword"));
 const Students = lazy(() => import("./pages/Students/Students"));
