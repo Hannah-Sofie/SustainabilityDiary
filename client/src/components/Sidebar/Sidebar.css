@@ -71,3 +71,24 @@
 .container-sidebar .logout:hover {
   color: var(--red);
 }
+
+.container-sidebar.collapsed {
+  width: 80px;
+}
+
+.container-sidebar.collapsed .logout span {
+  display: none;
+}
+
+.container-sidebar .toggle-sidebar {
+  position: absolute;
+  top: 580px;
+  left: 100%;
+  transform: translateX(-100%);
+  z-index: 1000;
+  background: #fff;
+  border: none;
+  cursor: pointer;
+  padding: 8px 12px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
