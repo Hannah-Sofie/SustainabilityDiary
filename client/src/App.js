@@ -35,6 +35,7 @@ const Sustainability = lazy(() =>
 );
 const Achievements = lazy(() => import("./pages/Achievements/Achievements"));
 const Feedback = lazy(() => import("./pages/Feedback/Feedback"));
+const Help = lazy(() => import("./pages/Help/Help"));
 
 function App() {
   const { loading } = useAuth();
@@ -154,10 +155,18 @@ function App() {
               }
             />
             <Route
-              path="/acheivements"
+              path="/achievements"
               element={
                 <ProtectedRoute>
                   <Achievements />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/help"
+              element={
+                <ProtectedRoute>
+                  <Help />
                 </ProtectedRoute>
               }
             />
