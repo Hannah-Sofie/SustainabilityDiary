@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Greeting from "../Greetings/Greetings";
 import LatestReflection from "../Reflection/LatestReflection";
+import SustainabilityFact from "../Sustainability/SustainabilityFact";
 import "./Dashboard.css";
 
 function DashboardStudent() {
@@ -26,6 +27,7 @@ function DashboardStudent() {
   return (
     <div>
       <Greeting />
+      <SustainabilityFact />
       <div className="active-classes">
         <h2>Your classrooms</h2>
       </div>

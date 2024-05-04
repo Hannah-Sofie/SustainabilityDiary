@@ -1,0 +1,41 @@
+.sustainability-fact {
+  margin: 20px;
+  padding: 15px;
+  background-color: #e8f5e9;
+  border-left: 5px solid #4caf50;
+  font-size: 16px;
+}
+
+.sustainability-fact h3 {
+  margin-top: 0;
+}
+
+.response-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.response-buttons button {
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  background-color: #4caf50;
+  color: white;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.response-buttons button:hover {
+  background-color: #367c39;
+}
+
+.response span {
+  font-weight: bold;
+}
+
+.response {
+  margin-top: 20px;
+  font-size: 14px;
+}
