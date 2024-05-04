@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -8,14 +8,27 @@ import Logo from "../../assets/img/logo.png";
 function Sidebar() {
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const handleLogout = async () => {
     await logout();
     navigate("/login");
   };
+
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
   return (
     <div>
-      <div className="container-sidebar">
+      <div className={`container-sidebar ${isCollapsed ? "collapsed" : ""}`}>
+        <button onClick={toggleSidebar} className="toggle-sidebar">
+          <i
+            className={`fas ${
+              isCollapsed ? "fa-chevron-right" : "fa-chevron-left"
+            }`}
+          ></i>
+        </button>
         <nav>
           <ul>
             <li className="logo-item">
