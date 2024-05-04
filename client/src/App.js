@@ -24,12 +24,17 @@ const Register = lazy(() => import("./pages/Register/Register"));
 const NotFound = lazy(() => import("./pages/NotFound/NotFound"));
 const Reflections = lazy(() => import("./pages/Reflections/Reflections"));
 const Classroom = lazy(() => import("./pages/Classroom/Classroom"));
-const ForgotPassword = lazy(
-  () => import("./pages/ForgotPassword/ForgotPassword"),
+const ForgotPassword = lazy(() =>
+  import("./pages/ForgotPassword/ForgotPassword")
 );
 const ResetPassword = lazy(() => import("./pages/ResetPassword/ResetPassword"));
 const Students = lazy(() => import("./pages/Students/Students"));
 const Profile = lazy(() => import("./pages/Profile/Profile"));
+const Sustainability = lazy(() =>
+  import("./pages/Sustainability/Sustainability")
+);
+const Achievements = lazy(() => import("./pages/Achievements/Achievements"));
+const Feedback = lazy(() => import("./pages/Feedback/Feedback"));
 
 function App() {
   const { loading } = useAuth();
@@ -129,6 +134,30 @@ function App() {
               element={
                 <ProtectedRoute>
                   <ClassroomDetail />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/sustainability"
+              element={
+                <ProtectedRoute>
+                  <Sustainability />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/feedback"
+              element={
+                <ProtectedRoute>
+                  <Feedback />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/acheivements"
+              element={
+                <ProtectedRoute>
+                  <Achievements />
                 </ProtectedRoute>
               }
             />

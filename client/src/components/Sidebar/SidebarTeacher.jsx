@@ -39,9 +39,21 @@ function Sidebar() {
               </Link>
             </li>
             <li className="nav-link-item">
+              <Link to="/feedback">
+                <i className="fas fa-comment"></i>
+                <span className="nav-item">Feedback</span>
+              </Link>
+            </li>
+            <li className="nav-link-item">
               <Link to="/classroom">
-                <i className="fas fa-tasks"></i>
+                <i className="fas fa-chalkboard"></i>
                 <span className="nav-item">Classroom</span>
+              </Link>
+            </li>
+            <li className="nav-link-item">
+              <Link to="/sustainability">
+                <i className="fas fa-leaf"></i>
+                <span className="nav-item">Sustainability</span>
               </Link>
             </li>
             <li className="nav-link-item">
