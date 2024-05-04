@@ -22,7 +22,7 @@
 .student-list-table td {
   text-align: left;
   padding: 12px;
-  border-bottom: 1px solid var(--light-purple);
+  border-bottom: 1px solid var(--light-gray);
   word-wrap: break-word;
 }
 
@@ -35,20 +35,33 @@
 }
 
 .student-list-table tr:hover {
+  background-color: var(--lighter-purple);
+}
+
+.student-list-table input[type="text"],
+.student-list-table input[type="email"] {
+  width: 95%;
+  padding: 8px;
+  margin: auto;
+  box-sizing: border-box;
   background-color: var(--lighter-gray);
 }
 
-.student-list-table td:nth-child(1), /* Name column */
-  .student-list-table th:nth-child(1) {
-  width: 50%;
+.student-list-table button {
+  padding: 6px 12px;
+  margin-right: 5px;
+  background-color: var(--darker-purple);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.student-list-table td:nth-child(2), /* Email column */
-  .student-list-table th:nth-child(2) {
-  width: 50%;
+.student-list-table button:hover {
+  background-color: var(--dark-purple);
 }
 
-/* Responsive adjustments */
 @media screen and (max-width: 600px) {
   .student-list-container {
     padding: 10px;

@@ -5,6 +5,7 @@ const {
   logoutUser,
   fetchStudents,
   updateUser,
+  updateStudentDetails,
 } = require("../controllers/userController");
 const { verifyToken } = require("../utils/verifyToken");
 const { status } = require("../utils/status");
@@ -19,6 +20,7 @@ router.post("/login", loginUser);
 router.post("/logout", logoutUser);
 router.get("/status", verifyToken, status);
 router.get("/students", verifyToken, fetchStudents);
+router.put("/students/:id", verifyToken, updateStudentDetails);
 router.put("/update", verifyToken, updateUser);
 
 module.exports = router;
