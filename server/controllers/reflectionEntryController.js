@@ -67,6 +67,18 @@ const getReflectionsByClassroom = async (req, res) => {
   }
 };
 
+const getLatestReflection = async (req, res, next) => {
+  try {
+      const latestReflection = await ReflectionEntry.findOne({ userId: req.user._id }).sort({ createdAt: -1 });
+      if (!latestReflection) {
+          return res.status(404).json({ message: "No reflections found" });
+      }
+      res.json(latestReflection);
+  } catch (error) {
+      next(new CreateError("Failed to fetch the latest reflection", 500));
+  }
+};
+
 const createReflectionEntry = async (req, res, next) => {
   const { title, body, isPublic, classroomId } = req.body; // Changed to classroomId
   const photo = req.file ? req.file.filename : null;
@@ -149,6 +161,7 @@ module.exports = {
   getAllPublicReflectionEntries,
   getReflectionsByClassroom,
   getReflectionById,
+  getLatestReflection,
   createReflectionEntry,
   updateReflectionEntry,
   deleteReflectionEntry,
