@@ -8,6 +8,7 @@ const {
   getAllPublicReflectionEntries,
   getReflectionsByClassroom,
   getReflectionById,
+  getLatestReflection,
   createReflectionEntry,
   updateReflectionEntry,
   deleteReflectionEntry,
@@ -42,13 +43,14 @@ const upload = multer({
 });
 
 router.get("/", verifyToken, getAllReflectionEntries);
-router.get("/:id", verifyToken, getReflectionById);
 router.get("/public", getAllPublicReflectionEntries);
 router.get(
   "/classroom/:classroomId/public",
   verifyToken,
   getReflectionsByClassroom
 );
+router.get("/latest", verifyToken, getLatestReflection);
+router.get("/:id", verifyToken, getReflectionById);
 router.post(
   "/create",
   verifyToken,
