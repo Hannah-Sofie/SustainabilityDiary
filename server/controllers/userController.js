@@ -176,10 +176,49 @@ const fetchStudents = async (req, res) => {
   }
 };
 
+// Update student details
+const updateStudentDetails = async (req, res) => {
+  const { id } = req.params; // Assume you pass the student ID as URL parameter
+  const { name, email } = req.body;
+
+  if (!validator.isEmail(email)) {
+    return res.status(400).json({ error: "Invalid email format." });
+  }
+
+  if (name && name.length > 50) {
+    return res.status(400).json({ error: "Name cannot exceed 50 characters." });
+  }
+
+  try {
+    // Check if the email is taken by another user
+    const emailExists = await User.findOne({ _id: { $ne: id }, email: email });
+    if (emailExists) {
+      return res.status(400).json({ error: "Email already in use by another account." });
+    }
+
+    const updatedStudent = await User.findByIdAndUpdate(
+      id,
+      { name, email },
+      { new: true, select: "-password" } // Do not return the password field
+    );
+
+    if (!updatedStudent) {
+      return res.status(404).json({ error: "Student not found." });
+    }
+
+    res.json({ status: "success", user: updatedStudent });
+  } catch (error) {
+    console.error("Failed to update student:", error);
+    res.status(500).json({ error: "Failed to update student details." });
+  }
+};
+
+
 module.exports = {
   registerUser,
   loginUser,
   logoutUser,
   fetchStudents,
   updateUser,
+  updateStudentDetails,
 };

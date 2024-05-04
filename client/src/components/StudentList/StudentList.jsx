@@ -5,34 +5,58 @@ import { toast } from "react-toastify";
 
 function StudentList() {
   const [students, setStudents] = useState([]);
+  const [editing, setEditing] = useState(null); // Stores the ID of the student being edited
+  const [editFormData, setEditFormData] = useState({ name: "", email: "" });
 
   useEffect(() => {
-    const fetchStudents = async () => {
-      try {
-        const { data } = await axios.get(
-          `${process.env.REACT_APP_API_URL}/api/users/students`,
-          { withCredentials: true }
-        );
-        if (Array.isArray(data) && data.length > 0) {
-          // Only sort and set students if data is valid and not empty
-          const sortedData = data.sort((a, b) =>
-            a.name && b.name ? a.name.localeCompare(b.name) : 0
-          );
-          setStudents(sortedData);
-        } else {
-          // Handle cases where data is an empty array or malformed
-          setStudents([]);
-          console.error("No valid student data received:", data);
-          toast.error("No student data available.");
-        }
-      } catch (error) {
-        console.error("Failed to fetch students:", error);
-        toast.error("Failed to fetch students. Please try again later.");
-      }
-    };
-
     fetchStudents();
   }, []);
+
+  const fetchStudents = async () => {
+    try {
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/users/students`,
+        { withCredentials: true }
+      );
+      setStudents(data.sort((a, b) => a.name.localeCompare(b.name)));
+    } catch (error) {
+      console.error("Failed to fetch students:", error);
+      toast.error("Failed to fetch students. Please try again later.");
+    }
+  };
+
+  const handleEditClick = (student) => {
+    setEditing(student._id);
+    setEditFormData({ name: student.name, email: student.email });
+  };
+
+  const handleCancelClick = () => {
+    setEditing(null);
+  };
+
+  const handleFormChange = (event) => {
+    const { name, value } = event.target;
+    setEditFormData({ ...editFormData, [name]: value });
+  };
+
+  const handleSaveClick = async () => {
+    try {
+      const { data } = await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/users/students/${editing}`,
+        editFormData,
+        { withCredentials: true }
+      );
+      const newStudents = students.map((student) =>
+        student._id === editing ? { ...student, ...data.user } : student
+      );
+      setStudents(newStudents);
+      toast.success("Student details updated successfully!");
+      setEditing(null);
+    } catch (error) {
+      console.error("Failed to update student details:", error);
+      toast.error("Failed to update student details. Please try again.");
+    }
+  };
 
   return (
     <div className="student-list-container">
@@ -43,13 +67,46 @@ function StudentList() {
             <tr>
               <th>Name</th>
               <th>Email</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {students.map((student) => (
               <tr key={student._id}>
-                <td>{student.name}</td>
-                <td>{student.email}</td>
+                {editing === student._id ? (
+                  <React.Fragment>
+                    <td>
+                      <input
+                        type="text"
+                        name="name"
+                        value={editFormData.name}
+                        onChange={handleFormChange}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="email"
+                        name="email"
+                        value={editFormData.email}
+                        onChange={handleFormChange}
+                      />
+                    </td>
+                    <td>
+                      <button onClick={handleSaveClick}>Save</button>
+                      <button onClick={handleCancelClick}>Cancel</button>
+                    </td>
+                  </React.Fragment>
+                ) : (
+                  <React.Fragment>
+                    <td>{student.name}</td>
+                    <td>{student.email}</td>
+                    <td>
+                      <button onClick={() => handleEditClick(student)}>
+                        Edit
+                      </button>
+                    </td>
+                  </React.Fragment>
+                )}
               </tr>
             ))}
           </tbody>
