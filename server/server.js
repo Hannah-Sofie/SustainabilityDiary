@@ -46,10 +46,12 @@ app.use(
 const userRoutes = require("./routes/userRoutes");
 const reflectionEntryRoutes = require("./routes/reflectionEntryRoutes");
 const classroomRoutes = require("./routes/classroomRoutes");
+const factRoutes = require("./routes/factRoutes");
 
 app.use("/api/users", userRoutes);
 app.use("/reflections", reflectionEntryRoutes);
 app.use("/api/classrooms", classroomRoutes);
+app.use("/api/facts", factRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
