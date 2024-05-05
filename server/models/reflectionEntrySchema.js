@@ -11,6 +11,11 @@ const reflectionEntrySchema = new Schema(
     classrooms: [
       { type: Schema.Types.ObjectId, ref: "Classroom", index: true },
     ],
+    likes: {
+      type: Number,
+      default: 0,
+    },
+    likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true }
 );

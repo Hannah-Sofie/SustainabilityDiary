@@ -12,6 +12,7 @@ const {
   createReflectionEntry,
   updateReflectionEntry,
   deleteReflectionEntry,
+  likeReflectionEntry,
 } = require("../controllers/reflectionEntryController");
 const { verifyToken } = require("../utils/verifyToken");
 
@@ -60,5 +61,6 @@ router.post(
 );
 router.put("/:id", verifyToken, validateReflection, updateReflectionEntry);
 router.delete("/:id", verifyToken, deleteReflectionEntry);
+router.post("/:id/like", verifyToken, likeReflectionEntry);
 
 module.exports = router;

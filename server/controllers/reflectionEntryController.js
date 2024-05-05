@@ -69,13 +69,15 @@ const getReflectionsByClassroom = async (req, res) => {
 
 const getLatestReflection = async (req, res, next) => {
   try {
-      const latestReflection = await ReflectionEntry.findOne({ userId: req.user._id }).sort({ createdAt: -1 });
-      if (!latestReflection) {
-          return res.status(404).json({ message: "No reflections found" });
-      }
-      res.json(latestReflection);
+    const latestReflection = await ReflectionEntry.findOne({
+      userId: req.user._id,
+    }).sort({ createdAt: -1 });
+    if (!latestReflection) {
+      return res.status(404).json({ message: "No reflections found" });
+    }
+    res.json(latestReflection);
   } catch (error) {
-      next(new CreateError("Failed to fetch the latest reflection", 500));
+    next(new CreateError("Failed to fetch the latest reflection", 500));
   }
 };
 
@@ -156,6 +158,33 @@ const deleteReflectionEntry = async (req, res, next) => {
   }
 };
 
+const likeReflectionEntry = async (req, res) => {
+  try {
+    const reflection = await ReflectionEntry.findById(req.params.id);
+    if (!reflection) {
+      return res.status(404).json({ message: "Reflection not found" });
+    }
+
+    const index = reflection.likedBy.indexOf(req.user._id);
+    if (index === -1) {
+      // Like the reflection
+      reflection.likes += 1;
+      reflection.likedBy.push(req.user._id);
+    } else {
+      // Unlike the reflection
+      reflection.likes -= 1;
+      reflection.likedBy.splice(index, 1);
+    }
+    await reflection.save();
+
+    res.json({ likes: reflection.likes, likedBy: reflection.likedBy });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to update likes", error: error.message });
+  }
+};
+
 module.exports = {
   getAllReflectionEntries,
   getAllPublicReflectionEntries,
@@ -165,4 +194,5 @@ module.exports = {
   createReflectionEntry,
   updateReflectionEntry,
   deleteReflectionEntry,
+  likeReflectionEntry,
 };

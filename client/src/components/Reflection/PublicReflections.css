@@ -64,7 +64,18 @@
   cursor: pointer;
 }
 
+.like-count {
+  font-size: 14px;
+  color: #888;
+  position: absolute;
+  bottom: 15px;
+  right: 40px;
+}
+
 .like-icon:hover {
+  color: #ff6861;
+}
+.liked {
   color: #ff6861;
 }
 
