@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 import ReflectionModal from "./ReflectionModal";
 import "./PublicReflections.css";
 import DefaultImage from "../../assets/img/default-image.jpg";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const PublicReflections = ({ classroomId }) => {
   const [publicEntries, setPublicEntries] = useState([]);
@@ -36,6 +38,10 @@ const PublicReflections = ({ classroomId }) => {
     setSelectedEntry(null);
   };
 
+  const handleLike = (id) => {
+    console.log("Liked:", id);
+  };
+
   return (
     <div className="public-entries">
       {publicEntries.map((entry) => (
@@ -44,6 +50,14 @@ const PublicReflections = ({ classroomId }) => {
           className="public-entry"
           onClick={() => openModal(entry)}
         >
+          <FontAwesomeIcon
+            icon={faHeart}
+            className="like-icon"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleLike(entry._id);
+            }}
+          />
           <div className="entry-image">
             <img
               src={
