@@ -1,22 +1,36 @@
 .public-entries {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
   padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-  margin: 20px 40px 40px 40px;
+  align-items: start;
 }
 
 .public-entry {
+  display: flex;
+  flex-direction: column;
   background: var(--pure-white);
   padding: 15px;
-  margin-bottom: 20px;
   border-radius: 8px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease-in-out;
+  overflow: hidden;
+  height: auto;
+  position: relative;
 }
 
-.public-entry:hover {
-  transform: translateY(-5px);
+.entry-image img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.public-entry h3,
+.public-entry p {
+  word-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .public-entry h3 {
@@ -29,19 +43,31 @@
   font-size: 16px;
   color: #666;
   line-height: 1.6;
-}
-
-.public-entry .entry-image {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 .public-entry .author {
   font-size: 14px;
   font-style: italic;
   color: #888;
-  margin-top: 10px;
+  margin-top: auto;
 }
 
-/* Responsive layout adjustments */
+.like-icon {
+  font-size: 22px;
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.like-icon:hover {
+  color: #ff6861;
+}
+
 @media (max-width: 768px) {
   .public-entries {
     padding: 10px;
