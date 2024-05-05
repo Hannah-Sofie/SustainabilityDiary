@@ -6,29 +6,61 @@ import "./PublicReflections.css";
 import DefaultImage from "../../assets/img/default-image.jpg";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useAuth } from "../../context/AuthContext";
 
 const PublicReflections = ({ classroomId }) => {
   const [publicEntries, setPublicEntries] = useState([]);
   const [selectedEntry, setSelectedEntry] = useState(null);
+  const { userData } = useAuth();
 
   useEffect(() => {
-    const fetchPublicEntries = async () => {
+    fetchPublicEntries();
+  }, [classroomId]);
+
+  const fetchPublicEntries = async () => {
+    if (classroomId) {
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/reflections/classroom/${classroomId}/public`,
           { withCredentials: true }
         );
-        setPublicEntries(response.data);
+        // Update isLiked based on the userData
+        setPublicEntries(
+          response.data.map((entry) => ({
+            ...entry,
+            isLiked: entry.likedBy.includes(userData?._id),
+          }))
+        );
       } catch (error) {
         console.error("Failed to fetch public entries:", error);
         toast.error("Failed to fetch public entries.");
       }
-    };
-
-    if (classroomId) {
-      fetchPublicEntries();
     }
-  }, [classroomId]);
+  };
+
+  const handleLike = async (id) => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/reflections/${id}/like`,
+        {},
+        { withCredentials: true }
+      );
+      // Update public entries with the new like count and liked status
+      const updatedEntries = publicEntries.map((entry) =>
+        entry._id === id
+          ? {
+              ...entry,
+              likes: response.data.likes,
+              isLiked: response.data.likedBy.includes(userData?._id),
+            }
+          : entry
+      );
+      setPublicEntries(updatedEntries);
+    } catch (error) {
+      console.error("Failed to toggle like on reflection:", error);
+      toast.error("Failed to process like.");
+    }
+  };
 
   const openModal = (entry) => {
     setSelectedEntry(entry);
@@ -36,10 +68,6 @@ const PublicReflections = ({ classroomId }) => {
 
   const closeModal = () => {
     setSelectedEntry(null);
-  };
-
-  const handleLike = (id) => {
-    console.log("Liked:", id);
   };
 
   return (
@@ -52,12 +80,13 @@ const PublicReflections = ({ classroomId }) => {
         >
           <FontAwesomeIcon
             icon={faHeart}
-            className="like-icon"
+            className={`like-icon ${entry.isLiked ? "liked" : ""}`}
             onClick={(e) => {
               e.stopPropagation();
               handleLike(entry._id);
             }}
           />
+          <span className="like-count">{entry.likes}</span>
           <div className="entry-image">
             <img
               src={
