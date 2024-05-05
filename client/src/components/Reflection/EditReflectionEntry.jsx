@@ -15,7 +15,7 @@ function EditReflectionEntry() {
     const fetchEntry = async () => {
       try {
         const { data } = await axios.get(
-          `${process.env.REACT_APP_API_URL}/reflections/${id}`,
+          `${process.env.REACT_APP_API_URL}/api/reflections/${id}`,
           { withCredentials: true }
         );
         setEntry(data);
@@ -46,7 +46,7 @@ function EditReflectionEntry() {
     e.preventDefault();
     try {
       await axios.put(
-        `${process.env.REACT_APP_API_URL}/reflections/${id}`,
+        `${process.env.REACT_APP_API_URL}/api/reflections/${id}`,
         entry,
         { withCredentials: true }
       );

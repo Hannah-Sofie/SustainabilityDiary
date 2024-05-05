@@ -49,7 +49,7 @@ const classroomRoutes = require("./routes/classroomRoutes");
 const factRoutes = require("./routes/factRoutes");
 
 app.use("/api/users", userRoutes);
-app.use("/reflections", reflectionEntryRoutes);
+app.use("/api/reflections", reflectionEntryRoutes);
 app.use("/api/classrooms", classroomRoutes);
 app.use("/api/facts", factRoutes);
 

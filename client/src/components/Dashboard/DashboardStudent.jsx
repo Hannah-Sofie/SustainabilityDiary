@@ -12,7 +12,7 @@ function DashboardStudent() {
     const fetchLatestReflection = async () => {
       try {
         const { data } = await axios.get(
-          `${process.env.REACT_APP_API_URL}/reflections/latest`,
+          `${process.env.REACT_APP_API_URL}/api/reflections/latest`,
           { withCredentials: true }
         );
         setLatestReflection(data);

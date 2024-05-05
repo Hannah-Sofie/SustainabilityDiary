@@ -13,7 +13,7 @@ function Reflections() {
     const fetchEntries = async () => {
       try {
         const { data } = await axios.get(
-          `${process.env.REACT_APP_API_URL}/reflections`,
+          `${process.env.REACT_APP_API_URL}/api/reflections`,
           { withCredentials: true }
         );
         setEntries(data); // Set fetched entries to state

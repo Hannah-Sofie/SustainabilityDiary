@@ -25,7 +25,7 @@ function ReflectionEntries() {
   const fetchEntries = async () => {
     try {
       const { data } = await axios.get(
-        `${process.env.REACT_APP_API_URL}/reflections`,
+        `${process.env.REACT_APP_API_URL}/api/reflections`,
         { withCredentials: true }
       );
       setEntries(data);
@@ -45,7 +45,7 @@ function ReflectionEntries() {
     if (window.confirm("Are you sure you want to delete this entry?")) {
       try {
         await axios.delete(
-          `${process.env.REACT_APP_API_URL}/reflections/${id}`,
+          `${process.env.REACT_APP_API_URL}/api/reflections/${id}`,
           { withCredentials: true }
         );
         const updatedEntries = entries.filter((entry) => entry._id !== id);

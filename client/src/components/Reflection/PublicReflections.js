@@ -21,7 +21,7 @@ const PublicReflections = ({ classroomId }) => {
     if (classroomId) {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/reflections/classroom/${classroomId}/public`,
+          `${process.env.REACT_APP_API_URL}/api/reflections/classroom/${classroomId}/public`,
           { withCredentials: true }
         );
         // Update isLiked based on the userData
@@ -41,7 +41,7 @@ const PublicReflections = ({ classroomId }) => {
   const handleLike = async (id) => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/reflections/${id}/like`,
+        `${process.env.REACT_APP_API_URL}/api/reflections/${id}/like`,
         {},
         { withCredentials: true }
       );
