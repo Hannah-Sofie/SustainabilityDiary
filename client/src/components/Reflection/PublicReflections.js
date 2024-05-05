@@ -14,29 +14,29 @@ const PublicReflections = ({ classroomId }) => {
   const { userData } = useAuth();
 
   useEffect(() => {
-    fetchPublicEntries();
-  }, [classroomId]);
-
-  const fetchPublicEntries = async () => {
-    if (classroomId) {
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/api/reflections/classroom/${classroomId}/public`,
-          { withCredentials: true }
-        );
-        // Update isLiked based on the userData
-        setPublicEntries(
-          response.data.map((entry) => ({
-            ...entry,
-            isLiked: entry.likedBy.includes(userData?._id),
-          }))
-        );
-      } catch (error) {
-        console.error("Failed to fetch public entries:", error);
-        toast.error("Failed to fetch public entries.");
+    const fetchPublicEntries = async () => {
+      if (classroomId) {
+        try {
+          const response = await axios.get(
+            `${process.env.REACT_APP_API_URL}/api/reflections/classroom/${classroomId}/public`,
+            { withCredentials: true }
+          );
+          // Update isLiked based on the userData
+          setPublicEntries(
+            response.data.map((entry) => ({
+              ...entry,
+              isLiked: entry.likedBy.includes(userData?._id),
+            }))
+          );
+        } catch (error) {
+          console.error("Failed to fetch public entries:", error);
+          toast.error("Failed to fetch public entries.");
+        }
       }
-    }
-  };
+    };
+
+    fetchPublicEntries();
+  }, [classroomId, userData?._id]); // Include userData._id as a dependency if it affects re-fetching
 
   const handleLike = async (id) => {
     try {

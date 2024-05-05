@@ -8,6 +8,7 @@ const {
   getClassrooms,
   getClassroomById,
   removeStudent,
+  updateClassroom,
 } = require("../controllers/classroomController");
 
 const storage = multer.diskStorage({
@@ -26,5 +27,6 @@ router.post("/join", verifyToken, joinClassroom);
 router.get("/", verifyToken, getClassrooms);
 router.get("/:id", verifyToken, getClassroomById);
 router.delete("/:classroomId/students/:studentId", verifyToken, removeStudent);
+router.put("/:id", verifyToken, upload.single("photo"), updateClassroom);
 
 module.exports = router;

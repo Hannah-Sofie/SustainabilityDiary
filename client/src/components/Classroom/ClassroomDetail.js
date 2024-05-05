@@ -7,59 +7,64 @@ import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 import Modal from "../Modal/Modal";
 import { useAuth } from "../../context/AuthContext";
 import "./ClassroomDetail.css";
+import EditClassroom from "./EditClassroom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faPencilAlt,
+  faEye,
+  faArrowLeft,
+} from "@fortawesome/free-solid-svg-icons";
 
 function ClassroomDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [classroom, setClassroom] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { userData } = useAuth();
 
   useEffect(() => {
-    axios
-      .get(`/api/classrooms/${id}`)
-      .then((response) => {
-        // console.log("API Response:", JSON.stringify(response.data, null, 2));
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`/api/classrooms/${id}`);
         setClassroom(response.data);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error fetching classroom details:", error);
-      });
+      }
+    };
+
+    fetchData();
   }, [id]);
 
   if (!classroom) {
     return <LoadingIndicator />;
   }
 
-  const handleViewStudents = () => {
-    setIsModalOpen(true); // Open the modal
-  };
+  const handleViewStudents = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const openEditModal = () => setIsEditModalOpen(true);
+  const closeEditModal = () => setIsEditModalOpen(false);
 
-  const closeModal = () => {
-    setIsModalOpen(false); // Close the modal
-  };
-
-  const removeStudent = (studentId) => {
-    axios
-      .delete(`/api/classrooms/${id}/students/${studentId}`, {
-        headers: { Authorization: `Bearer ${userData.token}` },
-      })
-
-      .then((response) => {
-        // Update the classroom state to reflect the change
-        setClassroom(response.data);
-        alert("Student removed successfully");
-      })
-      .catch((error) => {
-        console.error("Error removing student:", error.response.data.message);
-        alert("Failed to remove student");
-      });
+  const removeStudent = async (studentId) => {
+    try {
+      const response = await axios.delete(
+        `/api/classrooms/${id}/students/${studentId}`,
+        {
+          headers: { Authorization: `Bearer ${userData.token}` },
+        }
+      );
+      setClassroom(response.data);
+      alert("Student removed successfully");
+    } catch (error) {
+      console.error("Error removing student:", error.response?.data?.message);
+      alert("Failed to remove student");
+    }
   };
 
   return (
     <div className="classroom-detail-container">
       <button className="back-button" onClick={() => navigate(-1)}>
-        Go Back
+        <FontAwesomeIcon icon={faArrowLeft} className="fa-icon" /> Go Back
       </button>
       <div
         className="classroom-header"
@@ -70,23 +75,44 @@ function ClassroomDetail() {
         <h1>{classroom.title}</h1>
       </div>
       <div className="classroom-content">
-        <p className="classroom-detail-text">
-          <span>Description:</span> {classroom.description}
-        </p>
-        <p className="classroom-detail-text">
-          <span>Learning Goals:</span> {classroom.learningGoals}
-        </p>
-        <p className="classroom-detail-text">
-          <span>Class Code:</span> {classroom.classCode}
-        </p>
-        {userData && userData.role === "teacher" && (
-          <button
-            className="classroom-detail-button"
-            onClick={handleViewStudents}
-          >
-            View Students
-          </button>
-        )}
+        <div className="classroom-info">
+          <p className="classroom-detail-text">
+            <span>Description:</span> {classroom.description}
+          </p>
+          <p className="classroom-detail-text">
+            <span>Learning Goals:</span> {classroom.learningGoals}
+          </p>
+          <div className="classroom-detail-actions">
+            <p className="classroom-detail-text">
+              <span>Class Code:</span> {classroom.classCode}
+            </p>
+            {userData && userData.role === "teacher" && (
+              <button className="edit-classroom-button" onClick={openEditModal}>
+                <FontAwesomeIcon icon={faPencilAlt} className="fa-icon" /> Edit
+                classroom details
+              </button>
+            )}
+          </div>
+          {userData && userData.role === "teacher" && (
+            <button
+              className="classroom-detail-button"
+              onClick={handleViewStudents}
+            >
+              <FontAwesomeIcon icon={faEye} className="fa-icon" />
+              View students
+            </button>
+          )}
+        </div>
+        <Modal isOpen={isEditModalOpen} closeModal={closeEditModal}>
+          <EditClassroom
+            classroom={classroom}
+            onClose={closeEditModal}
+            onClassroomUpdated={(updatedClassroom) => {
+              setClassroom(updatedClassroom);
+              closeEditModal();
+            }}
+          />
+        </Modal>
         <Modal isOpen={isModalOpen} closeModal={closeModal}>
           <h2 className="students-in">Students in {classroom.title}</h2>
           <div className="student-table">
@@ -103,8 +129,6 @@ function ClassroomDetail() {
                     <span>{student.name}</span>
                     <span>{student.email}</span>
                     <span>{student.role}</span>
-                  </div>
-                  <div className="student-action">
                     <button
                       className="remove-student-button"
                       onClick={() => removeStudent(student._id)}
@@ -117,7 +141,6 @@ function ClassroomDetail() {
             </ul>
           </div>
         </Modal>
-
         <h1>Public Reflections</h1>
         <PublicReflections classroomId={id} />
       </div>
