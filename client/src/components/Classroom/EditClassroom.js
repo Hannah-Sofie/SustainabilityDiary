@@ -67,7 +67,7 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
           onChange={handleChange}
           required
         />
-        <label>Photo:</label>
+        <label>Photo header:</label>
         <input type="file" name="photo" onChange={handleFileChange} />
         <button type="submit">Update Classroom</button>
         <button type="button" onClick={onClose}>

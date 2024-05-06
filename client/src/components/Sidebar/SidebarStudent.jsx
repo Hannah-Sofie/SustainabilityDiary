@@ -82,7 +82,7 @@ function Sidebar() {
               </Link>
             </li>
             <li className="nav-link-item">
-              <Link href="/help">
+              <Link to="/help">
                 <i className="fas fa-question-circle"></i>
                 <span className="nav-item">Help</span>
               </Link>
