@@ -98,4 +98,3 @@ secrets:
 networks:
   sd-network:
     name: sd-network
-    external: true
