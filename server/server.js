@@ -13,13 +13,13 @@ const PORT = process.env.PORT || 8002;
 const whitelist = ["http://localhost:3000", "http://localhost:8083"];
 const corsOptions = {
   origin: (origin, callback) => {
-    if (whitelist.indexOf(origin) !== -1 || !origin) {
+    if (whitelist.includes(origin) || !origin) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
     }
   },
-  credentials: true, // This is important for cookies, authorization headers with HTTPS
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
@@ -34,7 +34,7 @@ connectDB();
 // Static file serving for uploaded images with custom CORS
 app.use(
   "/uploads",
-  express.static(path.join(__dirname, "uploads"), {
+  express.static(path.join(__dirname, "./uploads"), {
     setHeaders: function (res, path) {
       res.setHeader("Access-Control-Allow-Origin", "*");
       res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");

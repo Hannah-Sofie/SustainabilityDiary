@@ -55,3 +55,47 @@
 .createclassroom-modal .close:hover {
   color: var(--red);
 }
+
+label.file-upload-label {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.file-upload-label {
+  background-color: var(--darker-purple);
+  color: var(--pure-white);
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 0.9rem;
+}
+
+.file-upload-label:hover {
+  background-color: var(--dark-purple);
+}
+
+.classroom-photo-preview {
+  width: 200px;
+  height: 120px;
+  object-fit: cover;
+  margin-top: 10px;
+  border: 2px solid var(--darker-purple);
+  border-radius: 5px;
+}
+
+.create-button {
+  background-color: var(--darker-purple);
+  color: var(--pure-white);
+  padding: 10px 20px;
+  border-radius: 30px;
+  border: 2px solid var(--darker-purple);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.create-button:hover {
+  background-color: transparent;
+  color: var(--darker-purple);
+}

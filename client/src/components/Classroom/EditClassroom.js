@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import "./EditClassroom.css";
 
 function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
@@ -8,7 +10,10 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
     title: classroom.title,
     description: classroom.description,
     learningGoals: classroom.learningGoals,
+    photo: classroom.photoUrl || null,
   });
+
+  const [previewImage, setPreviewImage] = useState(classroom.photoUrl || null);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -16,7 +21,9 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
   };
 
   const handleFileChange = (event) => {
-    setFormData({ ...formData, photo: event.target.files[0] });
+    const file = event.target.files[0];
+    setFormData({ ...formData, photo: file });
+    setPreviewImage(URL.createObjectURL(file));
   };
 
   const handleSubmit = async (event) => {
@@ -38,7 +45,10 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
       toast.success("Classroom updated successfully!");
       onClose();
     } catch (error) {
-      toast.error("Failed to update classroom: " + error.response.data.message);
+      toast.error(
+        "Failed to update classroom: " +
+          (error.response?.data?.message || error.message)
+      );
     }
   };
 
@@ -67,8 +77,28 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
           onChange={handleChange}
           required
         />
-        <label>Photo header:</label>
-        <input type="file" name="photo" onChange={handleFileChange} />
+        <div className="file-upload">
+          <label htmlFor="classroom-photo-upload" className="file-upload-label">
+            <FontAwesomeIcon icon={faUpload} /> Upload new header photo
+          </label>
+          <input
+            id="classroom-photo-upload"
+            type="file"
+            name="photo"
+            onChange={handleFileChange}
+            accept="image/*"
+            style={{ display: "none" }}
+          />
+          {previewImage && (
+            <div className="photo-preview-container">
+              <img
+                src={previewImage}
+                alt="Preview of updated classroom header"
+                className="photo-preview"
+              />
+            </div>
+          )}
+        </div>
         <button type="submit">Update Classroom</button>
         <button type="button" onClick={onClose}>
           Cancel

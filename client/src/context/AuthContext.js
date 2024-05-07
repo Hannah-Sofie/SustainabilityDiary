@@ -7,7 +7,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true); // Add a loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const checkAuthStatus = async () => {
@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
           { withCredentials: true }
         );
         console.log("Auth status response:", response);
+
         if (response.data.isAuthenticated) {
           const role = response.data.user.email.endsWith("@ntnu.no")
             ? "teacher"
@@ -48,11 +49,9 @@ export const AuthProvider = ({ children }) => {
         { withCredentials: true }
       );
       if (response.data.status === "success") {
-        // Determine role based on email domain
         const role = response.data.user.email.endsWith("@ntnu.no")
           ? "teacher"
           : "student";
-        // Include role in userData
         setUserData({ ...response.data.user, role });
         setIsAuthenticated(true);
         return true;
@@ -91,7 +90,14 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ userData, isAuthenticated, login, logout, loading }}
+      value={{
+        userData,
+        setUserData,
+        isAuthenticated,
+        login,
+        logout,
+        loading,
+      }}
     >
       {children}
     </AuthContext.Provider>

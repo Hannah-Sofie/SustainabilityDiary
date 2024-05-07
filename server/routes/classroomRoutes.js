@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { verifyToken } = require("../utils/verifyToken");
 const multer = require("multer");
+const path = require("path");
 const {
   createClassroom,
   joinClassroom,
@@ -13,11 +14,12 @@ const {
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads/classrooms/");
+    cb(null, path.join(__dirname, '../uploads/classrooms'));
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
+    // Use a unique identifier for the file name
+    cb(null, Date.now() + '-' + file.originalname);
+  }
 });
 
 const upload = multer({ storage: storage });

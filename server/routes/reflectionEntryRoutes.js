@@ -2,6 +2,8 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
+const path = require("path");
+
 const validateReflection = require("../middlewares/validateReflection");
 const {
   getAllReflectionEntries,
@@ -18,12 +20,13 @@ const { verifyToken } = require("../utils/verifyToken");
 
 // Set up storage for file uploads
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./uploads/");
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, "../uploads/reflections"));
   },
   filename: function (req, file, cb) {
     const date = new Date().toISOString().replace(/:/g, "-");
-    cb(null, date + file.originalname);
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, `${date}-${uniqueSuffix}-${file.originalname}`);
   },
 });
 
