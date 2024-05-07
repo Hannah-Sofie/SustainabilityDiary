@@ -41,6 +41,7 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
+      // Update the parent component state with the new classroom data
       onClassroomUpdated(response.data);
       toast.success("Classroom updated successfully!");
       onClose();
