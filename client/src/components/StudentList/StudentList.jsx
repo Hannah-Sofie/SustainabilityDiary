@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./StudentList.css";
+import DefaultImage from "../../assets/img/default-profilepic.png";
 import { toast } from "react-toastify";
 
 function StudentList() {
   const [students, setStudents] = useState([]);
-  const [editing, setEditing] = useState(null); // Stores the ID of the student being edited
+  const [editing, setEditing] = useState(null);
   const [editFormData, setEditFormData] = useState({ name: "", email: "" });
 
   useEffect(() => {
@@ -58,6 +59,12 @@ function StudentList() {
     }
   };
 
+  const getStudentPhotoUrl = (photo) => {
+    return photo
+      ? `${process.env.REACT_APP_API_URL}/uploads/profilepics/${photo}`
+      : DefaultImage;
+  };
+
   return (
     <div className="student-list-container">
       <h2>Student List</h2>
@@ -65,6 +72,7 @@ function StudentList() {
         <table className="student-list-table">
           <thead>
             <tr>
+              <th>Photo</th>
               <th>Name</th>
               <th>Email</th>
               <th>Actions</th>
@@ -74,7 +82,14 @@ function StudentList() {
             {students.map((student) => (
               <tr key={student._id}>
                 {editing === student._id ? (
-                  <React.Fragment>
+                  <>
+                    <td>
+                      <img
+                        src={getStudentPhotoUrl(student.photo)}
+                        alt={`${student.name}`}
+                        className="student-photo"
+                      />
+                    </td>
                     <td>
                       <input
                         type="text"
@@ -95,9 +110,16 @@ function StudentList() {
                       <button onClick={handleSaveClick}>Save</button>
                       <button onClick={handleCancelClick}>Cancel</button>
                     </td>
-                  </React.Fragment>
+                  </>
                 ) : (
-                  <React.Fragment>
+                  <>
+                    <td>
+                      <img
+                        src={getStudentPhotoUrl(student.photo)}
+                        alt={`${student.name}`}
+                        className="student-photo"
+                      />
+                    </td>
                     <td>{student.name}</td>
                     <td>{student.email}</td>
                     <td>
@@ -105,7 +127,7 @@ function StudentList() {
                         Edit
                       </button>
                     </td>
-                  </React.Fragment>
+                  </>
                 )}
               </tr>
             ))}
