@@ -69,14 +69,14 @@ const removeStudent = asyncHandler(async (req, res) => {
 });
 
 const updateClassroom = asyncHandler(async (req, res) => {
-  const { title, description, learningGoals, photoUrl } = req.body;
-  const { id } = req.params; // Assuming the classroom ID is passed as a URL parameter
+  const { title, description, learningGoals } = req.body;
+  const { id } = req.params;
 
-  // Optionally check if the current user is the teacher of this classroom
   const classroom = await Classroom.findById(id);
   if (!classroom) {
     throw new CreateError("Classroom not found", 404);
   }
+
   if (classroom.teacher.toString() !== req.user._id.toString()) {
     throw new CreateError("Not authorized to edit this classroom", 403);
   }
@@ -85,7 +85,9 @@ const updateClassroom = asyncHandler(async (req, res) => {
     title: title || classroom.title,
     description: description || classroom.description,
     learningGoals: learningGoals || classroom.learningGoals,
-    photoUrl: photoUrl || classroom.photoUrl,
+    photoUrl: req.file
+      ? `/uploads/classrooms/${req.file.filename}`
+      : classroom.photoUrl,
   };
 
   const updatedClassroom = await Classroom.findByIdAndUpdate(

@@ -45,6 +45,12 @@ function ClassroomDetail() {
   const openEditModal = () => setIsEditModalOpen(true);
   const closeEditModal = () => setIsEditModalOpen(false);
 
+  const onClassroomUpdated = (updatedClassroom) => {
+    console.log("Updated classroom data:", updatedClassroom);
+    setClassroom(updatedClassroom);
+    closeEditModal(); // Close the modal
+  };
+
   const removeStudent = async (studentId) => {
     try {
       const response = await axios.delete(
@@ -69,7 +75,11 @@ function ClassroomDetail() {
       <div
         className="classroom-header"
         style={{
-          backgroundImage: `url(${classroom.photoUrl || DefaultImage})`,
+          backgroundImage: `url(${
+            classroom.photoUrl
+              ? `${process.env.REACT_APP_API_URL}${classroom.photoUrl}`
+              : DefaultImage
+          })`,
         }}
       >
         <h1>{classroom.title}</h1>
@@ -107,10 +117,7 @@ function ClassroomDetail() {
           <EditClassroom
             classroom={classroom}
             onClose={closeEditModal}
-            onClassroomUpdated={(updatedClassroom) => {
-              setClassroom(updatedClassroom);
-              closeEditModal();
-            }}
+            onClassroomUpdated={onClassroomUpdated}
           />
         </Modal>
         <Modal isOpen={isModalOpen} closeModal={closeModal}>
