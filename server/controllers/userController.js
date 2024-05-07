@@ -143,6 +143,10 @@ const updateUser = async (req, res) => {
   const updateData = { name }; // Directly set the name if it's part of the request
 
   try {
+    if (req.file) {
+      updateData.photo = req.file.filename;
+    }
+
     if (password) {
       const hashedPassword = await bcrypt.hash(password, 10); // Hash new password if provided
       updateData.password = hashedPassword; // Add hashed password to update data

@@ -17,7 +17,6 @@
   margin-top: 20px;
   margin-bottom: 8px;
   font-weight: 500;
-  color: var(--gray);
 }
 
 .profile-container input[type="text"],
@@ -81,4 +80,40 @@
 
 .profile-view button {
   margin-top: 20px;
+}
+
+.profile-photo {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-top: 10px;
+}
+
+.file-upload-label {
+  background-color: var(--darker-purple);
+  color: var(--pure-white);
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-block;
+  margin-top: 20px;
+  font-size: 0.9rem;
+}
+
+.file-upload-label:hover {
+  background-color: var(--dark-purple);
+}
+
+.file-name {
+  margin-top: 10px;
+  color: var(--darker-purple);
+}
+
+.profile-photo-preview {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-top: 10px;
 }

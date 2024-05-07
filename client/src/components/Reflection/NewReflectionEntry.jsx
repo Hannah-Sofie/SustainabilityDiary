@@ -95,7 +95,7 @@ function NewReflectionEntry() {
       toast.success("Reflection entry created successfully!");
 
       // Assuming the server response includes the path for the uploaded photo
-      const newImageUrl = `${process.env.REACT_APP_API_URL}/uploads/${response.data.photo}`;
+      const newImageUrl = `${process.env.REACT_APP_API_URL}/uploads/reflections/${response.data.photo}`;
       setEntry((prev) => ({ ...prev, photoUrl: newImageUrl }));
 
       navigate("/reflections");

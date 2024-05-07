@@ -9,6 +9,7 @@ const classroomSchema = new Schema(
     classCode: { type: String, required: true, unique: true },
     teacher: { type: Schema.Types.ObjectId, ref: "User", required: true },
     students: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    photo: { type: String },
   },
   { timestamps: true }
 );

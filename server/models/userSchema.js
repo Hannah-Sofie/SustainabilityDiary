@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  photo: { type: String },
   passwordResetCode: String,
   passwordResetExpires: Date,
 });
