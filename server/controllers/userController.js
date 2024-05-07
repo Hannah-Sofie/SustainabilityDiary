@@ -174,7 +174,9 @@ const updateUser = async (req, res) => {
 
 const fetchStudents = async (req, res) => {
   try {
-    const students = await User.find({ role: "student" });
+    const students = await User.find({ role: "student" }).select(
+      "name email photo"
+    );
     res.json(students);
   } catch (error) {
     console.error("Error fetching students:", error);
