@@ -11,6 +11,7 @@ import { useAuth } from "../../context/AuthContext";
 const PublicReflections = ({ classroomId }) => {
   const [publicEntries, setPublicEntries] = useState([]);
   const [selectedEntry, setSelectedEntry] = useState(null);
+  const [loading, setLoading] = useState(true);
   const { userData } = useAuth();
 
   useEffect(() => {
@@ -31,12 +32,22 @@ const PublicReflections = ({ classroomId }) => {
         } catch (error) {
           console.error("Failed to fetch public entries:", error);
           toast.error("Failed to fetch public entries.");
+        } finally {
+          setLoading(false); // Ensure loading state is correctly updated
         }
       }
     };
 
     fetchPublicEntries();
-  }, [classroomId, userData?._id]); // Include userData._id as a dependency if it affects re-fetching
+  }, [classroomId, userData?._id]);
+
+  if (loading) {
+    return <p>Loading reflections...</p>;
+  }
+
+  if (publicEntries.length === 0) {
+    return <p>No public reflections posted yet.</p>;
+  }
 
   const handleLike = async (id) => {
     try {
@@ -94,7 +105,7 @@ const PublicReflections = ({ classroomId }) => {
                   ? `${process.env.REACT_APP_API_URL}/uploads/${entry.photo}`
                   : DefaultImage
               }
-              alt="Reflection"
+              alt={entry.title}
             />
           </div>
           <h3>{entry.title}</h3>

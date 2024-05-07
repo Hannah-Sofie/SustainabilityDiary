@@ -10,10 +10,10 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
     title: classroom.title,
     description: classroom.description,
     learningGoals: classroom.learningGoals,
-    photo: classroom.photoUrl || null,
+    photo: classroom.headerPhotoUrl || null,
   });
 
-  const [previewImage, setPreviewImage] = useState(classroom.photoUrl || null);
+  const [previewImage, setPreviewImage] = useState(classroom.headerPhotoUrl || null);
 
   const handleChange = (event) => {
     const { name, value } = event.target;

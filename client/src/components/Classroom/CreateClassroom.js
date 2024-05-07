@@ -33,7 +33,7 @@ function CreateClassroom({ closeModal, onNewClassroom }) {
     data.append("description", formData.description);
     data.append("learningGoals", formData.learningGoals);
     if (file) {
-      data.append("photo", file);
+      data.append("photo", file); // This will be stored as the classroom icon
     }
 
     try {
@@ -46,7 +46,6 @@ function CreateClassroom({ closeModal, onNewClassroom }) {
         "Failed to create classroom: " +
           (error.response?.data?.message || error.message)
       );
-      console.error("Create Classroom Error:", error.response?.data);
     }
   };
 
@@ -86,7 +85,7 @@ function CreateClassroom({ closeModal, onNewClassroom }) {
               htmlFor="classroom-photo-upload"
               className="file-upload-label"
             >
-              <FontAwesomeIcon icon={faUpload} /> Upload classroom photo
+              <FontAwesomeIcon icon={faUpload} /> Upload classroom icon
             </label>
             <input
               id="classroom-photo-upload"

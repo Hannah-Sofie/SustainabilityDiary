@@ -46,7 +46,6 @@ function ClassroomDetail() {
   const closeEditModal = () => setIsEditModalOpen(false);
 
   const onClassroomUpdated = (updatedClassroom) => {
-    console.log("Updated classroom data:", updatedClassroom);
     setClassroom(updatedClassroom);
     closeEditModal(); // Close the modal
   };
@@ -76,8 +75,8 @@ function ClassroomDetail() {
         className="classroom-header"
         style={{
           backgroundImage: `url(${
-            classroom.photoUrl
-              ? `${process.env.REACT_APP_API_URL}${classroom.photoUrl}`
+            classroom.headerPhotoUrl
+              ? `${process.env.REACT_APP_API_URL}${classroom.headerPhotoUrl}`
               : DefaultImage
           })`,
         }}
