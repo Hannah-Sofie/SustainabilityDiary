@@ -2,25 +2,30 @@ const CreateError = require("../utils/createError");
 const Classroom = require("../models/classroomSchema");
 const asyncHandler = require("express-async-handler");
 
+const defaultHeaderUrl = `/uploads/default/default-header.jpeg`;
+
 const createClassroom = asyncHandler(async (req, res) => {
   const { title, description, learningGoals } = req.body;
   if (!title || !description || !learningGoals) {
     throw new CreateError("Missing required fields", 400);
   }
-  const classCode = Math.random().toString(36).substring(2, 8).toUpperCase();
-  const photoUrl = req.file
-    ? `${req.protocol}://${req.get("host")}/uploads/classrooms/${
-        req.file.filename
-      }`
+
+  // Uploaded photo URL for the icon
+  const uploadedPhotoUrl = req.file
+    ? `/uploads/classrooms/${req.file.filename}`
     : undefined;
+
+  // Use the uploaded photo as the icon and a default image for the header
   const classroom = await Classroom.create({
     title,
     description,
     learningGoals,
-    classCode,
-    photoUrl,
+    classCode: Math.random().toString(36).substring(2, 8).toUpperCase(),
+    iconPhotoUrl: uploadedPhotoUrl, // This will be the classroom icon
+    headerPhotoUrl: defaultHeaderUrl, // Use a static default header
     teacher: req.user._id,
   });
+
   res.status(201).json(classroom);
 });
 
@@ -85,9 +90,9 @@ const updateClassroom = asyncHandler(async (req, res) => {
     title: title || classroom.title,
     description: description || classroom.description,
     learningGoals: learningGoals || classroom.learningGoals,
-    photoUrl: req.file
+    headerPhotoUrl: req.file
       ? `/uploads/classrooms/${req.file.filename}`
-      : classroom.photoUrl,
+      : classroom.headerPhotoUrl,
   };
 
   const updatedClassroom = await Classroom.findByIdAndUpdate(

@@ -3,7 +3,6 @@
   position: relative;
   max-width: 1200px;
   margin: 20px auto;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   background: var(--light-grey);
   border-radius: 8px;
 }
