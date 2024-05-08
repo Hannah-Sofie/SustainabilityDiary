@@ -34,7 +34,7 @@ const joinClassroom = asyncHandler(async (req, res) => {
   const classroom = await Classroom.findOneAndUpdate(
     { classCode },
     { $addToSet: { students: req.user._id } },
-    { new: true },
+    { new: true }
   ).populate("students", "name email");
   if (!classroom) {
     throw new CreateError("Classroom not found", 404);
@@ -65,7 +65,7 @@ const removeStudent = asyncHandler(async (req, res) => {
   const classroom = await Classroom.findByIdAndUpdate(
     classroomId,
     { $pull: { students: studentId } },
-    { new: true },
+    { new: true }
   ).populate("students", "name email");
   if (!classroom) {
     throw new CreateError("Classroom not found", 404);
@@ -74,7 +74,7 @@ const removeStudent = asyncHandler(async (req, res) => {
 });
 
 const updateClassroom = asyncHandler(async (req, res) => {
-  const { title, description, learningGoals, active } = req.body;
+  const { title, description, learningGoals, classStatus } = req.body;
   const { id } = req.params;
 
   const classroom = await Classroom.findById(id);
@@ -82,26 +82,25 @@ const updateClassroom = asyncHandler(async (req, res) => {
     throw new CreateError("Classroom not found", 404);
   }
 
-  if (classroom.teacher.toString() !== req.user._id.toString()) {
-    throw new CreateError("Not authorized to edit this classroom", 403);
-  }
-  // converting the string to a boolean
-  const classStatus = active === "true";
+  // Convert the string to boolean explicitly if necessary
+  const activeStatus = classStatus === "true" || classStatus === true;
 
+  // Prepare updated data
   const updatedFields = {
     title: title || classroom.title,
     description: description || classroom.description,
     learningGoals: learningGoals || classroom.learningGoals,
+    classStatus: activeStatus,
     headerPhotoUrl: req.file
       ? `/uploads/classrooms/${req.file.filename}`
       : classroom.headerPhotoUrl,
-    classStatus,
   };
 
+  // Save the updated classroom
   const updatedClassroom = await Classroom.findByIdAndUpdate(
     id,
     updatedFields,
-    { new: true },
+    { new: true }
   );
   res.json(updatedClassroom);
 });

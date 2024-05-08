@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import { faUpload, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import "./EditClassroom.css";
 
 function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
@@ -15,12 +15,11 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
   });
 
   const [previewImage, setPreviewImage] = useState(
-    classroom.headerPhotoUrl || null,
+    classroom.headerPhotoUrl || null
   );
 
   const handleToggle = (event) => {
     setFormData({ ...formData, active: event.target.checked });
-    console.log("Checkbox active:", event.target.checked);
   };
 
   const handleChange = (event) => {
@@ -42,13 +41,13 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
         data.append(key, formData[key]);
       }
     });
-    data.append("active", formData.active); // Append boolean directly
+    data.append("classStatus", formData.active);
 
     try {
       const response = await axios.put(
         `/api/classrooms/${classroom._id}`,
         data,
-        { headers: { "Content-Type": "multipart/form-data" } },
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
       onClassroomUpdated(response.data);
       toast.success("Classroom updated successfully!");
@@ -56,7 +55,7 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
     } catch (error) {
       toast.error(
         "Failed to update classroom: " +
-          (error.response?.data?.message || error.message),
+          (error.response?.data?.message || error.message)
       );
     }
   };
@@ -88,6 +87,29 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
           onChange={handleChange}
           required
         />
+        <div className="switch-wrapper">
+          <span className="toggle-label">
+            {formData.active ? (
+              <>
+                <FontAwesomeIcon icon={faCheck} className="toggle-icon" />{" "}
+                Active
+              </>
+            ) : (
+              <>
+                <FontAwesomeIcon icon={faTimes} className="toggle-icon" />{" "}
+                Finished
+              </>
+            )}
+          </span>
+          <label className="toggle-switch">
+            <input
+              type="checkbox"
+              checked={formData.active}
+              onChange={handleToggle}
+            />
+            <span className="slider round"></span>
+          </label>
+        </div>
         <div className="file-upload">
           <label htmlFor="classroom-photo-upload" className="file-upload-label">
             <FontAwesomeIcon icon={faUpload} /> Upload new header photo
@@ -100,20 +122,6 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
             accept="image/*"
             style={{ display: "none" }}
           />
-          <div className="switchWrapper">
-            <label>Toggle switch off to mark classroom as finished</label>
-            <div className="toggle-switch">
-              <label>
-                <input
-                  type="checkbox"
-                  checked={formData.active}
-                  onChange={handleToggle}
-                  style={{ marginLeft: "10px" }}
-                />
-                <span className="slider round"></span>{" "}
-              </label>
-            </div>
-          </div>
           {previewImage && (
             <div className="photo-preview-container">
               <img

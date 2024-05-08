@@ -79,7 +79,6 @@ label.file-upload-label {
   height: 120px;
   object-fit: cover;
   margin-top: 10px;
-  border: 2px solid var(--darker-purple);
   border-radius: 5px;
 }
 
