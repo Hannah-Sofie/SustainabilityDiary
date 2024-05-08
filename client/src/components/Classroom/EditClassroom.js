@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUpload, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUpload,
+  faCheck,
+  faTimes,
+  faTrashAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import "./EditClassroom.css";
 
 function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
@@ -31,6 +36,11 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
   const handleRemovePhoto = () => {
     setFormData({ ...formData, photo: null });
     setPreviewImage(null);
+  };
+
+  const handleToggle = (event) => {
+    setFormData({ ...formData, active: event.target.checked });
+    console.log("Checkbox active:", event.target.checked);
   };
 
   const handleChange = (event) => {
@@ -92,6 +102,29 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
           onChange={handleChange}
           required
         />
+        <div className="switch-wrapper">
+          <span className="toggle-label">
+            {formData.active ? (
+              <>
+                <FontAwesomeIcon icon={faCheck} className="toggle-icon" />{" "}
+                Active
+              </>
+            ) : (
+              <>
+                <FontAwesomeIcon icon={faTimes} className="toggle-icon" />{" "}
+                Finished
+              </>
+            )}
+          </span>
+          <label className="toggle-switch">
+            <input
+              type="checkbox"
+              checked={formData.active}
+              onChange={handleToggle}
+            />
+            <span className="slider round"></span>
+          </label>
+        </div>
         <div className="file-upload">
           <label htmlFor="classroom-photo-upload" className="file-upload-label">
             <FontAwesomeIcon icon={faUpload} /> Upload or Change Photo
