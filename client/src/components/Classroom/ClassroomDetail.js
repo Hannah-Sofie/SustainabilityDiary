@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import DefaultImage from "../../assets/img/default-header.jpeg";
+import DefaultImage from "../../assets/img/default-profilepic.png";
 import PublicReflections from "../Reflection/PublicReflections";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 import Modal from "../Modal/Modal";
@@ -66,6 +66,12 @@ function ClassroomDetail() {
     }
   };
 
+  const getStudentPhotoUrl = (photo) => {
+    return photo
+      ? `${process.env.REACT_APP_API_URL}/uploads/profilepics/${photo}`
+      : DefaultImage;
+  };
+
   return (
     <div className="classroom-detail-container">
       <button className="back-button" onClick={() => navigate(-1)}>
@@ -114,8 +120,7 @@ function ClassroomDetail() {
               className="classroom-detail-button"
               onClick={handleViewStudents}
             >
-              <FontAwesomeIcon icon={faEye} className="fa-icon" />
-              View students
+              <FontAwesomeIcon icon={faEye} className="fa-icon" /> View students
             </button>
           )}
         </div>
@@ -130,28 +135,38 @@ function ClassroomDetail() {
           <h2 className="students-in">Students in {classroom.title}</h2>
           <div className="student-table">
             <div className="student-header">
+              <span>Photo</span>
               <span>Name</span>
               <span>Email</span>
-              <span>Role</span>
               <span>Action</span>
             </div>
-            <ul className="student-list">
-              {classroom.students.map((student) => (
-                <li key={student._id} className="student-row">
-                  <div className="student-info">
-                    <span>{student.name}</span>
-                    <span>{student.email}</span>
-                    <span>{student.role}</span>
-                    <button
-                      className="remove-student-button"
-                      onClick={() => removeStudent(student._id)}
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
+            {classroom.students.length > 0 ? (
+              <ul className="student-list">
+                {classroom.students.map((student) => (
+                  <li key={student._id} className="student-row">
+                    <div className="student-info">
+                      <img
+                        src={getStudentPhotoUrl(student.photo)}
+                        alt={`${student.name}`}
+                        className="student-photo"
+                      />
+                      <span>{student.name}</span>
+                      <span>{student.email}</span>
+                      <button
+                        className="remove-student-button"
+                        onClick={() => removeStudent(student._id)}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="no-students-message">
+                No students have joined this classroom yet.
+              </p>
+            )}
           </div>
         </Modal>
         <h1>Public Reflections</h1>
