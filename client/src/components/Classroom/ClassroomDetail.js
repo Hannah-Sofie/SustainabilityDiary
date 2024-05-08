@@ -56,7 +56,7 @@ function ClassroomDetail() {
         `/api/classrooms/${id}/students/${studentId}`,
         {
           headers: { Authorization: `Bearer ${userData.token}` },
-        }
+        },
       );
       setClassroom(response.data);
       alert("Student removed successfully");

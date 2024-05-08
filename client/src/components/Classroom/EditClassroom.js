@@ -11,9 +11,17 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
     description: classroom.description,
     learningGoals: classroom.learningGoals,
     photo: classroom.headerPhotoUrl || null,
+    active: classroom.classStatus,
   });
 
-  const [previewImage, setPreviewImage] = useState(classroom.headerPhotoUrl || null);
+  const [previewImage, setPreviewImage] = useState(
+    classroom.headerPhotoUrl || null,
+  );
+
+  const handleToggle = (event) => {
+    setFormData({ ...formData, active: event.target.checked });
+    console.log("Checkbox active:", event.target.checked);
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -30,25 +38,25 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
     event.preventDefault();
     const data = new FormData();
     Object.keys(formData).forEach((key) => {
-      data.append(key, formData[key]);
+      if (key !== "active") {
+        data.append(key, formData[key]);
+      }
     });
+    data.append("active", formData.active); // Append boolean directly
 
     try {
       const response = await axios.put(
         `/api/classrooms/${classroom._id}`,
         data,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
+        { headers: { "Content-Type": "multipart/form-data" } },
       );
-      // Update the parent component state with the new classroom data
       onClassroomUpdated(response.data);
       toast.success("Classroom updated successfully!");
       onClose();
     } catch (error) {
       toast.error(
         "Failed to update classroom: " +
-          (error.response?.data?.message || error.message)
+          (error.response?.data?.message || error.message),
       );
     }
   };
@@ -90,6 +98,20 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
             accept="image/*"
             style={{ display: "none" }}
           />
+          <div className="switchWrapper">
+            <label>Toggle switch off to mark classroom as finished</label>
+            <div className="toggle-switch">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={formData.active}
+                  onChange={handleToggle}
+                  style={{ marginLeft: "10px" }}
+                />
+                <span className="slider round"></span>{" "}
+              </label>
+            </div>
+          </div>
           {previewImage && (
             <div className="photo-preview-container">
               <img

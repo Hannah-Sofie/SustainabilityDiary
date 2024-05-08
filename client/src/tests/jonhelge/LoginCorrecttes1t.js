@@ -84,6 +84,6 @@ describe("Login Component - Comprehensive Test Suite", () => {
     fireEvent.click(screen.getByRole("button", { name: /login/i }));
 
     await waitFor(() => expect(mockLogin).not.toHaveBeenCalled());
-    expect(screen.queryByText(/invalid credentials/i)).toBeNull(); // Adjust based on actual error handling
+    expect(screen.queryByText(/invalid credentials/i)).toBeNull();
   });
 });
