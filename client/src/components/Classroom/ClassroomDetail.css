@@ -1,308 +1,269 @@
-.switchWrapper {
-    margin: 5px 5px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-}
-
-/* The switch - the box around the slider */
-.toggle-switch {
-    margin-top: 5px;
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-}
-
-/* Hide default HTML checkbox */
-.toggle-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-/* The slider */
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: 0.4s;
-    border-radius: 34px;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: 0.4s;
-    border-radius: 50%;
-}
-
-input:checked + .slider {
-    background-color: #2196f3;
-}
-
-input:focus + .slider {
-    box-shadow: 0 0 1px #2196f3;
-}
-
-input:checked + .slider:before {
-    transform: translateX(26px);
-}
-
 /* General styles */
 .classroom-detail-container {
-    padding: 20px;
-    position: relative;
-    max-width: 1200px;
-    margin: 20px auto;
-    background: var(--light-grey);
-    border-radius: 8px;
+  padding: 20px;
+  position: relative;
+  max-width: 1200px;
+  margin: 20px auto;
+  background: var(--light-grey);
+  border-radius: 8px;
 }
 
 .classroom-detail-container .fa-icon {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 
 .back-button {
-    position: absolute;
-    top: -17px;
-    right: 20px;
-    padding: 6px 15px;
-    background-color: transparent;
-    border: 2px solid var(--darker-purple);
-    color: var(--pure-white);
-    background-color: var(--darker-purple);
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 500;
-    font-size: 12px;
-    transition: background-color 0.2s ease-in-out;
+  position: absolute;
+  top: -17px;
+  right: 20px;
+  padding: 6px 15px;
+  background-color: transparent;
+  border: 2px solid var(--darker-purple);
+  color: var(--pure-white);
+  background-color: var(--darker-purple);
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 12px;
+  transition: background-color 0.2s ease-in-out;
 }
 
 .back-button:hover {
-    background-color: transparent;
-    color: var(--darker-purple);
+  background-color: transparent;
+  color: var(--darker-purple);
 }
 
 .classroom-header {
-    background-size: cover;
-    background-position: center;
-    height: 300px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    color: var(--pure-white);
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+  background-size: cover;
+  background-position: center;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  color: var(--pure-white);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+  flex-direction: column;
 }
 
 .classroom-content {
-    background: #ebe9eb;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: #ebe9eb;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .classroom-content h1 {
-    font-size: 24px;
-    color: var(--dark-blue);
+  font-size: 24px;
+  color: var(--dark-blue);
 }
 
 .classroom-info {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .classroom-detail-text {
-    text-align: left;
-    font-size: 18px;
-    color: var(--dark-grey);
-    margin-bottom: 10px;
-    flex-grow: 1;
+  text-align: left;
+  font-size: 18px;
+  color: var(--dark-grey);
+  margin-bottom: 10px;
+  flex-grow: 1;
 }
 
 .classroom-detail-text span {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .classroom-detail-button {
-    padding: 6px 14px;
-    background-color: var(--darker-purple);
-    border: 2px solid var(--darker-purple);
-    color: var(--pure-white);
-    border: 2px solid var(--darker-purple);
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 14px;
-    margin-bottom: 20px;
-    transition: background-color 0.3s;
-    align-self: flex-start;
+  padding: 6px 14px;
+  background-color: var(--darker-purple);
+  border: 2px solid var(--darker-purple);
+  color: var(--pure-white);
+  border: 2px solid var(--darker-purple);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-bottom: 20px;
+  transition: background-color 0.3s;
+  align-self: flex-start;
 }
 
 .edit-classroom-button {
-    padding: 6px 12px;
-    background-color: var(--dark-purple);
-    color: var(--pure-white);
-    border: 2px solid var(--dark-purple);
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 12px;
-    margin-bottom: 20px;
-    transition: background-color 0.3s;
-    margin-left: 20px;
+  padding: 6px 12px;
+  background-color: var(--dark-purple);
+  color: var(--pure-white);
+  border: 2px solid var(--dark-purple);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 12px;
+  margin-bottom: 20px;
+  transition: background-color 0.3s;
+  margin-left: 20px;
 }
 
 .classroom-detail-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.classroom-status {
+  display: block;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: 600;
+  color: var(--pure-white);
+  margin-top: 10px;
+  text-align: center;
+  width: max-content;
+  font-size: 12px;
+}
+
+.classroom-status.active {
+  background-color: #4caf50;
+}
+
+.classroom-status.finished {
+  background-color: #f44336;
 }
 
 /* Modal styles */
 .modal-content {
-    background: var(--pure-white);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  background: var(--pure-white);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .close {
-    float: right;
-    font-size: 1.5rem;
-    color: var(--dark-grey);
-    cursor: pointer;
+  float: right;
+  font-size: 1.5rem;
+  color: var(--dark-grey);
+  cursor: pointer;
 }
 
 .close:hover {
-    color: var(--red);
+  color: var(--red);
 }
 
 .edit-classroom-form {
-    background: var(--light-background);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: var(--light-background);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .edit-classroom-form input,
 .edit-classroom-form textarea {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    border: 1px solid var(--dark-grey);
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid var(--dark-grey);
 }
 
 .edit-classroom-form textarea {
-    min-height: 100px;
+  min-height: 100px;
 }
 
 .edit-classroom-form button {
-    width: 100%;
-    padding: 10px;
-    background-color: var(--button-color);
-    color: var(--pure-white);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
+  width: 100%;
+  padding: 10px;
+  background-color: var(--button-color);
+  color: var(--pure-white);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
 }
 
 .edit-classroom-form button:hover {
-    background-color: var(--button-hover-color);
+  background-color: var(--button-hover-color);
 }
 
 /* Responsive design adjustments */
 @media (max-width: 768px) {
-    .classroom-detail-container {
-        padding: 10px;
-    }
+  .classroom-detail-container {
+    padding: 10px;
+  }
 
-    .classroom-header {
-        height: 200px;
-    }
+  .classroom-header {
+    height: 200px;
+  }
 
-    .classroom-content h1 {
-        font-size: 20px;
-    }
+  .classroom-content h1 {
+    font-size: 20px;
+  }
 
-    .classroom-detail-text {
-        font-size: 16px;
-    }
+  .classroom-detail-text {
+    font-size: 16px;
+  }
 
-    .back-button,
-    .classroom-detail-button,
-    .edit-classroom-button {
-        padding: 8px 16px;
-        font-size: 14px;
-    }
+  .back-button,
+  .classroom-detail-button,
+  .edit-classroom-button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
 }
 
 /* Student list and modal specific styles */
 .students-in {
-    margin-bottom: 20px;
-    font-size: 20px;
-    color: var(--dark-blue);
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: var(--dark-blue);
 }
 
 .student-table {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .student-header,
 .student-row {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .student-header span,
 .student-info span {
-    text-align: left;
-    flex-basis: 25%;
+  text-align: left;
+  flex-basis: 25%;
 }
 
 .student-header {
-    margin-bottom: 10px;
-    font-weight: 600;
+  margin-bottom: 10px;
+  font-weight: 600;
 }
 
 .student-list {
-    list-style: none;
-    padding: 0;
+  list-style: none;
+  padding: 0;
 }
 
 .student-row {
-    align-items: center;
-    display: flex;
-    padding: 5px 0;
+  align-items: center;
+  display: flex;
+  padding: 5px 0;
 }
 
 .student-info {
-    display: flex;
-    width: 100%;
+  display: flex;
+  width: 100%;
 }
 
 .remove-student-button {
-    padding: 5px 10px;
-    background-color: var(--red);
-    color: var(--pure-white);
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 500;
+  padding: 5px 10px;
+  background-color: var(--red);
+  color: var(--pure-white);
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
 }
 
 .remove-student-button:hover {
-    background-color: var(--dark-red);
+  background-color: var(--dark-red);
 }

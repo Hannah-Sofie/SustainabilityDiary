@@ -56,7 +56,7 @@ function ClassroomDetail() {
         `/api/classrooms/${id}/students/${studentId}`,
         {
           headers: { Authorization: `Bearer ${userData.token}` },
-        },
+        }
       );
       setClassroom(response.data);
       alert("Student removed successfully");
@@ -82,6 +82,13 @@ function ClassroomDetail() {
         }}
       >
         <h1>{classroom.title}</h1>
+        <span
+          className={`classroom-status ${
+            classroom.active ? "active" : "finished"
+          }`}
+        >
+          {classroom.active ? "Active" : "Finished"}
+        </span>
       </div>
       <div className="classroom-content">
         <div className="classroom-info">

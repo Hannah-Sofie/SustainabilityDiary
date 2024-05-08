@@ -19,6 +19,7 @@ function NewReflectionEntry() {
     photoName: "",
     selectedClassroom: "",
   });
+  const [previewImage, setPreviewImage] = useState(null);
   const [classrooms, setClassrooms] = useState([]);
   const navigate = useNavigate();
 
@@ -27,9 +28,7 @@ function NewReflectionEntry() {
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/classrooms`,
-          {
-            withCredentials: true,
-          }
+          { withCredentials: true }
         );
         setClassrooms(response.data);
       } catch (error) {
@@ -53,16 +52,15 @@ function NewReflectionEntry() {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (files) {
+    if (name === "photo" && files.length > 0) {
       const file = files[0];
       setEntry((prev) => ({
         ...prev,
         photo: file,
         photoName: file.name,
       }));
-      // Optionally set a temporary URL to display the image before upload
-      const localImageUrl = URL.createObjectURL(file);
-      setEntry((prev) => ({ ...prev, photoUrl: localImageUrl }));
+      // Create a local URL for preview
+      setPreviewImage(URL.createObjectURL(file));
     } else {
       setEntry((prev) => ({ ...prev, [name]: value }));
     }
@@ -82,7 +80,7 @@ function NewReflectionEntry() {
     }
 
     try {
-      const response = await axios.post(
+      await axios.post(
         `${process.env.REACT_APP_API_URL}/api/reflections/create`,
         formData,
         {
@@ -93,11 +91,6 @@ function NewReflectionEntry() {
         }
       );
       toast.success("Reflection entry created successfully!");
-
-      // Assuming the server response includes the path for the uploaded photo
-      const newImageUrl = `${process.env.REACT_APP_API_URL}/uploads/reflections/${response.data.photo}`;
-      setEntry((prev) => ({ ...prev, photoUrl: newImageUrl }));
-
       navigate("/reflections");
     } catch (error) {
       console.error("Failed to create reflection entry:", error);
@@ -176,9 +169,18 @@ function NewReflectionEntry() {
             accept="image/*"
             style={{ display: "none" }}
           />
-
           {entry.photoName && (
-            <div className="file-name">{entry.photoName}</div>
+            <>
+              <div className="file-name">{entry.photoName}</div>
+              {previewImage && (
+                <div className="reflection-photo-preview">
+                  <img
+                    src={previewImage}
+                    alt="Preview of uploaded reflectionphoto"
+                  />
+                </div>
+              )}
+            </>
           )}
         </div>
         <div className="form-actions">

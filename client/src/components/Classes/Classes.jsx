@@ -2,13 +2,13 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Classes.css";
 import DefaultImage from "../../assets/img/default-classroom.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 // Replace with your environment variable or direct API URL if not using env variables.
 const baseURL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
 function Classes({ classrooms }) {
-  console.log("Fetched data", classrooms);
-
   // Add a search state
   const [search, setSearch] = useState("");
 
@@ -76,6 +76,7 @@ function Classes({ classrooms }) {
 
             {/* Add a search input */}
             <div className="inputSearch">
+              <FontAwesomeIcon icon={faSearch} className="fa-search-icon" />
               <input
                 placeholder="Search Classrooms"
                 onChange={handleSearch}
