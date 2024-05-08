@@ -136,9 +136,6 @@
 .reflection-photo-preview {
   width: 200px;
   height: auto;
-  object-fit: cover;
-  margin-top: 10px;
-  border-radius: 5px;
 }
 
 .reflection-photo-preview img {
@@ -146,4 +143,28 @@
   height: 100%;
   object-fit: cover;
   border-radius: 5px;
+}
+
+.remove-photo-button {
+  display: inline-flex;
+  align-items: center;
+  background-color: #e74c3c;
+  color: #ffffff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 12px;
+  transition: background-color 0.2s ease;
+  margin-bottom: 10px;
+  margin-top: -10px;
+}
+
+.remove-photo-button:hover {
+  background-color: #c0392b;
+}
+
+.remove-photo-button svg {
+  margin-right: 5px;
 }

@@ -7,6 +7,7 @@ import {
   faLock,
   faLockOpen,
   faUpload,
+  faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import "./NewReflectionEntry.css";
 
@@ -20,8 +21,10 @@ function EditReflectionEntry() {
     photoName: "",
     selectedClassroom: "",
   });
+  const [initialPhotoUrl, setInitialPhotoUrl] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [classrooms, setClassrooms] = useState([]);
+  const [removePhoto, setRemovePhoto] = useState(false);
 
   useEffect(() => {
     const fetchEntry = async () => {
@@ -35,9 +38,10 @@ function EditReflectionEntry() {
           selectedClassroom: data.classrooms.length ? data.classrooms[0] : "",
         });
         if (data.photo) {
-          setPreviewImage(
-            `${process.env.REACT_APP_API_URL}/uploads/reflections/${data.photo}`
-          );
+          const photoUrl = `${process.env.REACT_APP_API_URL}/uploads/reflections/${data.photo}`;
+          setInitialPhotoUrl(photoUrl);
+          setPreviewImage(photoUrl); // Display the initial image
+          setRemovePhoto(false); // Reset photo removal status
         }
       } catch (error) {
         console.error("Failed to fetch entry:", error);
@@ -81,11 +85,22 @@ function EditReflectionEntry() {
         photo: file,
         photoName: file.name,
       }));
+      setRemovePhoto(false); // A new photo will be uploaded
       // Update preview image
       setPreviewImage(URL.createObjectURL(file));
     } else {
       setEntry((prev) => ({ ...prev, [name]: value }));
     }
+  };
+
+  const handleRemovePhoto = () => {
+    setEntry((prev) => ({
+      ...prev,
+      photo: null,
+      photoName: "",
+    }));
+    setRemovePhoto(true);
+    setPreviewImage(null); // Clear the preview image
   };
 
   const handleSubmit = async (e) => {
@@ -111,10 +126,12 @@ function EditReflectionEntry() {
     formData.append("body", entry.body);
     formData.append("isPublic", isPublic);
 
-    // ** Add the conditional logic here **
     if (isPublic === "true" && entry.selectedClassroom) {
       formData.append("classroomId", entry.selectedClassroom);
     }
+
+    // Add the `removePhoto` field if the user chose to remove the current photo
+    formData.append("removePhoto", removePhoto);
 
     // Include the uploaded photo if provided
     if (entry.photo) {
@@ -140,8 +157,6 @@ function EditReflectionEntry() {
       toast.error("Failed to update entry.");
     }
   };
-  console.log("Title:", entry.title);
-  console.log("Body:", entry.body);
 
   return (
     <div className="container-new-entry">
@@ -204,17 +219,21 @@ function EditReflectionEntry() {
             accept="image/*"
             style={{ display: "none" }}
           />
-          {entry.photoName && (
+          {previewImage && (
             <>
-              <div className="file-name">{entry.photoName}</div>
-              {previewImage && (
-                <div className="reflection-photo-preview">
-                  <img
-                    src={previewImage}
-                    alt="Preview of uploaded reflectionphoto"
-                  />
-                </div>
-              )}
+              <div className="reflection-photo-preview">
+                <img
+                  src={previewImage}
+                  alt="Preview of uploaded reflectionphoto"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={handleRemovePhoto}
+                className="remove-photo-button"
+              >
+                <FontAwesomeIcon icon={faTrashAlt} /> Remove Photo
+              </button>
             </>
           )}
         </div>
