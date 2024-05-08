@@ -74,7 +74,7 @@ const removeStudent = asyncHandler(async (req, res) => {
 });
 
 const updateClassroom = asyncHandler(async (req, res) => {
-  const { title, description, learningGoals, classStatus } = req.body;
+  const { title, description, learningGoals, active } = req.body;
   const { id } = req.params;
 
   const classroom = await Classroom.findById(id);
@@ -85,6 +85,8 @@ const updateClassroom = asyncHandler(async (req, res) => {
   if (classroom.teacher.toString() !== req.user._id.toString()) {
     throw new CreateError("Not authorized to edit this classroom", 403);
   }
+  // converting the string to a boolean
+  const classStatus = active === "true";
 
   const updatedFields = {
     title: title || classroom.title,
@@ -93,7 +95,7 @@ const updateClassroom = asyncHandler(async (req, res) => {
     headerPhotoUrl: req.file
       ? `/uploads/classrooms/${req.file.filename}`
       : classroom.headerPhotoUrl,
-    classStatus: classStatus === "true" ? true : false,
+    classStatus,
   };
 
   const updatedClassroom = await Classroom.findByIdAndUpdate(
