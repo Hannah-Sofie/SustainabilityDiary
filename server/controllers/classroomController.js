@@ -34,7 +34,7 @@ const joinClassroom = asyncHandler(async (req, res) => {
   const classroom = await Classroom.findOneAndUpdate(
     { classCode },
     { $addToSet: { students: req.user._id } },
-    { new: true }
+    { new: true },
   ).populate("students", "name email");
   if (!classroom) {
     throw new CreateError("Classroom not found", 404);
@@ -65,7 +65,7 @@ const removeStudent = asyncHandler(async (req, res) => {
   const classroom = await Classroom.findByIdAndUpdate(
     classroomId,
     { $pull: { students: studentId } },
-    { new: true }
+    { new: true },
   ).populate("students", "name email");
   if (!classroom) {
     throw new CreateError("Classroom not found", 404);
@@ -74,7 +74,7 @@ const removeStudent = asyncHandler(async (req, res) => {
 });
 
 const updateClassroom = asyncHandler(async (req, res) => {
-  const { title, description, learningGoals } = req.body;
+  const { title, description, learningGoals, classStatus } = req.body;
   const { id } = req.params;
 
   const classroom = await Classroom.findById(id);
@@ -93,12 +93,13 @@ const updateClassroom = asyncHandler(async (req, res) => {
     headerPhotoUrl: req.file
       ? `/uploads/classrooms/${req.file.filename}`
       : classroom.headerPhotoUrl,
+    classStatus: classStatus === "true" ? true : false,
   };
 
   const updatedClassroom = await Classroom.findByIdAndUpdate(
     id,
     updatedFields,
-    { new: true }
+    { new: true },
   );
   res.json(updatedClassroom);
 });

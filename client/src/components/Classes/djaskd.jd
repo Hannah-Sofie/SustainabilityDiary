@@ -6,39 +6,23 @@ import DefaultImage from "../../assets/img/default-classroom.png";
 // Replace with your environment variable or direct API URL if not using env variables.
 const baseURL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
+// dette er riktig
+
 function Classes({ classrooms }) {
   console.log("Fetched data", classrooms);
 
   // Add a search state
   const [search, setSearch] = useState("");
 
-  // State to filter the classrooms out based on type we choose
-  const [filter, setFilter] = useState("All");
-
   // Add a search handler
   const handleSearch = (event) => {
     setSearch(event.target.value.toLowerCase());
   };
 
-  const handleFilterChange = (filterType) => {
-    setFilter(filterType);
-  };
-
   // Filter the classrooms based on the search input, search on the classroom title
-  // Ensure classrooms is an array before filtering to avoid errors in dashboard
-  const filteredClassrooms = Array.isArray(classrooms)
-    ? classrooms.filter((classroom) => {
-        const matchesSearch = classroom.title.toLowerCase().includes(search);
-
-        if (filter === "All") {
-          return matchesSearch;
-        } else if (filter === "Active") {
-          return matchesSearch && classroom.classStatus === true;
-        } else if (filter === "Finished") {
-          return matchesSearch && classroom.classStatus === false;
-        }
-      })
-    : [];
+  const filteredClassrooms = classrooms.filter((classroom) => {
+    return classroom.title.toLowerCase().includes(search);
+  });
 
   if (!classrooms || !classrooms.length) {
     return (
@@ -54,24 +38,9 @@ function Classes({ classrooms }) {
         <div className="class-box">
           <div className="classesHeader">
             <ul className="class-filter">
-              <li
-                className={filter === "All" ? "active" : ""}
-                onClick={() => handleFilterChange("All")}
-              >
-                All classes
-              </li>
-              <li
-                className={filter === "Active" ? "active" : ""}
-                onClick={() => handleFilterChange("Active")}
-              >
-                Active Classes
-              </li>
-              <li
-                className={filter === "Finished" ? "active" : ""}
-                onClick={() => handleFilterChange("Finished")}
-              >
-                Finished Classes
-              </li>
+              <li className="active">All classes</li>
+              <li>Active Classes</li>
+              <li>Finished Classes</li>
             </ul>
 
             {/* Add a search input */}

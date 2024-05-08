@@ -1,99 +1,117 @@
 .main-class {
-  position: relative;
-  padding: 0 40px;
-  width: 100%;
+    position: relative;
+    padding: 0 40px;
+    width: 100%;
+}
+
+.classesHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.inputSearch {
+    margin: 10px;
+}
+
+.inputSearch input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--lighter-gray);
 }
 
 .main-class .container-class {
-  margin-top: 20px;
-  text-transform: capitalize;
+    margin-top: 20px;
+    text-transform: capitalize;
 }
 
 .main-class .class-box {
-  width: 100%;
-  padding: 10px;
-  background: var(--pure-white);
-  border-radius: 10px;
-  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    padding: 10px;
+    background: var(--pure-white);
+    border-radius: 10px;
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
 }
 
 .main-class .class-box ul {
-  list-style: none;
-  display: flex;
+    list-style: none;
+    display: flex;
 }
 
 .main-class .class-box ul li {
-  margin: 10px;
-  color: gray;
-  cursor: pointer;
+    margin: 10px;
+    color: gray;
+    cursor: pointer;
 }
 
 .main-class .class-box ul .active {
-  color: #000;
-  border-bottom: 1px solid #000;
+    color: #000;
+    border-bottom: 1px solid #000;
 }
 
 .main-class .class-box .class {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
 }
 
 .main-class .box {
-  flex: 1 1 20%;
-  max-width: 22%;
-  padding: 30px 20px;
-  margin: 20px;
-  border-radius: 10px;
-  background: rgb(235, 233, 233);
-  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  height: 300px;
-  box-sizing: border-box;
+    flex: 1 1 20%;
+    max-width: 22%;
+    padding: 30px 20px;
+    margin: 20px;
+    border-radius: 10px;
+    background: rgb(235, 233, 233);
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 300px;
+    box-sizing: border-box;
 }
 
 .main-class .box h3,
 .main-class .box p {
-  text-align: center;
-  width: 100%;
+    text-align: center;
+    width: 100%;
 }
 
 .main-class .button-link {
-  display: inline-block;
-  background: var(--darker-purple);
-  color: var(--pure-white);
-  padding: 7px 10px;
-  text-align: center;
-  width: 80%;
-  border: 2px solid var(--darker-purple);
-  border-radius: 20px;
-  cursor: pointer;
-  text-decoration: none;
-  align-self: center;
-  margin: 10px 0;
+    display: inline-block;
+    background: var(--darker-purple);
+    color: var(--pure-white);
+    padding: 7px 10px;
+    text-align: center;
+    width: 80%;
+    border: 2px solid var(--darker-purple);
+    border-radius: 20px;
+    cursor: pointer;
+    text-decoration: none;
+    align-self: center;
+    margin: 10px 0;
 }
 
 .main-class .button-link:hover {
-  background: transparent;
-  color: var(--darker-purple);
+    background: transparent;
+    color: var(--darker-purple);
 }
 
 .main-class .classroom-icon {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  margin-bottom: 10px;
-  border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border-radius: 50%;
 }
 
 .no-classrooms {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  font-size: 2rem;
-  color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 2rem;
+    color: #000;
 }

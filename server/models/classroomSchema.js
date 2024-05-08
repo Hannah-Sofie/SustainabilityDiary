@@ -11,8 +11,9 @@ const classroomSchema = new Schema(
     students: [{ type: Schema.Types.ObjectId, ref: "User" }],
     iconPhotoUrl: { type: String },
     headerPhotoUrl: { type: String },
+    classStatus: { type: Boolean, default: true },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports = mongoose.model("Classroom", classroomSchema);
