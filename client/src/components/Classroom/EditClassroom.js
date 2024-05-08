@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUpload, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faUpload, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import "./EditClassroom.css";
 
 function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
@@ -10,16 +10,27 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
     title: classroom.title,
     description: classroom.description,
     learningGoals: classroom.learningGoals,
-    photo: classroom.headerPhotoUrl || null,
     active: classroom.classStatus,
+    photo: classroom.headerPhotoUrl || null,
   });
 
   const [previewImage, setPreviewImage] = useState(
-    classroom.headerPhotoUrl || null
+    classroom.headerPhotoUrl
+      ? `${process.env.REACT_APP_API_URL}${classroom.headerPhotoUrl}`
+      : null
   );
 
-  const handleToggle = (event) => {
-    setFormData({ ...formData, active: event.target.checked });
+  // Handle file selection for photo preview
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setFormData({ ...formData, photo: file });
+    setPreviewImage(URL.createObjectURL(file));
+  };
+
+  // Handle removing the photo
+  const handleRemovePhoto = () => {
+    setFormData({ ...formData, photo: null });
+    setPreviewImage(null);
   };
 
   const handleChange = (event) => {
@@ -27,21 +38,17 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setFormData({ ...formData, photo: file });
-    setPreviewImage(URL.createObjectURL(file));
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData();
-    Object.keys(formData).forEach((key) => {
-      if (key !== "active") {
-        data.append(key, formData[key]);
-      }
-    });
+    data.append("title", formData.title);
+    data.append("description", formData.description);
+    data.append("learningGoals", formData.learningGoals);
     data.append("classStatus", formData.active);
+
+    if (formData.photo) {
+      data.append("photo", formData.photo);
+    }
 
     try {
       const response = await axios.put(
@@ -59,8 +66,6 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
       );
     }
   };
-
-  console.log("Submitting with formData:", formData);
 
   return (
     <div className="edit-classroom-modal">
@@ -87,32 +92,9 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
           onChange={handleChange}
           required
         />
-        <div className="switch-wrapper">
-          <span className="toggle-label">
-            {formData.active ? (
-              <>
-                <FontAwesomeIcon icon={faCheck} className="toggle-icon" />{" "}
-                Active
-              </>
-            ) : (
-              <>
-                <FontAwesomeIcon icon={faTimes} className="toggle-icon" />{" "}
-                Finished
-              </>
-            )}
-          </span>
-          <label className="toggle-switch">
-            <input
-              type="checkbox"
-              checked={formData.active}
-              onChange={handleToggle}
-            />
-            <span className="slider round"></span>
-          </label>
-        </div>
         <div className="file-upload">
           <label htmlFor="classroom-photo-upload" className="file-upload-label">
-            <FontAwesomeIcon icon={faUpload} /> Upload new header photo
+            <FontAwesomeIcon icon={faUpload} /> Upload or Change Photo
           </label>
           <input
             id="classroom-photo-upload"
@@ -126,14 +108,23 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
             <div className="photo-preview-container">
               <img
                 src={previewImage}
-                alt="Preview of updated classroom header"
+                alt="Preview of classroom header photo"
                 className="photo-preview"
               />
+              <button
+                type="button"
+                onClick={handleRemovePhoto}
+                className="remove-photo-button"
+              >
+                <FontAwesomeIcon icon={faTrashAlt} /> Remove Photo
+              </button>
             </div>
           )}
         </div>
-        <button type="submit">Update Classroom</button>
-        <button type="button" onClick={onClose}>
+        <button type="submit" className="update-classroom-button">
+          Update Classroom
+        </button>
+        <button type="button" className="cancel-button" onClick={onClose}>
           Cancel
         </button>
       </form>
