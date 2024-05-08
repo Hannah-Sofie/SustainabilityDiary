@@ -1,7 +1,0 @@
-node_modules
-.gitignore
-package-lock.json
-.git
-secrets.folder/*
-keys
-remote.system.scripts
