@@ -61,6 +61,8 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
     }
   };
 
+  console.log("Submitting with formData:", formData);
+
   return (
     <div className="edit-classroom-modal">
       <form onSubmit={handleSubmit}>
