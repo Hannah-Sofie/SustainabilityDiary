@@ -134,7 +134,7 @@ function StudentList() {
           </tbody>
         </table>
       ) : (
-        <p>No students found.</p>
+        <p className="no-students-message">No students have registered yet.</p>
       )}
     </div>
   );
