@@ -20,6 +20,7 @@ function Classes({ classrooms }) {
             <li className="active">All classes</li>
             <li>Active Classes</li>
             <li>Finished Classes</li>
+            <li>Favourite Classes</li>
           </ul>
           <div className="class">
             {classrooms.map((classroom, index) => (

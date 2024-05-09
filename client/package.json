@@ -17,6 +17,7 @@
   },
   "scripts": {
     "start": "PORT=8083 react-scripts start",
+    "start-pc": "set PORT=8083&& react-scripts start",
     "build": "react-scripts build",
     "test": "jest",
     "eject": "react-scripts eject",

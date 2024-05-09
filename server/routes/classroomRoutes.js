@@ -5,6 +5,7 @@ const multer = require("multer");
 const {
   createClassroom,
   joinClassroom,
+  favouriteClassroom,
   getClassrooms,
   getClassroomById,
   removeStudent,
@@ -24,6 +25,7 @@ const upload = multer({ storage: storage });
 
 router.post("/create", verifyToken, upload.single("photo"), createClassroom);
 router.post("/join", verifyToken, joinClassroom);
+router.post("/fave", verifyToken, favouriteClassroom);
 router.get("/", verifyToken, getClassrooms);
 router.get("/:id", verifyToken, getClassroomById);
 router.delete("/:classroomId/students/:studentId", verifyToken, removeStudent);

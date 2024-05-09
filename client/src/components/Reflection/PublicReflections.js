@@ -86,7 +86,7 @@ const PublicReflections = ({ classroomId }) => {
               handleLike(entry._id);
             }}
           />
-          <span className="like-count">{entry.likes}</span>
+          <span className="like-count">Likes: {entry.likes}</span>
           <div className="entry-image">
             <img
               src={

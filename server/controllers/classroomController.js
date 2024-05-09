@@ -37,6 +37,19 @@ const joinClassroom = asyncHandler(async (req, res) => {
   res.status(200).json(classroom);
 });
 
+const favouriteClassroom = asyncHandler(async (req, res) => {
+  const { classCode } = req.body;
+  const classroom = await Classroom.findOneAndUpdate(
+    { classCode },
+    { $addToSet: { favourites: req.user._id } },
+    { new: true }
+  ).populate("students", "name email");
+  if (!classroom) {
+    throw new CreateError("Classroom not found", 404);
+  }
+  res.status(200).json(classroom);
+});
+
 const getClassrooms = asyncHandler(async (req, res) => {
   const classrooms = await Classroom.find({
     $or: [{ teacher: req.user._id }, { students: req.user._id }],
@@ -99,6 +112,7 @@ const updateClassroom = asyncHandler(async (req, res) => {
 module.exports = {
   createClassroom,
   joinClassroom,
+  favouriteClassroom,
   getClassrooms,
   getClassroomById,
   removeStudent,
