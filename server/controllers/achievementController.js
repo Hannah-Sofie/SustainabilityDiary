@@ -1,6 +1,6 @@
-const asyncHandler = require("express-async-handler");
-const UserAchievement = require("../models/achievementSchema");
 const CreateError = require("../utils/createError");
+const UserAchievement = require("../models/achievementSchema");
+const asyncHandler = require("express-async-handler");
 
 const createAchievement = asyncHandler(async (req, res) => {
     try {
@@ -32,4 +32,7 @@ const checkAchievements = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = router;
+module.exports = {
+    createAchievement,
+    checkAchievements
+};

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Achievements.css";
 import { useAuth } from "../../context/AuthContext";
@@ -6,35 +6,35 @@ import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator
 import CustomButton from "../../components/CustomButton/CustomButton";
 
 const Achievements = () => {
-    const { isAuthenticated, userData, loading } = useAuth();  // Adjusted to include isAuthenticated and loading
+    const { isAuthenticated, userData, loading } = useAuth();
     const [achievements, setAchievements] = useState([]);
     const [error, setError] = useState('');
 
-    const fetchAchievements = useCallback(async () => {
-      if (!isAuthenticated) {
-          console.error('User is not authenticated');
-          setError('Authentication error. Please log in.');
-          return;
-      }
-  
-      try {
-          const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/achievements`, {
-              headers: {
-                  Authorization: `Bearer ${userData.token}`,
-              },
-          });
-          setAchievements(response.data);
-      } catch (error) {
-          console.error("Error fetching achievements:", error.response);
-          setError('Failed to fetch achievements. Please try again.');
-      }
-  }, [isAuthenticated, userData.token]);
+    const fetchAchievements = async () => {
+        if (!isAuthenticated) {
+            console.error('User is not authenticated');
+            setError('Authentication error. Please log in.');
+            return;
+        }
+    
+        try {
+            const response = await axios.get("/api/achievements", {
+                headers: {
+                    Authorization: `Bearer ${userData.token}`,
+                },
+            });
+            setAchievements(response.data);
+        } catch (error) {
+            console.error("Error fetching achievements:", error);
+            setError('Failed to fetch achievements. Please try again.');
+        }
+    };
 
     useEffect(() => {
         if (isAuthenticated) {
             fetchAchievements();
         }
-    }, [isAuthenticated, fetchAchievements]);  // Updated dependencies to include isAuthenticated
+    }, [isAuthenticated]); // fetchAchievements function is not included in the dependencies to mimic the Classroom.jsx setup
 
     if (loading) {
         return <LoadingIndicator />;
