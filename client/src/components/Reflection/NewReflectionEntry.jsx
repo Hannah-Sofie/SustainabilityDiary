@@ -28,7 +28,7 @@ function NewReflectionEntry() {
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/classrooms`,
-          { withCredentials: true }
+          { withCredentials: true },
         );
         setClassrooms(response.data);
       } catch (error) {
@@ -46,7 +46,7 @@ function NewReflectionEntry() {
       isPublic: !prev.isPublic,
     }));
     toast.info(
-      `Entry will be set to ${entry.isPublic ? "private" : "public"}.`
+      `Entry will be set to ${entry.isPublic ? "private" : "public"}.`,
     );
   };
 
@@ -78,6 +78,8 @@ function NewReflectionEntry() {
     if (entry.photo) {
       formData.append("photo", entry.photo);
     }
+    // log data sent during form submission
+    console.log("Data sent:", [...formData.entries()]);
 
     try {
       await axios.post(
@@ -88,7 +90,7 @@ function NewReflectionEntry() {
             "Content-Type": "multipart/form-data",
             withCredentials: true,
           },
-        }
+        },
       );
       toast.success("Reflection entry created successfully!");
       navigate("/reflections");
@@ -101,7 +103,7 @@ function NewReflectionEntry() {
   const handleCancel = () => {
     if (
       window.confirm(
-        "Are you sure you want to cancel? Any unsaved changes will be lost."
+        "Are you sure you want to cancel? Any unsaved changes will be lost.",
       )
     ) {
       navigate("/reflections");

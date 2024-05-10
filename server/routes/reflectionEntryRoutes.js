@@ -51,7 +51,7 @@ router.get("/public", getAllPublicReflectionEntries);
 router.get(
   "/classroom/:classroomId/public",
   verifyToken,
-  getReflectionsByClassroom
+  getReflectionsByClassroom,
 );
 router.get("/latest", verifyToken, getLatestReflection);
 router.get("/:id", verifyToken, getReflectionById);
@@ -60,9 +60,18 @@ router.post(
   verifyToken,
   upload.single("photo"),
   validateReflection,
-  createReflectionEntry
+  createReflectionEntry,
 );
-router.put("/:id", verifyToken, validateReflection, updateReflectionEntry);
+// Assuming you only want to handle files when they are actually included:
+router.put(
+  "/:id",
+  verifyToken,
+  upload.single("photo"), // Handle photo uploads
+  validateReflection,
+  updateReflectionEntry,
+);
+
+// gammel: router.put("/:id", verifyToken, validateReflection, updateReflectionEntry);
 router.delete("/:id", verifyToken, deleteReflectionEntry);
 router.post("/:id/like", verifyToken, likeReflectionEntry);
 

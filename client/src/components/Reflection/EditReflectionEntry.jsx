@@ -31,7 +31,7 @@ function EditReflectionEntry() {
       try {
         const { data } = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/reflections/${id}`,
-          { withCredentials: true }
+          { withCredentials: true },
         );
         setEntry({
           ...data,
@@ -53,7 +53,7 @@ function EditReflectionEntry() {
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/classrooms`,
-          { withCredentials: true }
+          { withCredentials: true },
         );
         setClassrooms(response.data);
       } catch (error) {
@@ -72,7 +72,7 @@ function EditReflectionEntry() {
       isPublic: !prev.isPublic,
     }));
     toast.info(
-      `Entry will be set to ${entry.isPublic ? "private" : "public"}.`
+      `Entry will be set to ${entry.isPublic ? "private" : "public"}.`,
     );
   };
 
@@ -106,7 +106,6 @@ function EditReflectionEntry() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Ensure title and body have valid values
     if (!entry.title.trim()) {
       toast.error("Title is required.");
       return;
@@ -116,45 +115,55 @@ function EditReflectionEntry() {
       return;
     }
 
-    // Convert `isPublic` to a boolean string
-    const isPublic =
-      entry.isPublic === true || entry.isPublic === "true" ? "true" : "false";
+    const isPublicString = entry.isPublic ? "true" : "false";
+    const removePhotoString = removePhoto ? "true" : "false";
 
-    // Create `FormData` and add fields
     const formData = new FormData();
     formData.append("title", entry.title);
     formData.append("body", entry.body);
-    formData.append("isPublic", isPublic);
+    formData.append("isPublic", isPublicString);
 
-    if (isPublic === "true" && entry.selectedClassroom) {
+    if (entry.isPublic && entry.selectedClassroom) {
       formData.append("classroomId", entry.selectedClassroom);
     }
 
-    // Add the `removePhoto` field if the user chose to remove the current photo
-    formData.append("removePhoto", removePhoto);
+    formData.append("removePhoto", removePhotoString);
 
-    // Include the uploaded photo if provided
     if (entry.photo) {
       formData.append("photo", entry.photo);
     }
 
-    // Debugging step: Print out the form data entries
-    console.log("Submitting form data:", [...formData.entries()]);
+    // Debugging step: Verify each append
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value} (${typeof value})`);
+    }
 
     // Perform the PUT request
     try {
-      await axios.put(
+      const response = await axios.put(
         `${process.env.REACT_APP_API_URL}/api/reflections/${id}`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
-        }
+        },
       );
-      toast.success("Entry updated successfully!");
-      navigate("/reflections");
+
+      // Use the response here
+      if (response.status === 200) {
+        toast.success("Entry updated successfully!");
+        console.log("Update Response:", response.data);
+        navigate("/reflections"); // Redirect or handle the response further
+      } else {
+        // Handle other status codes or data issues
+        toast.error("Update was successful but check data or status code.");
+        console.log("Response status is not 200:", response.status);
+      }
     } catch (error) {
       console.error("Failed to update entry:", error.response?.data);
-      toast.error("Failed to update entry.");
+      toast.error(
+        "Failed to update entry: " +
+          (error.response?.data.message || "Unknown error"),
+      );
     }
   };
 
