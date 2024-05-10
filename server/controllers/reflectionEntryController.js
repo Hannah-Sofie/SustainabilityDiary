@@ -14,7 +14,7 @@ const getAllPublicReflectionEntries = async (req, res, next) => {
   try {
     const entries = await ReflectionEntry.find({ isPublic: true }).populate(
       "userId",
-      "name"
+      "name",
     );
     res.json(entries);
   } catch (error) {
@@ -27,7 +27,7 @@ const getReflectionById = async (req, res, next) => {
     const { id } = req.params; // Get the reflection ID from URL parameters
     const reflection = await ReflectionEntry.findById(id).populate(
       "userId",
-      "name email"
+      "name email",
     ); // Optionally populate user details
 
     if (!reflection) {
@@ -119,6 +119,14 @@ const updateReflectionEntry = async (req, res, next) => {
   const { title, body, isPublic, classroomId } = req.body;
   const photo = req.file ? req.file.filename : null;
 
+  console.log("Update Request Data:", {
+    title,
+    body,
+    isPublic,
+    classroomId,
+    photo,
+  });
+
   if (!title || !body) {
     return next(new CreateError("Title and body are required", 400));
   }
@@ -142,7 +150,7 @@ const updateReflectionEntry = async (req, res, next) => {
     const updatedEntry = await ReflectionEntry.findOneAndUpdate(
       { _id: req.params.id, userId: req.user._id },
       updateFields,
-      { new: true }
+      { new: true },
     );
 
     if (!updatedEntry) {
