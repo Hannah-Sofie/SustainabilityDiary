@@ -12,29 +12,52 @@ const Achievements = () => {
 
     const fetchAchievements = async () => {
         if (!isAuthenticated) {
-            console.error('User is not authenticated');
             setError('Authentication error. Please log in.');
             return;
         }
     
         try {
             const response = await axios.get("/api/achievements", {
-                headers: {
-                    Authorization: `Bearer ${userData.token}`,
-                },
+                headers: { Authorization: `Bearer ${userData.token}` },
             });
-            setAchievements(response.data);
+            if (response.status === 200) {
+                setAchievements(response.data);
+            } else {
+                setError('Failed to fetch achievements. Please try again.');
+            }
         } catch (error) {
             console.error("Error fetching achievements:", error);
             setError('Failed to fetch achievements. Please try again.');
         }
     };
+    
 
     useEffect(() => {
+        const fetchAchievements = async () => {
+          if (!isAuthenticated) {
+            console.error('User is not authenticated');
+            setError('Authentication error. Please log in.');
+            return;
+          }
+        
+          try {
+            const response = await axios.get("/api/achievements", {
+              headers: {
+                Authorization: `Bearer ${userData.token}`,
+              },
+            });
+            setAchievements(response.data);
+          } catch (error) {
+            console.error("Error fetching achievements:", error);
+            setError('Failed to fetch achievements. Please try again.');
+          }
+        };
+      
         if (isAuthenticated) {
-            fetchAchievements();
+          fetchAchievements();
         }
-    }, [isAuthenticated]); // fetchAchievements function is not included in the dependencies to mimic the Classroom.jsx setup
+      }, [isAuthenticated, userData.token]); // Now fetchAchievements is inside useEffect and uses the dependencies directly
+      
 
     if (loading) {
         return <LoadingIndicator />;

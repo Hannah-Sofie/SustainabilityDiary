@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,9 +14,23 @@ function Reflections() {
   const { userData } = useAuth();
 
   useEffect(() => {
+    const fetchEntries = async () => {
+      try {
+        const { data } = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/reflections`,
+          { headers: { Authorization: `Bearer ${userData.token}` } }
+        );
+        setEntries(data);
+      } catch (error) {
+        console.error("Failed to fetch reflection entries:", error);
+        toast.error("Failed to fetch reflections. Please try again.");
+      }
+    };
+  
     fetchEntries();
-  }, []);
-
+  }, [userData.token]); // Include all external variables that the function depends on
+  
+  
   const fetchEntries = async () => {
     try {
       const { data } = await axios.get(
@@ -24,31 +38,32 @@ function Reflections() {
         { headers: { Authorization: `Bearer ${userData.token}` } }
       );
       setEntries(data);
-      checkForAchievements(data.length);
     } catch (error) {
       console.error("Failed to fetch reflection entries:", error);
       toast.error("Failed to fetch reflections. Please try again.");
     }
   };
 
-  const checkForAchievements = useCallback(async (count) => {
-    // Trigger an achievement every 3 reflections
-    if (count % 3 === 0) {
-      try {
-        await axios.post(`${process.env.REACT_APP_API_URL}/api/achievements`, {
-          name: "Reflection Enthusiast",
-          description: `Congratulations on creating ${count} reflections!`
-        }, {
-          headers: { Authorization: `Bearer ${userData.token}` }
-        });
-        toast.success("Achievement unlocked: Reflection Enthusiast!");
-      } catch (error) {
-        console.error("Failed to post achievement:", error);
-        toast.error("Could not unlock achievement.");
+  const createReflection = async (reflectionData) => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/reflections/create`,
+        reflectionData,
+        { headers: { Authorization: `Bearer ${userData.token}` } }
+      );
+  
+      // Handle achievement creation notification
+      if (response.data.achievementCreated) {
+        toast.success("New achievement unlocked: Reflection Enthusiast!");
       }
+  
+      // Additional logic to update UI as necessary
+    } catch (error) {
+      console.error("Error creating reflection:", error);
+      toast.error("Failed to create reflection. Please try again.");
     }
-  }, [userData.token]);
-
+  };
+  
   return (
     <div>
       <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} 
