@@ -14,21 +14,22 @@ const handleAchievementCreation = async (userId, count) => {
         });
 
         if (!existingAchievement) {
-            console.log(`Creating new achievement for user ${userId}`);
-            await UserAchievement.create({
+            console.log(`No existing achievement, creating one with custom image`);
+            const newAchievement = await UserAchievement.create({
                 userId,
                 name: "Reflection Enthusiast",
-                description: "Congratulations on creating multiple reflections!"
+                description: "Congratulations on creating multiple reflections!",
+                image: `http://localhost:8001/uploads/achievements/reflection_award.jpg` 
             });
-            console.log(`Achievement created for user ${userId}`);
-            return true; // Indicates that a new achievement was created
+            console.log(`Achievement created with image: ${newAchievement.image}`);
+            return true;
         } else {
-            console.log(`User ${userId} already has the achievement.`);
+            console.log(`Existing achievement found, not creating a new one`);
         }
     } else {
         console.log(`Count not divisible by 3, no achievement.`);
     }
-    return false; // Indicates no achievement was created
+    return false;
 };
 
 // Endpoint to create a reflection entry and potentially trigger an achievement
@@ -66,7 +67,7 @@ const createReflectionEntry = asyncHandler(async (req, res) => {
 
 // Function to create an achievement manually
 const createAchievement = asyncHandler(async (req, res) => {
-    const { userId, name, description } = req.body;
+    const { userId, name, description, image } = req.body; 
 
     try {
         const existingAchievement = await UserAchievement.findOne({ userId, name });
@@ -77,7 +78,8 @@ const createAchievement = asyncHandler(async (req, res) => {
         const newAchievement = await UserAchievement.create({
             userId,
             name,
-            description
+            description,
+            image: image || 'default_award.jpg'
         });
         res.status(201).json(newAchievement);
     } catch (error) {
@@ -85,6 +87,7 @@ const createAchievement = asyncHandler(async (req, res) => {
         res.status(500).json({ message: "Error creating achievement", error: error.message });
     }
 });
+
 
 // Function to fetch all achievements for a user
 const checkAchievements = asyncHandler(async (req, res) => {

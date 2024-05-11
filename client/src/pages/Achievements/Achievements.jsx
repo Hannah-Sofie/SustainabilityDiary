@@ -52,7 +52,6 @@ const Achievements = () => {
             setError('Failed to fetch achievements. Please try again.');
           }
         };
-      
         if (isAuthenticated) {
           fetchAchievements();
         }
@@ -68,35 +67,27 @@ const Achievements = () => {
     }
 
     return (
-        <div className="achievements-container">
-            <section className="main-achievements">
-                <div className="container-achievements">
-                    {error && <p className="error">{error}</p>}
-                    <h1>Your Achievements</h1>
-                    {achievements.length > 0 ? (
-                        <ul>
-                            {achievements.map((achievement, index) => (
-                                <li key={index}>
-                                    <strong>{achievement.name}</strong> - {achievement.description}
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>No achievements to display.</p>
-                    )}
-                    <CustomButton
-                        name="Refresh Achievements"
-                        onClick={fetchAchievements}
-                        backgroundColor="var(--darker-blue)"
-                        color="var(--pure-white)"
-                        hoverBackgroundColor="transparent"
-                        hoverColor="var(--darker-blue)"
-                        hoverBorderColor="var(--darker-blue)"
-                    />
-                </div>
-            </section>
+<div className="achievements-container">
+    <section className="achievements-main">
+        <div className="achievements-content">
+            {error && <p className="achievements-error">{error}</p>}
+            <h1 className="achievements-title">Your Achievements</h1>
+            {achievements.length > 0 ? (
+                <ul className="achievements-list">
+                    {achievements.map((achievement, index) => (
+                        <li key={index} className="achievement-item">
+                            <strong>{achievement.name}</strong> - {achievement.description}
+                            <img src={achievement.image} alt={achievement.name} style={{ width: 100, height: 'auto' }}/>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <p>No achievements to display.</p>
+            )}
         </div>
-    );
-};
+    </section>
+</div>
 
+    );
+}
 export default Achievements;
