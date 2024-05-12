@@ -37,6 +37,7 @@ function TodoList() {
         {
           title: newTodo.trim(),
           description: "",
+          completed: false, // Add completed property
         }
       );
       setTodos(todos.concat(response.data)); // Add new todo to the list
@@ -56,9 +57,27 @@ function TodoList() {
     }
   };
 
+  // Function to toggle the completion status of a todo
+  const toggleTodoCompletion = async (id) => {
+    try {
+      const updatedTodos = todos.map((todo) =>
+        todo._id === id ? { ...todo, completed: !todo.completed } : todo
+      );
+      setTodos(updatedTodos);
+      await axios.put(`${process.env.REACT_APP_API_URL}/api/todos/${id}`, {
+        completed: !todos.find((todo) => todo._id === id).completed,
+      });
+    } catch (error) {
+      console.error("Failed to update todo completion:", error);
+    }
+  };
+
   return (
     <div className="todo-container">
-      <h2>Todo List</h2>
+      <h1>
+        Todo List
+        <span>Get things done, one item at a time.</span>
+      </h1>
       <div className="todo-form">
         <input
           className="todo-input"
@@ -68,14 +87,40 @@ function TodoList() {
           onChange={handleInputChange}
         />
         <button className="todo-button" onClick={handleAddTodo}>
-          Add Todo
+          Add item
         </button>
       </div>
       <ul className="todo-list">
         {todos.map((todo) => (
-          <li key={todo._id} className="todo-item">
-            <p>{todo.title}</p>
-            <button onClick={() => handleDeleteTodo(todo._id)}>Delete</button>
+          <li
+            key={todo._id}
+            className={`todo-item ${todo.completed ? "done" : ""}`}
+          >
+            <span className="label">{todo.title}</span>
+            <div className="actions">
+              <button
+                className="btn-picto"
+                type="button"
+                onClick={() => toggleTodoCompletion(todo._id)}
+                aria-label={
+                  todo.completed ? "Mark Incomplete" : "Mark Complete"
+                }
+                title={todo.completed ? "Mark Incomplete" : "Mark Complete"}
+              >
+                <i className="material-icons">
+                  {todo.completed ? "check_box" : "check_box_outline_blank"}
+                </i>
+              </button>
+              <button
+                className="btn-picto"
+                type="button"
+                onClick={() => handleDeleteTodo(todo._id)}
+                aria-label="Delete"
+                title="Delete"
+              >
+                <i className="material-icons">delete</i>
+              </button>
+            </div>
           </li>
         ))}
       </ul>

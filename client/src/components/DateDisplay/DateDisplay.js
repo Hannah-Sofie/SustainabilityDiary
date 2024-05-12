@@ -1,25 +1,20 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import "./DateDisplay.css";
 
-function DateDisplay() {
-  const formatDate = (dateString) => {
-    const options = {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    };
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", options);
-  };
+const DateDisplay = () => {
+  // Get current date and time
+  const currentDate = new Date();
+  const day = currentDate.toLocaleDateString("en-US", { weekday: "long" });
+  const month = currentDate.toLocaleDateString("en-US", { month: "long" });
+  const date = currentDate.getDate();
 
   return (
-    <div className="date-container">
-      <FontAwesomeIcon icon={faCalendarAlt} />
-      <span>{formatDate(new Date())}</span>
-    </div>
+    <time dateTime={currentDate.toISOString()} className="date-icon">
+      <em>{day}</em>
+      <strong>{month}</strong>
+      <span>{date}</span>
+    </time>
   );
-}
+};
 
 export default DateDisplay;
