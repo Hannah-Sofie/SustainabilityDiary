@@ -1,3 +1,5 @@
+fs = require("fs");
+path = require("path");
 const ReflectionEntry = require("../models/reflectionEntrySchema");
 const CreateError = require("../utils/createError");
 
@@ -172,6 +174,24 @@ const deleteReflectionEntry = async (req, res, next) => {
 
     if (!entry) {
       return next(new CreateError("Entry not found or permission denied", 404));
+    }
+
+    // Check if there's a photo to delete
+    if (entry.photo) {
+      const filePath = path.join(
+        __dirname,
+        "../uploads/reflections/",
+        entry.photo,
+      );
+      console.log("Attempting to delete file at:", filePath);
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error("Failed to delete the image file:", err);
+          // Handle error, maybe you want to log it or notify someone
+        } else {
+          console.log("Image file deleted successfully");
+        }
+      });
     }
 
     res.json({ message: "Entry deleted successfully" });
