@@ -29,7 +29,8 @@ function Reflections() {
     <div>
       <section className="main-reflection">
         <div className="container-reflection">
-          <div className="new-reflection">
+          <div className="header-container-reflection">
+            <h1>Reflections</h1>
             <CustomButton
               name="+ Create a new reflection"
               to="/new-reflection-entry"
@@ -40,10 +41,8 @@ function Reflections() {
               hoverBorderColor="var(--darker-purple)"
             />
           </div>
-          <h1>Reflections</h1>
           <ReflectionSearchbar />
-          <ReflectionCount count={entries.length} />{" "}
-          {/* Use ReflectionCount component */}
+          <ReflectionCount count={entries.length} />
           <ReflectionEntries entries={entries} />
         </div>
       </section>

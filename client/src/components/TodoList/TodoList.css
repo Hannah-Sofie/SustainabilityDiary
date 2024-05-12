@@ -4,7 +4,8 @@
   max-width: 500px;
   background: var(--pink);
   color: #fff;
-  box-shadow: -20px -20px 0px 0px rgba(100, 100, 100, 0.1);
+  box-shadow: 10px 10px 0px 0px rgba(100, 100, 100, 0.1);
+  border-radius: 10px;
 }
 
 .todo-container h1 {
@@ -73,7 +74,6 @@
 .todo-container .btn-picto {
   border: none;
   background: none;
-  -webkit-appearance: none;
   cursor: pointer;
 }
 

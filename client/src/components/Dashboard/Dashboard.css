@@ -2,6 +2,9 @@
   display: flex;
   justify-content: space-between;
   padding: 20px;
+  background-color: var(--light-white);
+  margin: 40px;
+  border-radius: 10px;
 }
 
 .dashboard-container h2 {
@@ -28,5 +31,5 @@
 
 .date-display {
   margin-left: 300px;
-  margin-top: 20px;
+  margin-top: 40px;
 }

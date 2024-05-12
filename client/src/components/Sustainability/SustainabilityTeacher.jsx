@@ -66,7 +66,8 @@ function SustainabilityTeacher() {
       </header>
       <form className="resource-form" onSubmit={handleSubmit}>
         <label>
-          Title:
+          <span>Title:</span>
+
           <input
             type="text"
             name="title"
@@ -76,7 +77,7 @@ function SustainabilityTeacher() {
           />
         </label>
         <label>
-          Link:
+          <span>Link:</span>
           <input
             type="url"
             name="link"

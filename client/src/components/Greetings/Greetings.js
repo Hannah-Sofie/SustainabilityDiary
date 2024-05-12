@@ -9,27 +9,29 @@ function Greeting() {
   // Determine the part of the day
   const getPartOfDay = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return "morning";
-    if (hour < 18) return "afternoon";
-    return "evening";
+    return hour < 12 ? "morning" : hour < 18 ? "afternoon" : "evening";
   };
 
   const partOfDay = getPartOfDay();
-  const greeting = `Good ${partOfDay}, ${userData?.name || "Guest"}!`;
+  const greetingText = `Good ${partOfDay},`;
+  const username = userData?.name || "Guest";
 
   return (
-    <h1 className="greetingStyle">
-      {greeting}{" "}
-      <span
-        className={`waveEmoji ${hovered ? "animated" : ""}`}
-        onMouseEnter={() => setHovered(true)}
-        onAnimationEnd={() => setHovered(false)}
-        role="img"
-        aria-label="Hand Wave"
-      >
-        👋
-      </span>
-    </h1>
+    <div className="dashboard-greeting">
+      <h1 className="greetingStyle">
+        {greetingText} <span className="username">{username}</span>
+        <span
+          className={` waveEmoji ${hovered ? "animated" : ""}`}
+          onMouseEnter={() => setHovered(true)}
+          onAnimationEnd={() => setHovered(false)}
+          role="img"
+          aria-label="Hand Wave"
+        >
+          👋
+        </span>
+      </h1>
+      <p className="greetingStyle">Welcome to your dashboard!</p>
+    </div>
   );
 }
 
