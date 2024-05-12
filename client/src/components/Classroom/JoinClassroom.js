@@ -29,7 +29,9 @@ function JoinClassroom({ onJoinSuccess }) {
         onChange={(e) => setClassCode(e.target.value)}
         required
       />
-      <button type="submit">Join Classroom</button>
+      <button type="submit" className="join-button">
+        Join Classroom
+      </button>
     </form>
   );
 }

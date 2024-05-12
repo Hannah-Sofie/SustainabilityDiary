@@ -1,7 +1,6 @@
 .row-reflections {
   display: flex;
   padding: 10px;
-  margin-top: 1.3rem;
   justify-content: space-between;
 }
 .row-reflections p {

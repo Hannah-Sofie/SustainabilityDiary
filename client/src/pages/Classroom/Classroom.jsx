@@ -40,20 +40,20 @@ function Classroom() {
   }
 
   return (
-    <div className="main-classroom">
+    <div className="classroom-container">
       <h1>Classrooms</h1>
-      <div className="join-classroom">
-        {" "}
-        <JoinClassroom onJoinSuccess={handleJoinSuccess} />
-      </div>
-      <div className="button-container">
+      <div className="top-controls">
+        <div className="join-classroom">
+          <JoinClassroom onJoinSuccess={handleJoinSuccess} />
+        </div>
         {userData && userData.role === "teacher" && (
-          <button onClick={() => setIsModalOpen(true)}>
-            + Create New Classroom
-          </button>
+          <div className="button-container">
+            <button onClick={() => setIsModalOpen(true)}>
+              + Create New Classroom
+            </button>
+          </div>
         )}
       </div>
-      {/* Render the classroom data */}
       <Classes classrooms={classrooms} />
 
       {isModalOpen && (
