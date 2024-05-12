@@ -82,7 +82,7 @@ function ReflectionEntries() {
               <img
                 src={
                   entry.photo
-                    ? `${process.env.REACT_APP_API_URL}/uploads/${entry.photo}`
+                    ? `${process.env.REACT_APP_API_URL}/uploads/reflections/${entry.photo}`
                     : DefaultImage
                 }
                 alt="Reflection"

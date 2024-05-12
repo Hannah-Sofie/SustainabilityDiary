@@ -1,9 +1,9 @@
+/* General styles */
 .classroom-detail-container {
   padding: 20px;
   position: relative;
   max-width: 1200px;
   margin: 20px auto;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   background: var(--light-grey);
   border-radius: 8px;
 }
@@ -44,6 +44,7 @@
   margin-bottom: 20px;
   color: var(--pure-white);
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+  flex-direction: column;
 }
 
 .classroom-content {
@@ -106,6 +107,26 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.classroom-status {
+  display: block;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: 600;
+  color: var(--pure-white);
+  margin-top: 10px;
+  text-align: center;
+  width: max-content;
+  font-size: 12px;
+}
+
+.classroom-status.active {
+  background-color: #4caf50;
+}
+
+.classroom-status.finished {
+  background-color: #f44336;
 }
 
 /* Modal styles */
@@ -189,49 +210,44 @@
 }
 
 /* Student list and modal specific styles */
-.students-in {
-  margin-bottom: 20px;
-  font-size: 20px;
-  color: var(--dark-blue);
-}
-
 .student-table {
-  display: flex;
-  flex-direction: column;
   width: 100%;
+  margin-bottom: 20px;
 }
 
 .student-header,
-.student-row {
-  display: flex;
-  justify-content: space-between;
-}
-
-.student-header span,
-.student-info span {
-  text-align: left;
-  flex-basis: 25%;
+.student-info {
+  display: grid;
+  grid-template-columns: 1fr 2fr 3fr 1fr;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 2px solid var(--light-gray);
 }
 
 .student-header {
-  margin-bottom: 10px;
-  font-weight: 600;
-}
-
-.student-list {
-  list-style: none;
-  padding: 0;
-}
-
-.student-row {
-  align-items: center;
-  display: flex;
-  padding: 5px 0;
+  font-weight: bold;
+  background-color: var(--light-background);
 }
 
 .student-info {
-  display: flex;
-  width: 100%;
+  padding: 8px 0;
+  align-items: center;
+}
+
+.student-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.no-students-message {
+  text-align: center;
+  padding: 10px;
+  background-color: #f7f7f7;
+  border-radius: 10px;
+  margin: 10px 0;
 }
 
 .remove-student-button {
@@ -245,4 +261,8 @@
 
 .remove-student-button:hover {
   background-color: var(--dark-red);
+}
+
+.student-list {
+  list-style-type: none;
 }

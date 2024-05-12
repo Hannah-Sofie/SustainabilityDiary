@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faUpload,
+  faCheck,
+  faTimes,
+  faTrashAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import "./EditClassroom.css";
 
 function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
@@ -8,37 +15,65 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
     title: classroom.title,
     description: classroom.description,
     learningGoals: classroom.learningGoals,
+    active: classroom.classStatus,
+    photo: classroom.headerPhotoUrl || null,
   });
+
+  const [previewImage, setPreviewImage] = useState(
+    classroom.headerPhotoUrl
+      ? `${process.env.REACT_APP_API_URL}${classroom.headerPhotoUrl}`
+      : null
+  );
+
+  // Handle file selection for photo preview
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setFormData({ ...formData, photo: file });
+    setPreviewImage(URL.createObjectURL(file));
+  };
+
+  // Handle removing the photo
+  const handleRemovePhoto = () => {
+    setFormData({ ...formData, photo: null });
+    setPreviewImage(null);
+  };
+
+  const handleToggle = (event) => {
+    setFormData({ ...formData, active: event.target.checked });
+    console.log("Checkbox active:", event.target.checked);
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFileChange = (event) => {
-    setFormData({ ...formData, photo: event.target.files[0] });
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData();
-    Object.keys(formData).forEach((key) => {
-      data.append(key, formData[key]);
-    });
+    data.append("title", formData.title);
+    data.append("description", formData.description);
+    data.append("learningGoals", formData.learningGoals);
+    data.append("classStatus", formData.active);
+
+    if (formData.photo) {
+      data.append("photo", formData.photo);
+    }
 
     try {
       const response = await axios.put(
         `/api/classrooms/${classroom._id}`,
         data,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
       onClassroomUpdated(response.data);
       toast.success("Classroom updated successfully!");
       onClose();
     } catch (error) {
-      toast.error("Failed to update classroom: " + error.response.data.message);
+      toast.error(
+        "Failed to update classroom: " +
+          (error.response?.data?.message || error.message)
+      );
     }
   };
 
@@ -67,10 +102,62 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
           onChange={handleChange}
           required
         />
-        <label>Photo:</label>
-        <input type="file" name="photo" onChange={handleFileChange} />
-        <button type="submit">Update Classroom</button>
-        <button type="button" onClick={onClose}>
+        <div className="switch-wrapper">
+          <span className="toggle-label">
+            {formData.active ? (
+              <>
+                <FontAwesomeIcon icon={faCheck} className="toggle-icon" />{" "}
+                Active
+              </>
+            ) : (
+              <>
+                <FontAwesomeIcon icon={faTimes} className="toggle-icon" />{" "}
+                Finished
+              </>
+            )}
+          </span>
+          <label className="toggle-switch">
+            <input
+              type="checkbox"
+              checked={formData.active}
+              onChange={handleToggle}
+            />
+            <span className="slider round"></span>
+          </label>
+        </div>
+        <div className="file-upload">
+          <label htmlFor="classroom-photo-upload" className="file-upload-label">
+            <FontAwesomeIcon icon={faUpload} /> Upload or Change Photo
+          </label>
+          <input
+            id="classroom-photo-upload"
+            type="file"
+            name="photo"
+            onChange={handleFileChange}
+            accept="image/*"
+            style={{ display: "none" }}
+          />
+          {previewImage && (
+            <div className="photo-preview-container">
+              <img
+                src={previewImage}
+                alt="Preview of classroom header photo"
+                className="photo-preview"
+              />
+              <button
+                type="button"
+                onClick={handleRemovePhoto}
+                className="remove-photo-button"
+              >
+                <FontAwesomeIcon icon={faTrashAlt} /> Remove Photo
+              </button>
+            </div>
+          )}
+        </div>
+        <button type="submit" className="update-classroom-button">
+          Update Classroom
+        </button>
+        <button type="button" className="cancel-button" onClick={onClose}>
           Cancel
         </button>
       </form>

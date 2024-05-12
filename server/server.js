@@ -13,13 +13,13 @@ const PORT = process.env.PORT || 8002;
 const whitelist = ["http://localhost:3000", "http://localhost:8083"];
 const corsOptions = {
   origin: (origin, callback) => {
-    if (whitelist.indexOf(origin) !== -1 || !origin) {
+    if (whitelist.includes(origin) || !origin) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
     }
   },
-  credentials: true, // This is important for cookies, authorization headers with HTTPS
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
@@ -34,7 +34,7 @@ connectDB();
 // Static file serving for uploaded images with custom CORS
 app.use(
   "/uploads",
-  express.static(path.join(__dirname, "uploads"), {
+  express.static(path.join(__dirname, "./uploads"), {
     setHeaders: function (res, path) {
       res.setHeader("Access-Control-Allow-Origin", "*");
       res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
@@ -47,11 +47,17 @@ const userRoutes = require("./routes/userRoutes");
 const reflectionEntryRoutes = require("./routes/reflectionEntryRoutes");
 const classroomRoutes = require("./routes/classroomRoutes");
 const factRoutes = require("./routes/factRoutes");
+const resourceRoutes = require("./routes/resourceRoutes");
+const feedbackRoutes = require("./routes/feedbackRoutes");
+const todoRoutes = require("./routes/todoRoutes");
 
 app.use("/api/users", userRoutes);
 app.use("/api/reflections", reflectionEntryRoutes);
 app.use("/api/classrooms", classroomRoutes);
 app.use("/api/facts", factRoutes);
+app.use("/api/resources", resourceRoutes);
+app.use("/api/feedback", feedbackRoutes);
+app.use("/api/todos", todoRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

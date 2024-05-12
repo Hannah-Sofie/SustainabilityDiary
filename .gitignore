@@ -1,7 +1,6 @@
 keys
 node_modules
 notes.md
-.mongo.env
 secrets.folder/*
 .DS_Store
 remote.system.scripts/*

@@ -1,8 +1,11 @@
+// DashboardStudent.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Greeting from "../Greetings/Greetings";
 import LatestReflection from "../Reflection/LatestReflection";
 import SustainabilityFact from "../Sustainability/SustainabilityFact";
+import DateDisplay from "../DateDisplay/DateDisplay";
+import TodoList from "../TodoList/TodoList";
 import "./Dashboard.css";
 
 function DashboardStudent() {
@@ -27,11 +30,17 @@ function DashboardStudent() {
   return (
     <div>
       <Greeting />
+      <DateDisplay />
+      <TodoList />
+      <h2>Today's Sustainability Fact</h2>
       <SustainabilityFact />
       <div className="active-classes">
         <h2>Your classrooms</h2>
       </div>
-      <LatestReflection latestReflection={latestReflection} />
+      <div className="reflection-latest">
+        <h2>Latest Reflection</h2>
+        <LatestReflection latestReflection={latestReflection} />
+      </div>
     </div>
   );
 }

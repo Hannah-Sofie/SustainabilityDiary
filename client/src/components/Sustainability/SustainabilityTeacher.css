@@ -1,0 +1,118 @@
+.teacher-sustainability-page {
+  padding: 40px 60px;
+  background-color: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  max-width: 900px;
+  margin: auto;
+  margin-top: 40px;
+}
+
+.sustainability-header h1 {
+  font-size: 32px;
+  margin-bottom: 5px;
+  color: #276749;
+}
+
+.sustainability-header p {
+  color: #4a5568;
+  font-size: 18px;
+  margin-bottom: 25px;
+}
+
+.resource-form {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border-left: 4px solid #276749;
+}
+
+.resource-form label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #276749;
+  display: flex;
+  align-items: center;
+}
+
+.resource-form input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #a0aec0;
+  transition: all 0.2s ease;
+  background-color: #f0f4f1;
+}
+
+.resource-form input:focus {
+  border-color: #38a169;
+  outline: none;
+}
+
+.resource-form button {
+  background-color: #38a169;
+  color: #ffffff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.resource-form button:hover {
+  background-color: #276749;
+}
+
+.student-sustainability-preview {
+  margin-top: 40px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-left: 4px solid #276749;
+}
+
+.student-sustainability-preview h2 {
+  font-size: 24px;
+  margin-bottom: 15px;
+  color: #276749;
+}
+
+.student-sustainability-preview ul {
+  list-style: none;
+  padding: 0;
+}
+
+.student-sustainability-preview li {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.student-sustainability-preview a {
+  text-decoration: none;
+  font-weight: 600;
+  color: #276749;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+.student-sustainability-preview a:hover {
+  background-color: #a2d4a9;
+}
+
+.student-sustainability-preview a::before {
+  content: "🌿";
+  margin-right: 8px;
+}

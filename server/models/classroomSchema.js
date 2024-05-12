@@ -9,9 +9,12 @@ const classroomSchema = new Schema(
     classCode: { type: String, required: true, unique: true },
     teacher: { type: Schema.Types.ObjectId, ref: "User", required: true },
     students: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    iconPhotoUrl: { type: String },
+    headerPhotoUrl: { type: String },
+    classStatus: { type: Boolean, default: true },
     favourites: [{ type: Schema.Types.ObjectId, ref: "User" }],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports = mongoose.model("Classroom", classroomSchema);

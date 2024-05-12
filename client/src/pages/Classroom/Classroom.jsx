@@ -46,7 +46,6 @@ function Classroom() {
         {" "}
         <JoinClassroom onJoinSuccess={handleJoinSuccess} />
       </div>
-
       <div className="button-container">
         {userData && userData.role === "teacher" && (
           <button onClick={() => setIsModalOpen(true)}>
@@ -54,6 +53,7 @@ function Classroom() {
           </button>
         )}
       </div>
+      {/* Render the classroom data */}
       <Classes classrooms={classrooms} />
 
       {isModalOpen && (

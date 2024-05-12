@@ -15,7 +15,9 @@ const registerUser = async (req, res, next) => {
     }
 
     if (name.length > 50) {
-      return res.status(400).json({error: "Name cannot exceed 50 characters"});
+      return res
+        .status(400)
+        .json({ error: "Name cannot exceed 50 characters" });
     }
 
     const isNtnuEmail =
@@ -134,13 +136,17 @@ const logoutUser = (req, res) => {
 // Update user
 const updateUser = async (req, res) => {
   // Assuming userId is correctly attached to req object via middleware
-  const { userId } = req;
+  const userId = req.user._id;
   const { name, password } = req.body;
 
   // Initialize the update object with any new data provided
   const updateData = { name }; // Directly set the name if it's part of the request
 
   try {
+    if (req.file) {
+      updateData.photo = req.file.filename;
+    }
+
     if (password) {
       const hashedPassword = await bcrypt.hash(password, 10); // Hash new password if provided
       updateData.password = hashedPassword; // Add hashed password to update data
@@ -168,7 +174,9 @@ const updateUser = async (req, res) => {
 
 const fetchStudents = async (req, res) => {
   try {
-    const students = await User.find({ role: "student" });
+    const students = await User.find({ role: "student" }).select(
+      "name email photo"
+    );
     res.json(students);
   } catch (error) {
     console.error("Error fetching students:", error);
@@ -193,7 +201,9 @@ const updateStudentDetails = async (req, res) => {
     // Check if the email is taken by another user
     const emailExists = await User.findOne({ _id: { $ne: id }, email: email });
     if (emailExists) {
-      return res.status(400).json({ error: "Email already in use by another account." });
+      return res
+        .status(400)
+        .json({ error: "Email already in use by another account." });
     }
 
     const updatedStudent = await User.findByIdAndUpdate(
@@ -212,7 +222,6 @@ const updateStudentDetails = async (req, res) => {
     res.status(500).json({ error: "Failed to update student details." });
   }
 };
-
 
 module.exports = {
   registerUser,

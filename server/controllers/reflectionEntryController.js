@@ -14,7 +14,7 @@ const getAllPublicReflectionEntries = async (req, res, next) => {
   try {
     const entries = await ReflectionEntry.find({ isPublic: true }).populate(
       "userId",
-      "name"
+      "name",
     );
     res.json(entries);
   } catch (error) {
@@ -27,7 +27,7 @@ const getReflectionById = async (req, res, next) => {
     const { id } = req.params; // Get the reflection ID from URL parameters
     const reflection = await ReflectionEntry.findById(id).populate(
       "userId",
-      "name email"
+      "name email",
     ); // Optionally populate user details
 
     if (!reflection) {
@@ -116,26 +116,48 @@ const createReflectionEntry = async (req, res, next) => {
 };
 
 const updateReflectionEntry = async (req, res, next) => {
-  const { title, body, isPublic } = req.body;
-  if (title.length === 0 || body.length === 0 || !title || !body) {
+  const { title, body, isPublic, classroomId } = req.body;
+  const photo = req.file ? req.file.filename : null;
+
+  console.log("Update Request Data:", {
+    title,
+    body,
+    isPublic,
+    classroomId,
+    photo,
+  });
+
+  if (!title || !body) {
     return next(new CreateError("Title and body are required", 400));
   }
-  if (title.length > 20) {
-    return next(new CreateError("Title is too long", 400));
+
+  const updateFields = {
+    title,
+    body,
+    isPublic: isPublic === "true",
+  };
+
+  // Include classroomId if the entry is public
+  if (updateFields.isPublic && classroomId) {
+    updateFields.classrooms = [classroomId];
   }
-  if (body.length > 200) {
-    return next(new CreateError("Body is too long", 400));
+
+  if (photo) {
+    updateFields.photo = photo;
   }
+
   try {
-    const entry = await ReflectionEntry.findOneAndUpdate(
+    const updatedEntry = await ReflectionEntry.findOneAndUpdate(
       { _id: req.params.id, userId: req.user._id },
-      { title, body, isPublic },
-      { new: true }
+      updateFields,
+      { new: true },
     );
-    if (!entry) {
+
+    if (!updatedEntry) {
       return next(new CreateError("Entry not found or permission denied", 404));
     }
-    res.json(entry);
+
+    res.json(updatedEntry);
   } catch (error) {
     next(new CreateError("Failed to update entry", 500));
   }
