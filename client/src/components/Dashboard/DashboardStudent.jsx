@@ -1,4 +1,3 @@
-// DashboardStudent.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Greeting from "../Greetings/Greetings";
@@ -28,18 +27,28 @@ function DashboardStudent() {
   }, []);
 
   return (
-    <div>
-      <Greeting />
-      <DateDisplay />
-      <TodoList />
-      <h2>Today's Sustainability Fact</h2>
-      <SustainabilityFact />
-      <div className="active-classes">
-        <h2>Your classrooms</h2>
+    <div className="dashboard-container">
+      <div className="left-panel">
+        <Greeting />
+
+        <div className="sustainability-facts">
+          <h2>Today's Sustainability Fact</h2>
+          <SustainabilityFact />
+        </div>
+        <div className="reflection">
+          <h2>Latest Reflection</h2>
+          <LatestReflection latestReflection={latestReflection} />
+        </div>
+        <div className="classrooms">
+          <h2>Your Classrooms</h2>
+          {/* Add your classrooms component here */}
+        </div>
       </div>
-      <div className="reflection-latest">
-        <h2>Latest Reflection</h2>
-        <LatestReflection latestReflection={latestReflection} />
+      <div className="right-panel">
+        <div className="date-display">
+          <DateDisplay />
+        </div>
+        <TodoList />
       </div>
     </div>
   );
