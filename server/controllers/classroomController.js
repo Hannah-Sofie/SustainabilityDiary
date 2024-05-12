@@ -43,9 +43,10 @@ const joinClassroom = asyncHandler(async (req, res) => {
 });
 
 const favouriteClassroom = asyncHandler(async (req, res) => {
-  const { classCode } = req.body;
-  const classroom = await Classroom.findOneAndUpdate(
-    { classCode },
+  console.log("we're here");
+  const { classroomId } = req.params;
+  const classroom = await Classroom.findByIdAndUpdate(
+    classroomId,
     { $addToSet: { favourites: req.user._id } },
     { new: true }
   ).populate("students", "name email");

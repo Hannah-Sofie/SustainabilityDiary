@@ -72,6 +72,16 @@ function ClassroomDetail() {
       : DefaultImage;
   };
 
+  const handleFavourite = async () => {
+    try {
+      const response = await axios.post(`/api/classrooms/${id}`);
+      console.log("I am doing something!!");
+      setClassroom(response.data);
+    } catch (error) {
+      console.error("Error fetching classroom details:", error);
+    }
+  }
+
   return (
     <div className="classroom-detail-container">
       <button className="back-button" onClick={() => navigate(-1)}>
@@ -80,18 +90,16 @@ function ClassroomDetail() {
       <div
         className="classroom-header"
         style={{
-          backgroundImage: `url(${
-            classroom.headerPhotoUrl
+          backgroundImage: `url(${classroom.headerPhotoUrl
               ? `${process.env.REACT_APP_API_URL}${classroom.headerPhotoUrl}`
               : DefaultImage
-          })`,
+            })`,
         }}
       >
         <h1>{classroom.title}</h1>
         <span
-          className={`classroom-status ${
-            classroom.active ? "active" : "finished"
-          }`}
+          className={`classroom-status ${classroom.active ? "active" : "finished"
+            }`}
         >
           {classroom.active ? "Active" : "Finished"}
         </span>
@@ -104,6 +112,9 @@ function ClassroomDetail() {
           <p className="classroom-detail-text">
             <span>Learning Goals:</span> {classroom.learningGoals}
           </p>
+
+          <button className="classroom-detail-button" onClick={handleFavourite}>Favourite class</button>
+
           <div className="classroom-detail-actions">
             <p className="classroom-detail-text">
               <span>Class Code:</span> {classroom.classCode}
