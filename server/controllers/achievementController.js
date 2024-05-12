@@ -122,8 +122,6 @@ const checkAchievements = asyncHandler(async (req, res) => {
     try {
         const objectIdUserId = new mongoose.Types.ObjectId(req.user._id); 
         const achievements = await UserAchievement.find({ userId: objectIdUserId });
-        console.log(typeof userId);
-        console.log("Achievements found:", achievements); 
 
         res.json(achievements);
     } catch (error) {
@@ -168,6 +166,22 @@ const optOutLeaderboard = asyncHandler(async (req, res) => {
     }
 });
 
+const getOptInStatus = asyncHandler(async (req, res) => {
+    try {
+        const userId = req.user._id; 
+        const user = await User.findById(userId).select('isInLeaderboard'); 
+
+        if (!user) {
+            res.status(404).json({ message: "User not found" });
+        } else {
+            res.json({ isInLeaderboard: user.isInLeaderboard });
+        }
+    } catch (error) {
+        console.error("Error fetching opt-in status:", error);
+        res.status(500).json({ message: "Error fetching opt-in status", error: error.toString() });
+    }
+});
+
 const getLeaderboard = asyncHandler(async (req, res) => {
     try {
         const leaderboard = await User.aggregate([
@@ -197,5 +211,6 @@ module.exports = {
     checkAchievements,
     getLeaderboard,
     optInLeaderboard,
-    optOutLeaderboard
+    optOutLeaderboard,
+    getOptInStatus
 };
