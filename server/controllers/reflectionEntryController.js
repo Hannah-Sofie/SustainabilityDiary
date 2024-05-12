@@ -1,5 +1,6 @@
 fs = require("fs");
 path = require("path");
+const { uptime } = require("process");
 const ReflectionEntry = require("../models/reflectionEntrySchema");
 const CreateError = require("../utils/createError");
 
@@ -119,36 +120,31 @@ const createReflectionEntry = async (req, res, next) => {
 
 const updateReflectionEntry = async (req, res, next) => {
   const { title, body, isPublic, classroomId } = req.body;
-  const photo = req.file ? req.file.filename : null;
-
-  console.log("Update Request Data:", {
-    title,
-    body,
-    isPublic,
-    classroomId,
-    photo,
-  });
+  const newPhoto = req.file ? req.file.filename : null;
 
   if (!title || !body) {
     return next(new CreateError("Title and body are required", 400));
   }
 
-  const updateFields = {
-    title,
-    body,
-    isPublic: isPublic === "true",
-  };
-
-  // Include classroomId if the entry is public
-  if (updateFields.isPublic && classroomId) {
-    updateFields.classrooms = [classroomId];
-  }
-
-  if (photo) {
-    updateFields.photo = photo;
-  }
-
   try {
+    const existingEntry = await ReflectionEntry.findById(req.params.id);
+    if (!existingEntry) {
+      return next(new CreateError("Entry not found or permission denied", 404));
+    }
+
+    const updateFields = {
+      title,
+      body,
+      isPublic: isPublic === "true",
+      ...(isPublic && classroomId && { classrooms: [classroomId] }), // Conditionally add classroomId if applicable
+    };
+
+    if (newPhoto) {
+      updateFields.photo = newPhoto;
+    } else if (!req.file && existingEntry.photo) {
+      updateFields.photo = null;
+    }
+
     const updatedEntry = await ReflectionEntry.findOneAndUpdate(
       { _id: req.params.id, userId: req.user._id },
       updateFields,
@@ -156,11 +152,25 @@ const updateReflectionEntry = async (req, res, next) => {
     );
 
     if (!updatedEntry) {
-      return next(new CreateError("Entry not found or permission denied", 404));
+      return next(new CreateError("Failed to update entry", 404));
+    }
+
+    // Delete the old photo file if necessary
+    if ((newPhoto || updateFields.photo === null) && existingEntry.photo) {
+      const oldFilePath = path.join(
+        __dirname,
+        "../uploads/reflections/",
+        existingEntry.photo,
+      );
+      fs.unlink(oldFilePath, (err) => {
+        if (err) console.error("Error deleting old photo", err);
+        else console.log("Old photo deleted successfully");
+      });
     }
 
     res.json(updatedEntry);
   } catch (error) {
+    console.error("Error updating entry:", error);
     next(new CreateError("Failed to update entry", 500));
   }
 };
