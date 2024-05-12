@@ -3,31 +3,54 @@ const UserAchievement = require("../models/achievementSchema");
 const CreateError = require("../utils/createError");
 const asyncHandler = require("express-async-handler");
 const mongoose = require('mongoose');
+const User = require('../models/userSchema');
+
 
 // Utility function to handle achievement creation
 const handleAchievementCreation = async (userId, count) => {
-    console.log(`Checking achievements for user ${userId} with count ${count}`);
     if (count % 3 === 0) {
+        let user;
+        try {
+            user = await User.findById(userId);
+            console.log(user);
+            if (!user) {
+                console.error(`User not found with ID: ${userId}`);
+                return false; // User not found
+            }
+        } catch (error) {
+            console.error(`Failed to fetch user with ID: ${userId}`, error);
+            return false; // Error fetching user
+        }
+
         const existingAchievement = await UserAchievement.findOne({
             userId,
             name: "Reflection Enthusiast"
         });
-
+        console.log(`Attempting to create achievement with userName: ${user.name}`);
         if (!existingAchievement) {
-            console.log(`No existing achievement, creating one with custom image`);
-            const newAchievement = await UserAchievement.create({
-                userId,
-                name: "Reflection Enthusiast",
-                description: "Congratulations on creating multiple reflections!",
-                image: `http://localhost:8001/uploads/achievements/reflection_award.jpg` 
-            });
-            console.log(`Achievement created with image: ${newAchievement.image}`);
-            return true;
+            console.log(`User found: ${user.name}`); // Confirm user's name is logging correctly
+            try {
+                console.log(`Attempting to create achievement with userName: ${user.name}`);
+                user = await User.findById(userId);
+                const newAchievement = await UserAchievement.create({
+                    userId: req.user._id,
+                    userName: user.name,
+                    name: "Reflection Enthusiast",
+                    description: "Congratulations on creating multiple reflections!",
+                    image: `http://localhost:8001/uploads/achievements/reflection_award.jpg`
+                });
+                console.log(`Achievement created for ${user.name} with image: ${newAchievement.image}`);
+                return true;
+            } catch (error) {
+                console.error("Error creating achievement:", error);
+                console.error("Detailed Error: ", error.errors); // More detailed error logging
+                return false;
+            }
         } else {
-            console.log(`Existing achievement found, not creating a new one`);
+            console.log("Existing achievement found, not creating a new one.");
         }
     } else {
-        console.log(`Count not divisible by 3, no achievement.`);
+        console.log("Count not divisible by 3, no achievement.");
     }
     return false;
 };
@@ -44,6 +67,7 @@ const createReflectionEntry = asyncHandler(async (req, res) => {
     try {
         const newEntry = new ReflectionEntry({
             userId: req.user._id,
+            userName: user.name,
             title,
             body,
             isPublic,
@@ -78,6 +102,7 @@ const createAchievement = asyncHandler(async (req, res) => {
         const newAchievement = await UserAchievement.create({
             userId,
             name,
+            userName,
             description,
             image: image || 'default_award.jpg'
         });
@@ -91,7 +116,7 @@ const createAchievement = asyncHandler(async (req, res) => {
 
 // Function to fetch all achievements for a user
 const checkAchievements = asyncHandler(async (req, res) => {
-    const { userId } = req.user; // Make sure this userId is what you expect
+    const { userId } = req.user._id; // Make sure this userId is what you expect
     console.log("Fetching achievements for user:", userId);
 
     try {
@@ -107,9 +132,59 @@ const checkAchievements = asyncHandler(async (req, res) => {
     }
 });
 
+const optInLeaderboard = asyncHandler(async (req, res) => {
+    const userId = req.user._id;  // Assuming user ID is correctly extracted from JWT
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            userId, 
+            { isInLeaderboard: true }, 
+            { new: true }
+        );
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.json({ message: "Successfully opted into leaderboard", isInLeaderboard: updatedUser.isInLeaderboard });
+    } catch (error) {
+        console.error("Error opting into leaderboard:", error);
+        res.status(500).json({ message: "Failed to opt-in to leaderboard", error: error.toString() });
+    }
+});
+
+const getLeaderboard = asyncHandler(async (req, res) => {
+    try {
+        const leaderboard = await UserAchievement.aggregate([
+            { $match: { "userDetails.isInLeaderboard": true } }, // Ensure users have opted in
+            { $group: {
+                _id: "$userId",
+                achievementCount: { $sum: 1 },
+                lastAchievement: { $last: "$$ROOT" }
+            }},
+            { $lookup: {
+                from: "users",
+                localField: "_id",
+                foreignField: "_id",
+                as: "userDetails"
+            }},
+            { $unwind: "$userDetails" },
+            { $project: {
+                _id: 0,
+                username: "$userDetails.name",
+                achievementCount: 1
+            }},
+            { $sort: { achievementCount: -1 } }
+        ]);
+
+        res.json(leaderboard);
+    } catch (error) {
+        console.error("Error fetching leaderboard:", error);
+        res.status(500).json({ message: "Error fetching leaderboard", error: error.toString() });
+    }
+});
 
 module.exports = {
     createReflectionEntry,
     createAchievement,
-    checkAchievements
+    checkAchievements,
+    getLeaderboard,
+    optInLeaderboard
 };

@@ -2,6 +2,7 @@ const ReflectionEntry = require("../models/reflectionEntrySchema");
 const UserAchievement = require("../models/achievementSchema");
 const CreateError = require("../utils/createError");
 const asyncHandler = require("express-async-handler");
+const User = require('../models/userSchema');
 
 // Utility function to handle achievement creation
 const handleAchievementCreation = async (userId, count) => {
@@ -14,8 +15,10 @@ const handleAchievementCreation = async (userId, count) => {
 
         if (!existingAchievement) {
             console.log(`Creating new achievement for user ${userId}`);
+            user = await User.findById(userId);
             await UserAchievement.create({
                 userId,
+                userName: user.name,
                 name: "Reflection Enthusiast",
                 description: "Congratulations on creating multiple reflections!"
             });
@@ -97,15 +100,16 @@ const createReflectionEntry = asyncHandler(async (req, res) => {
   }
 
   try {
+    console.log(typeof req.user._id);
       const newEntry = new ReflectionEntry({
-          userId: req.user._id,
+    
+          userId: req.user._id.toString(),
           title,
           body,
           isPublic,
           photo,
           classrooms: isPublic && classroomId ? [classroomId] : []
       });
-
       await newEntry.save();
 
       const reflectionsCount = await ReflectionEntry.countDocuments({ userId: req.user._id });

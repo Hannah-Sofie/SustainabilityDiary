@@ -9,11 +9,16 @@ const CustomButton = ({
   hoverBackgroundColor,
   hoverColor,
   hoverBorderColor,
+  onClick, 
 }) => {
   let navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(to);
+    if (onClick) {
+      onClick(); 
+    } else if (to) {
+      navigate(to); 
+    }
   };
 
   const [isHovered, setIsHovered] = React.useState(false);

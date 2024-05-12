@@ -5,6 +5,7 @@ const defaultImagePath = `${baseURL}/uploads/achievements/default_award.jpg`;
 
 const userAchievementSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    userName: { type: String, required: true },
     name: { type: String, required: true },
     description: { type: String, required: true },
     image: { type: String, default: 'http://localhost:8001/uploads/achievements/reflection_award.jpg' },
