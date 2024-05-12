@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from 'axios';
+import axios from "axios";
 import DefaultImage from "../../assets/img/default-image.jpg";
 import profileImage from "../../assets/img/profile-silhouette.png";
 import "./ReflectionModal.css";
@@ -13,7 +13,7 @@ function ReflectionModal({ entry, onClose, user }) {
         const res = await axios.get(`/api/feedback/${entry._id}`);
         setFeedbacks(res.data);
       } catch (error) {
-        console.error('Error fetching feedbacks:', error);
+        console.error("Error fetching feedbacks:", error);
       }
     };
 
@@ -28,25 +28,23 @@ function ReflectionModal({ entry, onClose, user }) {
 
   const handleFeedbackSubmit = async (event) => {
     event.preventDefault();
-    const feedback = document.getElementById('feedback').value;
+    const feedback = document.getElementById("feedback").value;
     if (!user || !user.name) {
-      alert('User name is not available');
+      alert("User name is not available");
       return;
     }
     try {
-      await axios.post('/api/feedback', {
+      await axios.post("/api/feedback", {
         reflectionId: entry._id,
         writer: user._id,
         writerName: user.name,
-        content: feedback
+        content: feedback,
       });
-      alert('Feedback submitted successfully');
-      
+      alert("Feedback submitted successfully");
     } catch (error) {
-      console.error('Error submitting feedback:', error);
+      console.error("Error submitting feedback:", error);
     }
   };
-
 
   return (
     <div className="modal-backdrop">
@@ -59,11 +57,13 @@ function ReflectionModal({ entry, onClose, user }) {
           {feedbacks.map((feedback) => (
             <div key={feedback._id}>
               <p>{feedback.content}</p>
-              <p className="feedback-container_author">Written by: {feedback.writerName}</p>
+              <p className="feedback-container_author">
+                Written by: {feedback.writerName}
+              </p>
             </div>
           ))}
         </div>
-        {user.role === 'teacher' && (
+        {user && user.role === "teacher" && (
           <form id="feedback-form" onSubmit={handleFeedbackSubmit}>
             <div>
               <img src={profileImage} alt="Profile" />
