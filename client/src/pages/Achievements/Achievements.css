@@ -71,3 +71,42 @@
     margin-bottom: 20px;
 }
 
+/* Adjust alignment and spacing */
+.leaderboard-main, .achievements-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.leaderboard-content, .achievements-content {
+    width: 90%; /* Adjust based on your layout needs */
+    max-width: 600px; /* Set a max-width for larger screens */
+    margin: auto;
+}
+
+.leaderboard-list, .achievements-list {
+    width: 100%;
+    padding: 0;
+}
+
+.leaderboard-list {
+    list-style-type: decimal; 
+    padding-left: 20px; 
+}
+
+.leader-item, .achievement-item {
+    text-align: center; /* Center align text */
+    margin: 10px 0; /* Space out items */
+}
+
+.leader-item {
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

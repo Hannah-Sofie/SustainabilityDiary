@@ -150,30 +150,40 @@ const optInLeaderboard = asyncHandler(async (req, res) => {
     }
 });
 
+const optOutLeaderboard = asyncHandler(async (req, res) => {
+    const userId = req.user._id;  // Assuming user ID is correctly extracted from JWT
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            userId, 
+            { isInLeaderboard: false },  // Set isInLeaderboard to false
+            { new: true }
+        );
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.json({ message: "Successfully opted out of leaderboard", isInLeaderboard: updatedUser.isInLeaderboard });
+    } catch (error) {
+        console.error("Error opting out of leaderboard:", error);
+        res.status(500).json({ message: "Failed to opt-out of leaderboard", error: error.toString() });
+    }
+});
+
 const getLeaderboard = asyncHandler(async (req, res) => {
     try {
-        const leaderboard = await UserAchievement.aggregate([
-            { $match: { "userDetails.isInLeaderboard": true } }, // Ensure users have opted in
-            { $group: {
-                _id: "$userId",
-                achievementCount: { $sum: 1 },
-                lastAchievement: { $last: "$$ROOT" }
-            }},
+        const leaderboard = await User.aggregate([
+            { $match: { isInLeaderboard: true } }, // Only consider users who opted in
             { $lookup: {
-                from: "users",
+                from: "userachievements",
                 localField: "_id",
-                foreignField: "_id",
-                as: "userDetails"
+                foreignField: "userId",
+                as: "achievements"
             }},
-            { $unwind: "$userDetails" },
             { $project: {
-                _id: 0,
-                username: "$userDetails.name",
-                achievementCount: 1
+                username: "$name",
+                achievementCount: { $size: "$achievements" }
             }},
-            { $sort: { achievementCount: -1 } }
+            { $sort: { achievementCount: -1 } } // Sorting in descending order
         ]);
-
         res.json(leaderboard);
     } catch (error) {
         console.error("Error fetching leaderboard:", error);
@@ -186,5 +196,6 @@ module.exports = {
     createAchievement,
     checkAchievements,
     getLeaderboard,
-    optInLeaderboard
+    optInLeaderboard,
+    optOutLeaderboard
 };

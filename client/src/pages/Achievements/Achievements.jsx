@@ -4,6 +4,8 @@ import "./Achievements.css";
 import { useAuth } from "../../context/AuthContext";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import CustomButton from "../../components/CustomButton/CustomButton";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Achievements = () => {
   const { isAuthenticated, userData } = useAuth();
@@ -31,7 +33,9 @@ const Achievements = () => {
             headers: { Authorization: `Bearer ${userData.token}` }
         });
         if (response.status === 200) {
-            setLeaders(response.data);
+            // Sort the data by achievement count in descending order
+            const sortedLeaders = response.data.sort((a, b) => b.achievementCount - a.achievementCount);
+            setLeaders(sortedLeaders);
         } else {
             console.error('Failed to fetch leaderboard');
         }
@@ -40,24 +44,25 @@ const Achievements = () => {
     }
 };
 
-
-  const handleOptIn = async () => {
-    try {
-        const response = await axios.post("/api/achievements/opt-in", {}, {
-            headers: { Authorization: `Bearer ${userData.token}` },
-        });
-        if (response.data.isInLeaderboard) {
-            setIsOptedIn(true); // Update the opt-in state
-            fetchAchievements(); // Refresh data
-        } else {
-            alert("Failed to opt into the leaderboard.");
-        }
-    } catch (error) {
-        console.error("Error opting into leaderboard:", error);
-        alert("Failed to opt into the leaderboard.");
-    }
+const toggleOptIn = async () => {
+  try {
+      const url = isOptedIn ? "/api/achievements/opt-out" : "/api/achievements/opt-in";
+      const response = await axios.post(url, {}, {
+          headers: { Authorization: `Bearer ${userData.token}` },
+      });
+      if (response.data.isInLeaderboard !== isOptedIn) {
+          setIsOptedIn(!isOptedIn); // Toggle the state
+          fetchAchievements(); // Refresh data if necessary
+          fetchLeaderboard(); // Refresh leaderboard data
+          toast.success(`Successfully ${isOptedIn ? "opted out of" : "opted into"} the leaderboard.`);
+      } else {
+          toast.error(`Failed to ${isOptedIn ? "opt out of" : "opt in to"} the leaderboard.`);
+      }
+  } catch (error) {
+      console.error("Error toggling leaderboard opt-in status:", error);
+      toast.error(`Failed to ${isOptedIn ? "opt out of" : "opt in to"} the leaderboard due to an error.`);
+  }
 };
-
 
 
   // Fetch achievements on mount and auth state change
@@ -128,26 +133,24 @@ const Achievements = () => {
       </section>
       <section className="leaderboard-main">
         <div className="leaderboard-content">
-<CustomButton 
-    name="Opt-In to Leaderboard" 
-    onClick={handleOptIn} 
-    backgroundColor="var(--darker-blue)" 
-    color="var(--pure-white)"
+    <CustomButton 
+    name={isOptedIn ? "Opt-Out of Leaderboard" : "Opt-In to Leaderboard"} 
+    onClick={toggleOptIn} 
+    backgroundColor={isOptedIn ? "red" : "var(--darker-blue)"} 
+    color={isOptedIn ? "var(--darker-blue)" : "var(--green)"} 
 />
-          <h1 className="leaderboard-title">Leaderboard</h1>
-
-          {leaders.length > 0 ? (
-            <ul className="leaderboard-list">
-              {leaders.map((leader, index) => (
-                <li key={index} className="leader-item">
-                  <strong>{leader.username}</strong> - {leader.achievementCount}{" "}
-                  Achievements
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No leaderboard data available.</p>
-          )}
+<h1 className="leaderboard-title">Leaderboard</h1>
+                {leaders.length > 0 ? (
+                    <ol className="leaderboard-list">
+                        {leaders.map((leader, index) => (
+                            <li key={index} className="leader-item">
+                                <strong>{index + 1}. {leader.username}</strong> {leader.achievementCount} Achievements
+                            </li>
+                        ))}
+                    </ol>
+                ) : (
+                    <p>No leaderboard data available.</p>
+                )}
         </div>
       </section>
     </div>
