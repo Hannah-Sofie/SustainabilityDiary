@@ -55,6 +55,26 @@
   margin-top: auto;
 }
 
+.feedback-icon {
+  font-size: 22px;
+  position: absolute;
+  bottom: 15px;
+  right: 65px;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.feedback-icon.live::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
 .like-icon {
   font-size: 22px;
   position: absolute;

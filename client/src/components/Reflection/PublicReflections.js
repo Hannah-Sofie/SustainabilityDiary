@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import ReflectionModal from "./ReflectionModal";
 import "./PublicReflections.css";
 import DefaultImage from "../../assets/img/default-image.jpg";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faCommentDots } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAuth } from "../../context/AuthContext";
 
@@ -97,6 +97,10 @@ const PublicReflections = ({ classroomId }) => {
               handleLike(entry._id);
             }}
           />
+          <FontAwesomeIcon
+            icon={faCommentDots}
+            className={`feedback-icon ${entry.isFeedbackGiven ? "feedback-given" : ""}`}
+          />
           <span className="like-count">{entry.likes}</span>
           <div className="entry-image">
             <img
@@ -114,7 +118,7 @@ const PublicReflections = ({ classroomId }) => {
         </div>
       ))}
       {selectedEntry && (
-        <ReflectionModal entry={selectedEntry} onClose={closeModal} />
+        <ReflectionModal entry={selectedEntry} onClose={closeModal} user={userData} />
       )}
     </div>
   );
