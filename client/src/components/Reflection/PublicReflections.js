@@ -22,7 +22,6 @@ const PublicReflections = ({ classroomId }) => {
             `${process.env.REACT_APP_API_URL}/api/reflections/classroom/${classroomId}/public`,
             { withCredentials: true }
           );
-          // Update isLiked based on the userData
           setPublicEntries(
             response.data.map((entry) => ({
               ...entry,
@@ -33,7 +32,7 @@ const PublicReflections = ({ classroomId }) => {
           console.error("Failed to fetch public entries:", error);
           toast.error("Failed to fetch public entries.");
         } finally {
-          setLoading(false); // Ensure loading state is correctly updated
+          setLoading(false);
         }
       }
     };
@@ -56,7 +55,6 @@ const PublicReflections = ({ classroomId }) => {
         {},
         { withCredentials: true }
       );
-      // Update public entries with the new like count and liked status
       const updatedEntries = publicEntries.map((entry) =>
         entry._id === id
           ? {
@@ -99,7 +97,9 @@ const PublicReflections = ({ classroomId }) => {
           />
           <FontAwesomeIcon
             icon={faCommentDots}
-            className={`feedback-icon ${entry.isFeedbackGiven ? "feedback-given" : ""}`}
+            className={`feedback-icon ${
+              entry.isFeedbackGiven ? "feedback-given" : ""
+            }`}
           />
           <span className="like-count">{entry.likes}</span>
           <div className="entry-image">
@@ -114,11 +114,13 @@ const PublicReflections = ({ classroomId }) => {
           </div>
           <h3>{entry.title}</h3>
           <p>{entry.body}</p>
-          <p className="author">By: {entry.userId.name}</p>
+          <p className="author">
+            By: {entry.isAnonymous ? "Anonymous" : entry.userId.name}
+          </p>
         </div>
       ))}
       {selectedEntry && (
-        <ReflectionModal entry={selectedEntry} onClose={closeModal} user={userData} />
+        <ReflectionModal entry={selectedEntry} onClose={closeModal} />
       )}
     </div>
   );

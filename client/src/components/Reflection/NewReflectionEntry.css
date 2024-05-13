@@ -1,3 +1,19 @@
+.anonymous-option {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.anonymous-option input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+label.anonymous-option {
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 500;
+}
+
 .container-new-entry form {
   max-width: 600px;
   margin: 2rem auto;
@@ -21,7 +37,8 @@
 }
 
 .container-new-entry input[type="text"],
-.container-new-entry textarea {
+.container-new-entry textarea,
+.container-new-entry select {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid var(--light-gray);
@@ -29,13 +46,15 @@
   font-size: 1rem;
   color: #333;
   background-color: var(--pure-white);
-  transition: border-color 0.3s;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .container-new-entry input[type="text"]:focus,
-.container-new-entry textarea:focus {
+.container-new-entry textarea:focus,
+.container-new-entry select:focus {
   border-color: var(--darker-purple);
   outline: none;
+  box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.2);
 }
 
 .container-new-entry textarea {
@@ -70,8 +89,10 @@
 
 .container-new-entry input[type="text"]:hover,
 .container-new-entry textarea:hover,
+.container-new-entry select:hover,
 .container-new-entry input[type="text"]:focus,
-.container-new-entry textarea:focus {
+.container-new-entry textarea:focus,
+.container-new-entry select:focus {
   border-color: var(--darker-purple);
 }
 
@@ -167,4 +188,48 @@
 
 .remove-photo-button svg {
   margin-right: 5px;
+}
+
+/* Custom styles for the dropdown menu */
+.container-new-entry select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: url('data:image/svg+xml;utf8,<svg fill="%23333" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>')
+    no-repeat right 0.75rem center;
+  padding-right: 2.5rem; /* Adjust padding to make space for the arrow */
+}
+
+.container-new-entry select:hover {
+  border-color: var(--darker-purple);
+}
+
+.container-new-entry select:focus {
+  border-color: var(--darker-purple);
+  box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.2);
+  outline: none;
+}
+
+.container-new-entry .select-container {
+  position: relative;
+}
+
+.container-new-entry .select-container:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  width: 10px;
+  height: 10px;
+  background: url('data:image/svg+xml;utf8,<svg fill="%23333" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>')
+    no-repeat center;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* Styles for the disabled dropdown */
+.container-new-entry select:disabled {
+  background-color: #c4c2c2;
+  color: var(--gray);
+  cursor: not-allowed;
 }
