@@ -109,10 +109,11 @@ function ClassroomDetail() {
       >
         <h1>{classroom.title}</h1>
         <span
-          className={`classroom-status ${classroom.active ? "active" : "finished"
-            }`}
+          className={`classroom-status ${
+            classroom.classStatus ? "active" : "finished"
+          }`}
         >
-          {classroom.active ? "Active" : "Finished"}
+          {classroom.classStatus ? "Active" : "Finished"}
         </span>
       </div>
       <div className="classroom-content">

@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Greeting from "../Greetings/Greetings";
 import SustainabilityFact from "../Sustainability/SustainabilityFact";
 import DateDisplay from "../DateDisplay/DateDisplay";

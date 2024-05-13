@@ -20,6 +20,7 @@ function EditReflectionEntry() {
     isPublic: false,
     photoName: "",
     selectedClassroom: "",
+    isAnonymous: false, // Add isAnonymous field
   });
   const [initialPhotoUrl, setInitialPhotoUrl] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
@@ -31,11 +32,12 @@ function EditReflectionEntry() {
       try {
         const { data } = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/reflections/${id}`,
-          { withCredentials: true },
+          { withCredentials: true }
         );
         setEntry({
           ...data,
           selectedClassroom: data.classrooms.length ? data.classrooms[0] : "",
+          isAnonymous: data.isAnonymous || false, // Initialize isAnonymous
         });
         if (data.photo) {
           const photoUrl = `${process.env.REACT_APP_API_URL}/uploads/reflections/${data.photo}`;
@@ -53,7 +55,7 @@ function EditReflectionEntry() {
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/classrooms`,
-          { withCredentials: true },
+          { withCredentials: true }
         );
         setClassrooms(response.data);
       } catch (error) {
@@ -72,7 +74,7 @@ function EditReflectionEntry() {
       isPublic: !prev.isPublic,
     }));
     toast.info(
-      `Entry will be set to ${entry.isPublic ? "private" : "public"}.`,
+      `Entry will be set to ${entry.isPublic ? "private" : "public"}.`
     );
   };
 
@@ -115,6 +117,7 @@ function EditReflectionEntry() {
     formData.append("title", entry.title);
     formData.append("body", entry.body);
     formData.append("isPublic", entry.isPublic ? "true" : "false");
+    formData.append("isAnonymous", entry.isAnonymous); // Append isAnonymous field
 
     if (entry.isPublic && entry.selectedClassroom) {
       formData.append("classroomId", entry.selectedClassroom);
@@ -134,7 +137,7 @@ function EditReflectionEntry() {
       const response = await axios.put(
         `${process.env.REACT_APP_API_URL}/api/reflections/${id}`,
         formData,
-        { headers: { "Content-Type": "multipart/form-data" } },
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
 
       if (response.status === 200) {
@@ -147,7 +150,7 @@ function EditReflectionEntry() {
       console.error("Failed to update entry:", error.response?.data);
       toast.error(
         "Failed to update entry: " +
-          (error.response?.data.message || "Unknown error"),
+          (error.response?.data.message || "Unknown error")
       );
     }
   };
@@ -200,6 +203,22 @@ function EditReflectionEntry() {
               </option>
             ))}
           </select>
+          {entry.selectedClassroom && (
+            <label className="anonymous-option">
+              <input
+                type="checkbox"
+                name="isAnonymous"
+                checked={entry.isAnonymous}
+                onChange={(e) =>
+                  setEntry((prev) => ({
+                    ...prev,
+                    isAnonymous: e.target.checked,
+                  }))
+                }
+              />
+              Post Anonymously
+            </label>
+          )}
         </div>
         <div className="file-upload">
           <label htmlFor="photo-upload" className="file-upload-label">
