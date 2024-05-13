@@ -119,7 +119,7 @@ const createReflectionEntry = async (req, res, next) => {
 };
 
 const updateReflectionEntry = async (req, res, next) => {
-  const { title, body, isPublic, classroomId } = req.body;
+  const { title, body, isPublic, classroomId, removePhoto } = req.body;
   const newPhoto = req.file ? req.file.filename : null;
 
   if (!title || !body) {
@@ -140,9 +140,11 @@ const updateReflectionEntry = async (req, res, next) => {
     };
 
     if (newPhoto) {
-      updateFields.photo = newPhoto;
-    } else if (!req.file && existingEntry.photo) {
-      updateFields.photo = null;
+      updateFields.photo = newPhoto; // New photo provided, update it
+    } else if (removePhoto === "true") {
+      updateFields.photo = null; // Explicit removal flag, remove the photo
+    } else {
+      updateFields.photo = existingEntry.photo; // No new photo and no removal flag, retain the existing photo
     }
 
     const updatedEntry = await ReflectionEntry.findOneAndUpdate(
@@ -155,8 +157,12 @@ const updateReflectionEntry = async (req, res, next) => {
       return next(new CreateError("Failed to update entry", 404));
     }
 
-    // Delete the old photo file if necessary
-    if ((newPhoto || updateFields.photo === null) && existingEntry.photo) {
+    // Handle the deletion of the old photo file if a new photo is uploaded or it's explicitly removed
+    if (
+      (newPhoto || removePhoto === "true") &&
+      existingEntry.photo &&
+      existingEntry.photo !== newPhoto
+    ) {
       const oldFilePath = path.join(
         __dirname,
         "../uploads/reflections/",
