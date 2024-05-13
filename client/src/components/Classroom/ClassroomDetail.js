@@ -74,13 +74,24 @@ function ClassroomDetail() {
 
   const handleFavourite = async () => {
     try {
-      const response = await axios.post(`/api/classrooms/${id}`);
+      const response = await axios.post(`/api/classrooms/fave/${id}`);
       console.log("I am doing something!!");
       setClassroom(response.data);
     } catch (error) {
       console.error("Error fetching classroom details:", error);
     }
   }
+
+  const handleUnfavourite = async () => {
+    try {
+      const response = await axios.post(`/api/classrooms/unfave/${id}`);
+      console.log("I am doing something!!");
+      setClassroom(response.data);
+    } catch (error) {
+      console.error("Error fetching classroom details:", error);
+    }
+  }
+
 
   return (
     <div className="classroom-detail-container">
@@ -91,8 +102,8 @@ function ClassroomDetail() {
         className="classroom-header"
         style={{
           backgroundImage: `url(${classroom.headerPhotoUrl
-              ? `${process.env.REACT_APP_API_URL}${classroom.headerPhotoUrl}`
-              : DefaultImage
+            ? `${process.env.REACT_APP_API_URL}${classroom.headerPhotoUrl}`
+            : DefaultImage
             })`,
         }}
       >
@@ -113,7 +124,13 @@ function ClassroomDetail() {
             <span>Learning Goals:</span> {classroom.learningGoals}
           </p>
 
-          <button className="classroom-detail-button" onClick={handleFavourite}>Favourite class</button>
+          {userData && !classroom.favourites.includes(userData._id) && (
+            <button className="classroom-detail-button favourite" onClick={handleFavourite}>Favourite class</button>
+          )}
+          {userData && classroom.favourites.includes(userData._id) && (
+            <button className="classroom-detail-button unfavourite" onClick={handleUnfavourite}>Unfavourite class</button>
+          )}
+
 
           <div className="classroom-detail-actions">
             <p className="classroom-detail-text">

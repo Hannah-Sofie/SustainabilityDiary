@@ -271,3 +271,21 @@
 .student-list {
   list-style-type: none;
 }
+
+.favourite {
+  color: var(--dark-grey);
+  background-color: var(--orange);
+}
+
+.favourite:hover {
+  background-color: var(--yellow);
+}
+
+.unfavourite {
+  color: var(--dark-grey);
+  background-color: var(--red);
+}
+
+.unfavourite:hover {
+  background-color: var(--bright-red);
+}

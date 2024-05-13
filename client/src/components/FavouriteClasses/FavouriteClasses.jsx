@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import "./Classes.css";
+import "./FavouriteClasses.css";
 import DefaultImage from "../../assets/img/default-classroom.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -9,39 +9,23 @@ import { useAuth } from "../../context/AuthContext";
 // Replace with your environment variable or direct API URL if not using env variables.
 const baseURL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
-function Classes({ classrooms }) {
+function FavouriteClasses({ classrooms }) {
   // Add a search state
   const [search, setSearch] = useState("");
-
-  // State to filter the classrooms out based on type we choose
-  const [filter, setFilter] = useState("All");
 
   // Add a search handler
   const handleSearch = (event) => {
     setSearch(event.target.value.toLowerCase());
   };
 
-  const handleFilterChange = (filterType) => {
-    setFilter(filterType);
-  };
-
-   const { userData } = useAuth();
+  const { userData } = useAuth();
 
   // Filter the classrooms based on the search input, search on the classroom title
   // Ensure classrooms is an array before filtering to avoid errors in dashboard
   const filteredClassrooms = Array.isArray(classrooms)
     ? classrooms.filter((classroom) => {
       const matchesSearch = classroom.title.toLowerCase().includes(search);
-
-      if (filter === "All") {
-        return matchesSearch;
-      } else if (filter === "Active") {
-        return matchesSearch && classroom.classStatus === true;
-      } else if (filter === "Finished") {
-        return matchesSearch && classroom.classStatus === false;
-      } else if (filter === "Favourites") {
-        return matchesSearch && classroom.favourites.includes(userData._id);
-      }
+      return matchesSearch && classroom.favourites.includes(userData._id);
     })
     : [];
 
@@ -58,33 +42,6 @@ function Classes({ classrooms }) {
       <section className="container-class">
         <div className="class-box">
           <div className="classesHeader">
-            <ul className="class-filter">
-              <li
-                className={filter === "All" ? "active" : ""}
-                onClick={() => handleFilterChange("All")}
-              >
-                All classes
-              </li>
-              <li
-                className={filter === "Active" ? "active" : ""}
-                onClick={() => handleFilterChange("Active")}
-              >
-                Active Classes
-              </li>
-              <li
-                className={filter === "Finished" ? "active" : ""}
-                onClick={() => handleFilterChange("Finished")}
-              >
-                Finished Classes
-              </li>
-              <li
-                className={filter === "Favourites" ? "active" : ""}
-                onClick={() => handleFilterChange("Favourites")}
-              >
-                Favourite Classes
-              </li>
-            </ul>
-
             {/* Add a search input */}
             <div className="inputSearch">
               <FontAwesomeIcon icon={faSearch} className="fa-search-icon" />
@@ -129,4 +86,4 @@ function Classes({ classrooms }) {
   );
 }
 
-export default Classes;
+export default FavouriteClasses;

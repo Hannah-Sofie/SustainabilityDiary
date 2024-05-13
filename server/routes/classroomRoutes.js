@@ -7,6 +7,8 @@ const {
   createClassroom,
   joinClassroom,
   favouriteClassroom,
+  unFavouriteClassroom,
+  getFavouriteClassrooms,
   getClassrooms,
   getClassroomById,
   removeStudent,
@@ -27,7 +29,9 @@ const upload = multer({ storage: storage });
 
 router.post("/create", verifyToken, upload.single("photo"), createClassroom);
 router.post("/join", verifyToken, joinClassroom);
-router.post("/:classroomId", verifyToken, favouriteClassroom);
+router.post("/fave/:classroomId", verifyToken, favouriteClassroom);
+router.post("/unfave/:classroomId", verifyToken, unFavouriteClassroom);
+router.get("/getfaves", verifyToken, getFavouriteClassrooms);
 router.get("/", verifyToken, getClassrooms);
 router.get("/:id", verifyToken, getClassroomById);
 router.delete("/:classroomId/students/:studentId", verifyToken, removeStudent);

@@ -5,10 +5,29 @@ import LatestReflection from "../Reflection/LatestReflection";
 import SustainabilityFact from "../Sustainability/SustainabilityFact";
 import DateDisplay from "../DateDisplay/DateDisplay";
 import TodoList from "../TodoList/TodoList";
+import FavouriteClasses from "../FavouriteClasses/FavouriteClasses";
+import { useAuth } from "../../context/AuthContext";
 import "./Dashboard.css";
 
 function DashboardStudent() {
   const [latestReflection, setLatestReflection] = useState(null);
+  const [classrooms, setClassrooms] = useState([]);
+  const { isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchClassrooms();
+    }
+  }, [isAuthenticated]);
+
+  const fetchClassrooms = async () => {
+    try {
+      const response = await axios.get("/api/classrooms");
+      setClassrooms(response.data);
+    } catch (error) {
+      console.error("Error fetching classrooms:", error);
+    }
+  };
 
   useEffect(() => {
     const fetchLatestReflection = async () => {
@@ -40,8 +59,8 @@ function DashboardStudent() {
           <LatestReflection latestReflection={latestReflection} />
         </div>
         <div className="classrooms">
-          <h2>Your Classrooms</h2>
-          {/* Add your classrooms component here */}
+          <h2>Your Favourite Classrooms</h2>
+          <FavouriteClasses classrooms ={classrooms}/>
         </div>
       </div>
       <div className="right-panel">
