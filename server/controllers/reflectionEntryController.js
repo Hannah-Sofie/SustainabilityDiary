@@ -17,7 +17,7 @@ const getAllPublicReflectionEntries = async (req, res, next) => {
   try {
     const entries = await ReflectionEntry.find({ isPublic: true }).populate(
       "userId",
-      "name",
+      "name"
     );
     res.json(entries);
   } catch (error) {
@@ -30,7 +30,7 @@ const getReflectionById = async (req, res, next) => {
     const { id } = req.params; // Get the reflection ID from URL parameters
     const reflection = await ReflectionEntry.findById(id).populate(
       "userId",
-      "name email",
+      "name email"
     ); // Optionally populate user details
 
     if (!reflection) {
@@ -85,7 +85,7 @@ const getLatestReflection = async (req, res, next) => {
 };
 
 const createReflectionEntry = async (req, res, next) => {
-  const { title, body, isPublic, classroomId } = req.body; // Changed to classroomId
+  const { title, body, isPublic, classroomId, isAnonymous } = req.body;
   const photo = req.file ? req.file.filename : null;
 
   if (title.length === 0 || body.length === 0 || !title || !body) {
@@ -106,11 +106,11 @@ const createReflectionEntry = async (req, res, next) => {
       title,
       body,
       isPublic,
+      isAnonymous,
       photo,
-      classrooms: isPublic && classroomId ? [classroomId] : [], // Now adding the classroomId to an array if isPublic is true
+      classrooms: isPublic && classroomId ? [classroomId] : [],
     });
 
-    console.log("New Entry:", newEntry); // Log created entry
     res.status(201).json(newEntry);
   } catch (error) {
     console.error("Error creating entry:", error);
@@ -119,7 +119,8 @@ const createReflectionEntry = async (req, res, next) => {
 };
 
 const updateReflectionEntry = async (req, res, next) => {
-  const { title, body, isPublic, classroomId, removePhoto } = req.body;
+  const { title, body, isPublic, classroomId, removePhoto, isAnonymous } =
+    req.body;
   const newPhoto = req.file ? req.file.filename : null;
 
   if (!title || !body) {
@@ -136,28 +137,28 @@ const updateReflectionEntry = async (req, res, next) => {
       title,
       body,
       isPublic: isPublic === "true",
-      ...(isPublic && classroomId && { classrooms: [classroomId] }), // Conditionally add classroomId if applicable
+      isAnonymous,
+      ...(isPublic && classroomId && { classrooms: [classroomId] }),
     };
 
     if (newPhoto) {
-      updateFields.photo = newPhoto; // New photo provided, update it
+      updateFields.photo = newPhoto;
     } else if (removePhoto === "true") {
-      updateFields.photo = null; // Explicit removal flag, remove the photo
+      updateFields.photo = null;
     } else {
-      updateFields.photo = existingEntry.photo; // No new photo and no removal flag, retain the existing photo
+      updateFields.photo = existingEntry.photo;
     }
 
     const updatedEntry = await ReflectionEntry.findOneAndUpdate(
       { _id: req.params.id, userId: req.user._id },
       updateFields,
-      { new: true },
+      { new: true }
     );
 
     if (!updatedEntry) {
       return next(new CreateError("Failed to update entry", 404));
     }
 
-    // Handle the deletion of the old photo file if a new photo is uploaded or it's explicitly removed
     if (
       (newPhoto || removePhoto === "true") &&
       existingEntry.photo &&
@@ -166,7 +167,7 @@ const updateReflectionEntry = async (req, res, next) => {
       const oldFilePath = path.join(
         __dirname,
         "../uploads/reflections/",
-        existingEntry.photo,
+        existingEntry.photo
       );
       fs.unlink(oldFilePath, (err) => {
         if (err) console.error("Error deleting old photo", err);
@@ -197,7 +198,7 @@ const deleteReflectionEntry = async (req, res, next) => {
       const filePath = path.join(
         __dirname,
         "../uploads/reflections/",
-        entry.photo,
+        entry.photo
       );
       console.log("Attempting to delete file at:", filePath);
       fs.unlink(filePath, (err) => {

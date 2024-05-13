@@ -7,14 +7,12 @@ const reflectionEntrySchema = new Schema(
     title: { type: String, required: true, maxlength: 20 },
     body: { type: String, required: true, maxlength: 200 },
     isPublic: { type: Boolean, default: false },
+    isAnonymous: { type: Boolean, default: false },
     photo: { type: String },
     classrooms: [
       { type: Schema.Types.ObjectId, ref: "Classroom", index: true },
     ],
-    likes: {
-      type: Number,
-      default: 0,
-    },
+    likes: { type: Number, default: 0 },
     likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true }

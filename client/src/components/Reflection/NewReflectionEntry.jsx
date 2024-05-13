@@ -18,6 +18,7 @@ function NewReflectionEntry() {
     photo: null,
     photoName: "",
     selectedClassroom: "",
+    isAnonymous: false, // Added isAnonymous field
   });
   const [previewImage, setPreviewImage] = useState(null);
   const [classrooms, setClassrooms] = useState([]);
@@ -28,7 +29,7 @@ function NewReflectionEntry() {
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/classrooms`,
-          { withCredentials: true },
+          { withCredentials: true }
         );
         setClassrooms(response.data);
       } catch (error) {
@@ -46,7 +47,7 @@ function NewReflectionEntry() {
       isPublic: !prev.isPublic,
     }));
     toast.info(
-      `Entry will be set to ${entry.isPublic ? "private" : "public"}.`,
+      `Entry will be set to ${entry.isPublic ? "private" : "public"}.`
     );
   };
 
@@ -72,6 +73,8 @@ function NewReflectionEntry() {
     formData.append("title", entry.title);
     formData.append("body", entry.body);
     formData.append("isPublic", entry.isPublic);
+    formData.append("isAnonymous", entry.isAnonymous); // Append isAnonymous field
+
     if (entry.isPublic) {
       formData.append("classroomId", entry.selectedClassroom);
     }
@@ -90,7 +93,7 @@ function NewReflectionEntry() {
             "Content-Type": "multipart/form-data",
             withCredentials: true,
           },
-        },
+        }
       );
       toast.success("Reflection entry created successfully!");
       navigate("/reflections");
@@ -103,7 +106,7 @@ function NewReflectionEntry() {
   const handleCancel = () => {
     if (
       window.confirm(
-        "Are you sure you want to cancel? Any unsaved changes will be lost.",
+        "Are you sure you want to cancel? Any unsaved changes will be lost."
       )
     ) {
       navigate("/reflections");
@@ -158,6 +161,22 @@ function NewReflectionEntry() {
               </option>
             ))}
           </select>
+          {entry.selectedClassroom && (
+            <label id="anonymous-label" className="anonymous-option">
+              <input
+                type="checkbox"
+                name="isAnonymous"
+                checked={entry.isAnonymous}
+                onChange={(e) =>
+                  setEntry((prev) => ({
+                    ...prev,
+                    isAnonymous: e.target.checked,
+                  }))
+                }
+              />
+              Post anonymously
+            </label>
+          )}
         </div>
         <div className="file-upload">
           <label htmlFor="photo-upload" className="file-upload-label">
