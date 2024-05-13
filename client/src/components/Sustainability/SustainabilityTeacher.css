@@ -100,6 +100,7 @@
   margin-bottom: 10px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .student-sustainability-preview a {
@@ -111,6 +112,8 @@
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
+  flex-grow: 1;
+  margin-right: 10px;
 }
 
 .student-sustainability-preview a:hover {
@@ -120,4 +123,31 @@
 .student-sustainability-preview a::before {
   content: "🌿";
   margin-right: 8px;
+}
+
+.sustainability-edit-button,
+.sustainability-delete-button {
+  background-color: #368e5f;
+  color: #ffffff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin-left: 10px;
+}
+
+.sustainability-edit-button:hover,
+.sustainability-delete-button:hover {
+  background-color: #276749;
+}
+
+.sustainability-delete-button {
+  background-color: #e53e3e;
+}
+
+.sustainability-delete-button:hover {
+  background-color: #c53030;
 }
