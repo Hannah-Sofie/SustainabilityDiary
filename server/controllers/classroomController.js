@@ -82,10 +82,8 @@ const updateClassroom = asyncHandler(async (req, res) => {
     throw new CreateError("Classroom not found", 404);
   }
 
-  // Convert the string to boolean explicitly if necessary
   const activeStatus = classStatus === "true" || classStatus === true;
 
-  // Prepare updated data
   const updatedFields = {
     title: title || classroom.title,
     description: description || classroom.description,
@@ -96,7 +94,6 @@ const updateClassroom = asyncHandler(async (req, res) => {
       : classroom.headerPhotoUrl,
   };
 
-  // Save the updated classroom
   const updatedClassroom = await Classroom.findByIdAndUpdate(
     id,
     updatedFields,
