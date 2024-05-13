@@ -25,14 +25,12 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
       : null
   );
 
-  // Handle file selection for photo preview
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setFormData({ ...formData, photo: file });
     setPreviewImage(URL.createObjectURL(file));
   };
 
-  // Handle removing the photo
   const handleRemovePhoto = () => {
     setFormData({ ...formData, photo: null });
     setPreviewImage(null);
