@@ -5,14 +5,10 @@ import "react-toastify/dist/ReactToastify.css";
 import "./SustainabilityTeacher.css";
 
 function SustainabilityTeacher() {
-  const [formData, setFormData] = useState({
-    title: "",
-    link: "",
-  });
-
+  const [formData, setFormData] = useState({ title: "", link: "" });
   const [resources, setResources] = useState([]);
+  const [editingId, setEditingId] = useState(null);
 
-  // Fetch all resources for student view
   const fetchResources = async () => {
     try {
       const { data } = await axios.get(
@@ -25,7 +21,6 @@ function SustainabilityTeacher() {
     }
   };
 
-  // Initial fetch for resources
   useEffect(() => {
     fetchResources();
   }, []);
@@ -43,18 +38,42 @@ function SustainabilityTeacher() {
     }
 
     try {
-      await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/resources`,
-        formData
+      const method = editingId ? "put" : "post";
+      const url = `${process.env.REACT_APP_API_URL}/api/resources${
+        editingId ? `/${editingId}` : ""
+      }`;
+      await axios[method](url, formData);
+      toast.success(
+        `Resource ${editingId ? "updated" : "added"} successfully!`
       );
-      toast.success("Resource added successfully!");
-
-      // Clear form and refetch resources
       setFormData({ title: "", link: "" });
+      setEditingId(null);
       fetchResources();
     } catch (error) {
-      console.error("Failed to add resource:", error);
-      toast.error("An error occurred while adding the resource.");
+      console.error("Failed to manage resource:", error);
+      toast.error(
+        `An error occurred while ${
+          editingId ? "updating" : "adding"
+        } the resource.`
+      );
+    }
+  };
+
+  const handleEdit = (resource) => {
+    setEditingId(resource._id);
+    setFormData({ title: resource.title, link: resource.link });
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_API_URL}/api/resources/${id}`
+      );
+      toast.success("Resource deleted successfully!");
+      fetchResources();
+    } catch (error) {
+      console.error("Failed to delete resource:", error);
+      toast.error("Error deleting resource");
     }
   };
 
@@ -67,7 +86,6 @@ function SustainabilityTeacher() {
       <form className="resource-form" onSubmit={handleSubmit}>
         <label>
           <span>Title:</span>
-
           <input
             type="text"
             name="title"
@@ -86,10 +104,9 @@ function SustainabilityTeacher() {
             placeholder="https://example.com"
           />
         </label>
-        <button type="submit">Add Resource</button>
+        <button type="submit">{editingId ? "Update" : "Add"} Resource</button>
       </form>
 
-      {/* Student View */}
       <div className="student-sustainability-preview">
         <h2>Student View</h2>
         <ul>
@@ -98,6 +115,18 @@ function SustainabilityTeacher() {
               <a href={resource.link} target="_blank" rel="noopener noreferrer">
                 {resource.title}
               </a>
+              <button
+                className="sustainability-edit-button"
+                onClick={() => handleEdit(resource)}
+              >
+                Edit
+              </button>
+              <button
+                className="sustainability-delete-button"
+                onClick={() => handleDelete(resource._id)}
+              >
+                Delete
+              </button>
             </li>
           ))}
         </ul>

@@ -25,4 +25,37 @@ const getAllResources = async (req, res, next) => {
   }
 };
 
-module.exports = { createResource, getAllResources };
+const updateResource = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const updatedResource = await Resource.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    if (!updatedResource) {
+      return next(new CreateError("Resource not found", 404));
+    }
+    res.json(updatedResource);
+  } catch (error) {
+    next(new CreateError("Failed to update resource", 500));
+  }
+};
+
+const deleteResource = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const deletedResource = await Resource.findByIdAndDelete(id);
+    if (!deletedResource) {
+      return next(new CreateError("Resource not found", 404));
+    }
+    res.status(204).send();
+  } catch (error) {
+    next(new CreateError("Failed to delete resource", 500));
+  }
+};
+
+module.exports = {
+  createResource,
+  getAllResources,
+  updateResource,
+  deleteResource,
+};
