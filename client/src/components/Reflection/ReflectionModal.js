@@ -23,7 +23,7 @@ function ReflectionModal({ entry, onClose, user }) {
   if (!entry) return null;
 
   const imageUrl = entry.photo
-    ? `${process.env.REACT_APP_API_URL}/uploads/${entry.photo}`
+    ? `${process.env.REACT_APP_API_URL}/uploads/reflections/${entry.photo}`
     : DefaultImage;
 
   const handleFeedbackSubmit = async (event) => {
