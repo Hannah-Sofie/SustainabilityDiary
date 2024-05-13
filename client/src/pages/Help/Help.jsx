@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronDown,
+  faChevronUp,
+  faQuestionCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import "./Help.css";
 
 // A single FAQ item
@@ -12,7 +16,10 @@ const FAQItem = ({ question, answer }) => {
   return (
     <div className="faq-item">
       <button className="faq-question" onClick={toggle}>
-        {question}
+        <span className="question-content">
+          <FontAwesomeIcon icon={faQuestionCircle} className="question-icon" />
+          {question}
+        </span>
         <FontAwesomeIcon
           icon={isOpen ? faChevronUp : faChevronDown}
           className="dropdown-icon"

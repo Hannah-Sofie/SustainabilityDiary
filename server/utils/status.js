@@ -3,7 +3,7 @@ const User = require("../models/userSchema");
 // status endpoint to check user's authentication status
 const status = async (req, res) => {
   try {
-    const user = await User.findById(req.userId).select("-password"); // Exclude password from the result
+    const user = await User.findById(req.user._id).select("-password"); // Exclude password from the result
     if (!user) {
       return res
         .status(404)

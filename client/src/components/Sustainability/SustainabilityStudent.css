@@ -1,10 +1,10 @@
 .student-sustainability-page {
   padding: 40px 60px;
-  background-color: var(--white);
+  background-color: #ddeddf;
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
-  max-width: 900px;
+  max-width: 90%;
   margin: auto;
   margin-top: 40px;
 }
@@ -22,18 +22,18 @@
 }
 
 .resources {
-  background-color: #ffffff;
+  background-color: var(--pure-white);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
-  border-left: 4px solid #276749; 
+  border-left: 4px solid #276749;
 }
 
 .resources h2 {
   font-size: 24px;
   margin-bottom: 15px;
-  color: #276749; 
+  color: #276749;
 }
 
 .resources ul {
@@ -50,7 +50,7 @@
 .resources a {
   text-decoration: none;
   font-weight: 600;
-  color: #276749; 
+  color: #276749;
   padding: 8px;
   border-radius: 8px;
   transition: all 0.3s ease;
@@ -59,7 +59,7 @@
 }
 
 .resources a:hover {
-  background-color: #a2d4a9;
+  background-color: #ddeddf;
 }
 
 .resources a::before {

@@ -1,6 +1,6 @@
 .search_bar {
   display: flex;
-  padding: 10px;
+  padding: 10px 0;
   justify-content: space-between;
 }
 .search_bar input {

@@ -23,6 +23,7 @@
   width: 50%;
 }
 
+
 .button-cancel {
   padding: 10px 20px;
   margin-top: 10px;
@@ -44,4 +45,59 @@
 .button-cancel:focus {
   outline: none;
   box-shadow: 0 0 0 2px rgba(211, 47, 47, 0.5);
+}
+
+.modal_splitline {
+  margin: 20px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+#feedback-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+#feedback-container div .feedback-container_author {
+  font-size: 12px;
+  font-style: italic;
+  color: #888;
+  margin-top: auto;
+}
+
+#feedback-form img {
+  width: 30px;
+  border-radius: 50%;
+}
+
+#feedback-form div {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+#feedback-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0 0 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: none;
+}
+
+#feedback-form button {
+  padding: 5px 10px;
+  background-color: var(--green);
+  color: var(--pure-white);
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+#feedback-form button:hover {
+  background-color: var(--dark-green);
+  transform: scale(1.05);
 }

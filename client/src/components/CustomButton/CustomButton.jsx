@@ -23,11 +23,11 @@ const CustomButton = ({
     backgroundColor: isHovered
       ? hoverBackgroundColor || backgroundColor
       : backgroundColor || "transparent",
-    color: isHovered ? hoverColor || color : color || "var(--orange)",
+    color: isHovered ? hoverColor || color : color || "var(--pure-white)",
     border: `2px solid ${
       isHovered
         ? hoverBorderColor || hoverColor || color
-        : color || "var(--orange)"
+        : hoverBorderColor || "var(--darker-purple)"
     }`,
     borderRadius: "120px",
     cursor: "pointer",

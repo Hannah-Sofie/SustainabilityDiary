@@ -106,57 +106,42 @@ function EditReflectionEntry() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!entry.title.trim()) {
-      toast.error("Title is required.");
+    if (!entry.title.trim() || !entry.body.trim()) {
+      toast.error("Title and body are required.");
       return;
     }
-    if (!entry.body.trim()) {
-      toast.error("Body is required.");
-      return;
-    }
-
-    const isPublicString = entry.isPublic ? "true" : "false";
-    const removePhotoString = removePhoto ? "true" : "false";
 
     const formData = new FormData();
     formData.append("title", entry.title);
     formData.append("body", entry.body);
-    formData.append("isPublic", isPublicString);
+    formData.append("isPublic", entry.isPublic ? "true" : "false");
 
     if (entry.isPublic && entry.selectedClassroom) {
       formData.append("classroomId", entry.selectedClassroom);
     }
 
-    formData.append("removePhoto", removePhotoString);
-
-    if (entry.photo) {
-      formData.append("photo", entry.photo);
+    // Only append 'removePhoto' if the photo is explicitly marked for removal
+    if (removePhoto) {
+      formData.append("removePhoto", "true");
+    } else {
+      // Append photo only if a new one has been chosen
+      if (entry.photo && typeof entry.photo === "object") {
+        formData.append("photo", entry.photo);
+      }
     }
 
-    // Debugging step: Verify each append
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value} (${typeof value})`);
-    }
-
-    // Perform the PUT request
     try {
       const response = await axios.put(
         `${process.env.REACT_APP_API_URL}/api/reflections/${id}`,
         formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        },
+        { headers: { "Content-Type": "multipart/form-data" } },
       );
 
-      // Use the response here
       if (response.status === 200) {
         toast.success("Entry updated successfully!");
-        console.log("Update Response:", response.data);
-        navigate("/reflections"); // Redirect or handle the response further
+        navigate("/reflections");
       } else {
-        // Handle other status codes or data issues
         toast.error("Update was successful but check data or status code.");
-        console.log("Response status is not 200:", response.status);
       }
     } catch (error) {
       console.error("Failed to update entry:", error.response?.data);

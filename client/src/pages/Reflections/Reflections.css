@@ -1,19 +1,28 @@
 .main-reflection {
-  width: 100%;
+  margin: 40px 40px;
 }
 
-.main-reflection h1 {
+.header-container-reflection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.container-reflection h1 {
+  margin: 0;
   font-size: 2rem;
 }
 
-.container-reflection {
-  padding: 10px 40px;
+.new-reflection {
+  margin: 0;
 }
-.container-reflection h1 {
-  margin: 20px 10px;
-}
-.container-reflection .new-reflection {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
+
+.custom-button {
+  padding: 10px 20px;
+  background-color: var(--darker-purple);
+  color: var(--pure-white);
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
 }

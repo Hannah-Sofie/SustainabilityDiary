@@ -11,6 +11,10 @@ const FeedbackSchema = new mongoose.Schema({
     ref: 'Teacher',
     required: true
   },
+  writerName: {
+    type: String,
+    required: true
+  },
   content: {
     type: String,
     required: true

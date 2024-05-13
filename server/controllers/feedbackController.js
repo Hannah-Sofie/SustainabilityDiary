@@ -9,10 +9,20 @@ exports.getFeedbackByReflectionId = async (req, res) => {
   }
 };
 
+exports.getFeedbackByWriterId = async (req, res) => {
+  try {
+    const feedbacks = await Feedback.find({ writer: req.params.writerId });
+    res.json(feedbacks);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 exports.createFeedback = async (req, res) => {
   const feedback = new Feedback({
     reflectionId: req.body.reflectionId,
     writer: req.body.writer,
+    writerName: req.body.writerName,
     content: req.body.content
   });
 
