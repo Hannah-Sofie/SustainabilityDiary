@@ -51,16 +51,19 @@ function DashboardStudent() {
         <Greeting />
 
         <div className="sustainability-facts">
-          <h2>Today's Sustainability Fact</h2>
+          <h2>Today's sustainability fact</h2>
           <SustainabilityFact />
         </div>
         <div className="reflection">
-          <h2>Latest Reflection</h2>
+          <h2>Latest reflection</h2>
           <LatestReflection latestReflection={latestReflection} />
         </div>
         <div className="classrooms">
-          <h2>Your Favourite Classrooms</h2>
-          <FavouriteClasses classrooms ={classrooms}/>
+          <h2>Favourite classrooms</h2>
+          <FavouriteClasses
+            classrooms={classrooms}
+            setClassrooms={setClassrooms}
+          />
         </div>
       </div>
       <div className="right-panel">
