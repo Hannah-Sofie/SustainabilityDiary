@@ -18,7 +18,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18.x" # Using a valid Node.js version
+          node-version: "20.x" # Using a valid Node.js version
           cache: npm
           cache-dependency-path: ${{ matrix.dir }}/package-lock.json
       - name: Change to project directory
@@ -81,7 +81,7 @@ jobs:
       - name: Login and deploy
         run: |
           ssh -tt ${{ secrets.DEPLOY_SSH_USERNAME }}@${{ secrets.DEPLOY_SSH_HOST }} << EOF
-            docker-compose -f /path/to/your/docker-compose.yml down
-            docker-compose -f /path/to/your/docker-compose.yml up -d --build
+            docker-compose -f /path/to/your/docker-compose.yml pull
+            docker-compose -f /path/to/your/docker-compose.yml up -d --force-recreate
             exit
           EOF
