@@ -1,20 +1,29 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Classes.css";
 import DefaultImage from "../../assets/img/default-classroom.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faStar } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../context/AuthContext";
+import axios from "axios";
 
 // Replace with your environment variable or direct API URL if not using env variables.
 const baseURL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
-function Classes({ classrooms }) {
+function Classes({ classrooms: initialClassrooms }) {
   // Add a search state
   const [search, setSearch] = useState("");
-
   // State to filter the classrooms out based on type we choose
   const [filter, setFilter] = useState("All");
+  const [filteredClassrooms, setFilteredClassrooms] = useState(
+    initialClassrooms || []
+  );
+
+  const { userData } = useAuth();
+
+  useEffect(() => {
+    setFilteredClassrooms(initialClassrooms);
+  }, [initialClassrooms]);
 
   // Add a search handler
   const handleSearch = (event) => {
@@ -25,27 +34,67 @@ function Classes({ classrooms }) {
     setFilter(filterType);
   };
 
-   const { userData } = useAuth();
+  const handleFavourite = async (id) => {
+    try {
+      const response = await axios.post(
+        `${baseURL}/api/classrooms/fave/${id}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${userData.token}` },
+        }
+      );
+      // Update the classroom's favourites list locally
+      updateClassroomFavourites(response.data);
+    } catch (error) {
+      console.error("Error favoriting classroom:", error);
+    }
+  };
+
+  const handleUnfavourite = async (id) => {
+    try {
+      const response = await axios.post(
+        `${baseURL}/api/classrooms/unfave/${id}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${userData.token}` },
+        }
+      );
+      // Update the classroom's favourites list locally
+      updateClassroomFavourites(response.data);
+    } catch (error) {
+      console.error("Error unfavoriting classroom:", error);
+    }
+  };
+
+  const updateClassroomFavourites = (updatedClassroom) => {
+    setFilteredClassrooms((prevClassrooms) =>
+      prevClassrooms.map((classroom) =>
+        classroom._id === updatedClassroom._id ? updatedClassroom : classroom
+      )
+    );
+  };
 
   // Filter the classrooms based on the search input, search on the classroom title
   // Ensure classrooms is an array before filtering to avoid errors in dashboard
-  const filteredClassrooms = Array.isArray(classrooms)
-    ? classrooms.filter((classroom) => {
-      const matchesSearch = classroom.title.toLowerCase().includes(search);
+  const filteredAndSearchedClassrooms = Array.isArray(filteredClassrooms)
+    ? filteredClassrooms.filter((classroom) => {
+        const matchesSearch = classroom.title.toLowerCase().includes(search);
 
-      if (filter === "All") {
-        return matchesSearch;
-      } else if (filter === "Active") {
-        return matchesSearch && classroom.classStatus === true;
-      } else if (filter === "Finished") {
-        return matchesSearch && classroom.classStatus === false;
-      } else if (filter === "Favourites") {
-        return matchesSearch && classroom.favourites.includes(userData._id);
-      }
-    })
+        if (filter === "All") {
+          return matchesSearch;
+        } else if (filter === "Active") {
+          return matchesSearch && classroom.classStatus === true;
+        } else if (filter === "Finished") {
+          return matchesSearch && classroom.classStatus === false;
+        } else if (filter === "Favourites") {
+          return matchesSearch && classroom.favourites.includes(userData._id);
+        } else {
+          return false;
+        }
+      })
     : [];
 
-  if (!classrooms || !classrooms.length) {
+  if (!initialClassrooms || !initialClassrooms.length) {
     return (
       <div className="no-classrooms">
         No classrooms available or still loading...
@@ -98,7 +147,7 @@ function Classes({ classrooms }) {
 
           <div className="class">
             {/*Map over the filtered classrooms*/}
-            {filteredClassrooms.map((classroom, index) => {
+            {filteredAndSearchedClassrooms.map((classroom, index) => {
               // Use the baseURL with the classroom's `iconPhotoUrl`
               const iconUrl = classroom.iconPhotoUrl
                 ? `${baseURL}${classroom.iconPhotoUrl}`
@@ -119,6 +168,20 @@ function Classes({ classrooms }) {
                   >
                     Open
                   </Link>
+                  {userData && !classroom.favourites.includes(userData._id) && (
+                    <FontAwesomeIcon
+                      icon={faStar}
+                      className="star-icon"
+                      onClick={() => handleFavourite(classroom._id)}
+                    />
+                  )}
+                  {userData && classroom.favourites.includes(userData._id) && (
+                    <FontAwesomeIcon
+                      icon={faStar}
+                      className="star-icon favorite"
+                      onClick={() => handleUnfavourite(classroom._id)}
+                    />
+                  )}
                 </div>
               );
             })}

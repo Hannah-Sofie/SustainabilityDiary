@@ -84,6 +84,7 @@
   justify-content: space-between;
   height: 300px;
   box-sizing: border-box;
+  position: relative; /* Add position relative to position the star icon */
 }
 
 .main-class .box h3,
@@ -118,6 +119,19 @@
   object-fit: cover;
   margin-bottom: 10px;
   border-radius: 50%;
+}
+
+.star-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #ccc; /* Default color */
+  cursor: pointer;
+  font-size: 24px;
+}
+
+.star-icon.favorite {
+  color: gold; /* Color for favorited classrooms */
 }
 
 .no-classrooms {

@@ -45,6 +45,7 @@
   color: var(--pure-white);
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
   flex-direction: column;
+  position: relative; /* Added for absolute positioning of the star icon */
 }
 
 .classroom-content {
@@ -95,7 +96,7 @@
 .edit-classroom-button {
   padding: 8px 12px;
   background-color: var(--darker-purple);
-  color: var(--pure-white);
+  color: var (--pure-white);
   border-radius: 10px;
   cursor: pointer;
   font-size: 12px;
@@ -132,6 +133,21 @@
 
 .classroom-status.finished {
   background-color: #f44336;
+}
+
+.favourite-icon {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+}
+
+.star-icon {
+  font-size: 24px;
+}
+
+.favorite {
+  color: var(--yellow);
 }
 
 /* Modal styles */
@@ -270,22 +286,4 @@
 
 .student-list {
   list-style-type: none;
-}
-
-.favourite {
-  color: var(--dark-grey);
-  background-color: var(--orange);
-}
-
-.favourite:hover {
-  background-color: var(--yellow);
-}
-
-.unfavourite {
-  color: var(--dark-grey);
-  background-color: var(--red);
-}
-
-.unfavourite:hover {
-  background-color: var(--bright-red);
 }
