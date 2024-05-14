@@ -3,7 +3,6 @@ import axios from "axios";
 import "./Reflections.css";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import ReflectionEntries from "../../components/Reflection/ReflectionEntries";
-import ReflectionSearchbar from "../../components/Reflection/ReflectionSearchbar";
 import ReflectionCount from "../../components/Reflection/ReflectionCount";
 
 function Reflections() {
@@ -14,7 +13,7 @@ function Reflections() {
       try {
         const { data } = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/reflections`,
-          { withCredentials: true }
+          { withCredentials: true },
         );
         setEntries(data); // Set fetched entries to state
       } catch (error) {
@@ -41,7 +40,6 @@ function Reflections() {
               hoverBorderColor="var(--darker-purple)"
             />
           </div>
-          <ReflectionSearchbar />
           <ReflectionCount count={entries.length} />
           <ReflectionEntries entries={entries} />
         </div>
