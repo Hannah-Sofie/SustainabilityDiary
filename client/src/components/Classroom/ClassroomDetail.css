@@ -96,7 +96,7 @@
 .edit-classroom-button {
   padding: 8px 12px;
   background-color: var(--darker-purple);
-  color: var (--pure-white);
+  color: white;
   border-radius: 10px;
   cursor: pointer;
   font-size: 12px;
