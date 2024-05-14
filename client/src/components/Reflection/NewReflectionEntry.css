@@ -14,6 +14,13 @@ label.anonymous-option {
   font-weight: 500;
 }
 
+.container-new-entry h2 {
+  font-weight: 600;
+  color: var(--darker-purple);
+  margin-top: 60px;
+  text-align: center;
+}
+
 .container-new-entry form {
   max-width: 600px;
   margin: 2rem auto;
@@ -21,7 +28,6 @@ label.anonymous-option {
   background-color: var(--light-white);
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-top: 100px;
 }
 
 .container-new-entry form div {
