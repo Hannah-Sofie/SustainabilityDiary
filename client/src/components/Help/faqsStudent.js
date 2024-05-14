@@ -5,6 +5,11 @@ const faqsStudent = [
       "To write a reflection, navigate to the 'Reflections' section in the sidebar and click on 'New Reflection'. Fill out the title, body, and any other required fields, then click 'Submit'.",
   },
   {
+    question: "How do I read a reflection?",
+    answer:
+      "To read a reflection, go to the 'Reflections' section and click on the reflection you want to view. The reflection details will be displayed on the screen.",
+  },
+  {
     question: "How do I make my reflection private/public?",
     answer:
       "When writing or editing a reflection, you can toggle its privacy status by clicking on the 'Private' or 'Public' button. This button is typically located near the submission area and will indicate the current status.",

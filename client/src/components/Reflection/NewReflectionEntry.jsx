@@ -115,6 +115,7 @@ function NewReflectionEntry() {
 
   return (
     <div className="container-new-entry">
+      <h2>New reflection entry</h2>
       <form onSubmit={handleSubmit}>
         <div className="privacy">
           <button
