@@ -47,6 +47,7 @@ function DashboardStudent() {
 
   return (
     <div className="dashboard-container">
+      <div className="panel-container">
       <div className="left-panel">
         <Greeting />
 
@@ -58,13 +59,6 @@ function DashboardStudent() {
           <h2>Latest reflection</h2>
           <LatestReflection latestReflection={latestReflection} />
         </div>
-        <div className="classrooms">
-          <h2>Favourite classrooms</h2>
-          <FavouriteClasses
-            classrooms={classrooms}
-            setClassrooms={setClassrooms}
-          />
-        </div>
       </div>
       <div className="right-panel">
         <div className="date-display">
@@ -72,6 +66,14 @@ function DashboardStudent() {
         </div>
         <TodoList />
       </div>
+      </div>
+        <div className="classrooms">
+          <h2>Favourite classrooms</h2>
+          <FavouriteClasses
+            classrooms={classrooms}
+            setClassrooms={setClassrooms}
+          />
+        </div>
     </div>
   );
 }

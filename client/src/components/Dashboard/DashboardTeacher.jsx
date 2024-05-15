@@ -29,19 +29,13 @@ function DashboardTeacher() {
 
   return (
     <div className="dashboard-container">
+      <div className="panel-container">
       <div className="left-panel">
         <Greeting />
 
         <div className="sustainability-facts">
           <h2>Today's sustainability fact</h2>
           <SustainabilityFact />
-        </div>
-        <div className="classrooms">
-          <h2>Favourite classrooms</h2>
-          <FavouriteClasses
-            classrooms={classrooms}
-            setClassrooms={setClassrooms}
-          />
         </div>
       </div>
       <div className="right-panel">
@@ -50,6 +44,14 @@ function DashboardTeacher() {
         </div>
         <TodoList />
       </div>
+      </div>
+        <div className="classrooms">
+          <h2>Favourite classrooms</h2>
+          <FavouriteClasses
+            classrooms={classrooms}
+            setClassrooms={setClassrooms}
+          />
+        </div>
     </div>
   );
 }

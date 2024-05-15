@@ -1,11 +1,16 @@
 .dashboard-container {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   padding: 20px;
   background-color: var(--light-white);
   margin: 40px;
   border-radius: 10px;
   padding-bottom: 60px;
+}
+
+.panel-container {
+  display: flex;
 }
 
 .dashboard-container h2 {
@@ -33,4 +38,10 @@
 .date-display {
   margin-left: 300px;
   margin-top: 40px;
+}
+
+@media only screen and (max-width: 800px) {
+  .panel-container {
+    flex-direction: column;
+  }
 }
