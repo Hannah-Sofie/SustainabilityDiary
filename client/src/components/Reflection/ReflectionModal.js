@@ -3,9 +3,12 @@ import axios from "axios";
 import DefaultImage from "../../assets/img/default-image.jpg";
 import profileImage from "../../assets/img/profile-silhouette.png";
 import "./ReflectionModal.css";
+import { useAuth } from '../../context/AuthContext';
 
 function ReflectionModal({ entry, onClose, user }) {
   const [feedbacks, setFeedbacks] = useState([]);
+  const { userData } = useAuth();
+
 
   useEffect(() => {
     const fetchFeedbacks = async () => {
@@ -63,7 +66,7 @@ function ReflectionModal({ entry, onClose, user }) {
             </div>
           ))}
         </div>
-        {user && user.role === "teacher" && (
+        {userData && userData.role === "teacher" && (
           <form id="feedback-form" onSubmit={handleFeedbackSubmit}>
             <div>
               <img src={profileImage} alt="Profile" />

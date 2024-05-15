@@ -22,6 +22,8 @@ function ReflectionEntries() {
   const [privacyFilter, setPrivacyFilter] = useState("");
   const navigate = useNavigate();
 
+
+
   useEffect(() => {
     fetchEntries();
   }, []);
