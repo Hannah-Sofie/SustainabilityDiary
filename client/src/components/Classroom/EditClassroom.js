@@ -139,7 +139,7 @@ function EditClassroom({ classroom, onClose, onClassroomUpdated }) {
             <div className="photo-preview-container">
               <img
                 src={previewImage}
-                alt="Preview of classroom header photo"
+                alt="Preview of classroom headerphoto"
                 className="photo-preview"
               />
               <button

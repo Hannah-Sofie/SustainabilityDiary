@@ -1,4 +1,3 @@
-
 .inputSearch {
   position: relative;
   display: flex;
@@ -23,13 +22,22 @@
   outline: none;
 }
 
-.main-class .class-box .class {
+.main-class-dashboard .class-box .class {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
 }
 
-.main-class .box {
+.main-class-dashboard .class-box {
+  width: 100%;
+  padding: 10px;
+  background: var(--pure-white);
+  border-radius: 10px;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.main-class-dashboard .box {
   flex: 1 1 20%;
   max-width: 30%;
   padding: 30px 20px;
@@ -43,9 +51,10 @@
   justify-content: space-between;
   height: 300px;
   box-sizing: border-box;
+  position: relative;
 }
 
-.main-class .button-link {
+.main-class-dashboard .button-link {
   display: inline-block;
   background: var(--darker-purple);
   color: var(--pure-white);
@@ -60,12 +69,12 @@
   margin: 10px 0;
 }
 
-.main-class .button-link:hover {
+.main-class-dashboard .button-link:hover {
   background: transparent;
   color: var(--darker-purple);
 }
 
-.main-class .classroom-icon {
+.main-class-dashboard .classroom-icon {
   width: 100px;
   height: 100px;
   object-fit: cover;
@@ -73,11 +82,22 @@
   border-radius: 50%;
 }
 
-.no-classrooms {
+.no-classrooms-dashboard {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  font-size: 2rem;
   color: #000;
+  padding: 50px;
+}
+
+.star-icon {
+  cursor: pointer;
+  font-size: 24px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.favorite {
+  color: var(--yellow);
 }

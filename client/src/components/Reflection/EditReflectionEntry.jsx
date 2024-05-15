@@ -157,6 +157,7 @@ function EditReflectionEntry() {
 
   return (
     <div className="container-new-entry">
+      <h2>Edit reflection entry</h2>
       <form onSubmit={handleSubmit}>
         <div className="privacy">
           <button

@@ -10,7 +10,11 @@ const app = express();
 const PORT = process.env.PORT || 8002;
 
 // CORS configuration for different environments
-const whitelist = ["http://localhost:3000", "http://localhost:8083"];
+const whitelist = [
+  "http://localhost:3000",
+  "http://localhost:8083",
+  "https://team3.sustainability.it.ntnu.no",
+];
 const corsOptions = {
   origin: (origin, callback) => {
     if (whitelist.includes(origin) || !origin) {
@@ -39,7 +43,7 @@ app.use(
       res.setHeader("Access-Control-Allow-Origin", "*");
       res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
     },
-  })
+  }),
 );
 
 // Routes

@@ -13,6 +13,7 @@ import {
   faPencilAlt,
   faEye,
   faArrowLeft,
+  faStar,
 } from "@fortawesome/free-solid-svg-icons";
 
 function ClassroomDetail() {
@@ -75,23 +76,20 @@ function ClassroomDetail() {
   const handleFavourite = async () => {
     try {
       const response = await axios.post(`/api/classrooms/fave/${id}`);
-      console.log("I am doing something!!");
       setClassroom(response.data);
     } catch (error) {
-      console.error("Error fetching classroom details:", error);
+      console.error("Error favoriting classroom:", error);
     }
-  }
+  };
 
   const handleUnfavourite = async () => {
     try {
       const response = await axios.post(`/api/classrooms/unfave/${id}`);
-      console.log("I am doing something!!");
       setClassroom(response.data);
     } catch (error) {
-      console.error("Error fetching classroom details:", error);
+      console.error("Error unfavoriting classroom:", error);
     }
-  }
-
+  };
 
   return (
     <div className="classroom-detail-container">
@@ -101,10 +99,11 @@ function ClassroomDetail() {
       <div
         className="classroom-header"
         style={{
-          backgroundImage: `url(${classroom.headerPhotoUrl
-            ? `${process.env.REACT_APP_API_URL}${classroom.headerPhotoUrl}`
-            : DefaultImage
-            })`,
+          backgroundImage: `url(${
+            classroom.headerPhotoUrl
+              ? `${process.env.REACT_APP_API_URL}${classroom.headerPhotoUrl}`
+              : DefaultImage
+          })`,
         }}
       >
         <h1>{classroom.title}</h1>
@@ -115,6 +114,22 @@ function ClassroomDetail() {
         >
           {classroom.classStatus ? "Active" : "Finished"}
         </span>
+        <div className="favourite-icon">
+          {userData && !classroom.favourites.includes(userData._id) && (
+            <FontAwesomeIcon
+              icon={faStar}
+              className="star-icon"
+              onClick={handleFavourite}
+            />
+          )}
+          {userData && classroom.favourites.includes(userData._id) && (
+            <FontAwesomeIcon
+              icon={faStar}
+              className="star-icon favorite"
+              onClick={handleUnfavourite}
+            />
+          )}
+        </div>
       </div>
       <div className="classroom-content">
         <div className="classroom-info">
@@ -124,15 +139,6 @@ function ClassroomDetail() {
           <p className="classroom-detail-text">
             <span>Learning Goals:</span> {classroom.learningGoals}
           </p>
-
-          {userData && !classroom.favourites.includes(userData._id) && (
-            <button className="classroom-detail-button favourite" onClick={handleFavourite}>Favourite class</button>
-          )}
-          {userData && classroom.favourites.includes(userData._id) && (
-            <button className="classroom-detail-button unfavourite" onClick={handleUnfavourite}>Unfavourite class</button>
-          )}
-
-
           <div className="classroom-detail-actions">
             <p className="classroom-detail-text">
               <span>Class Code:</span> {classroom.classCode}

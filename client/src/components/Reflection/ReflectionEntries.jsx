@@ -32,7 +32,7 @@ function ReflectionEntries() {
     try {
       const { data } = await axios.get(
         `${process.env.REACT_APP_API_URL}/api/reflections`,
-        { withCredentials: true },
+        { withCredentials: true }
       );
       setEntries(data);
     } catch (error) {
@@ -56,7 +56,7 @@ function ReflectionEntries() {
       try {
         await axios.delete(
           `${process.env.REACT_APP_API_URL}/api/reflections/${id}`,
-          { withCredentials: true },
+          { withCredentials: true }
         );
         const updatedEntries = entries.filter((entry) => entry._id !== id);
         setEntries(updatedEntries);
@@ -170,13 +170,13 @@ function ReflectionEntries() {
                   className="privacy-icon"
                 />
                 <button
-                  onClick={() => handleEdit(entry._id)}
+                  onClick={(e) => handleEdit(entry._id, e)}
                   className="edit-button"
                 >
                   <FontAwesomeIcon icon={faPencilAlt} />
                 </button>
                 <button
-                  onClick={() => deleteEntry(entry._id)}
+                  onClick={(e) => deleteEntry(entry._id, e)}
                   className="delete-button"
                 >
                   <FontAwesomeIcon icon={faTrash} />

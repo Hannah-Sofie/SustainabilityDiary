@@ -1,0 +1,39 @@
+.help-container {
+  max-width: 90%;
+  margin: 40px auto;
+  padding: 40px;
+  background: var(--light-white);
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.site-purpose {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: var(--pure-white);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+}
+
+.site-purpose h1 {
+  color: var(--pink);
+  font-size: 26px;
+  margin-bottom: 15px;
+}
+
+.site-purpose p {
+  font-size: 16px;
+  color: var(--gray);
+  line-height: 1.8;
+}
+
+@media (max-width: 600px) {
+  .site-purpose p,
+  .faq-answer {
+    font-size: 14px;
+  }
+
+  .faq-question {
+    font-size: 16px;
+  }
+}
