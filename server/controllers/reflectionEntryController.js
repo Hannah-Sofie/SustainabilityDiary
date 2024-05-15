@@ -1,107 +1,127 @@
-fs = require("fs");
-path = require("path");
+const fs = require("fs");
+const path = require("path");
 const { uptime } = require("process");
+const asyncHandler = require("express-async-handler");
+const mongoose = require('mongoose');
 const ReflectionEntry = require("../models/reflectionEntrySchema");
+const UserAchievement = require("../models/achievementSchema");
+const User = require('../models/userSchema');
 const CreateError = require("../utils/createError");
 
-const getAllReflectionEntries = async (req, res, next) => {
-  try {
-    const entries = await ReflectionEntry.find({ userId: req.user._id });
-    res.json(entries);
-  } catch (error) {
-    next(new CreateError("Failed to fetch entries", 500));
-  }
-};
+// Utility function to handle achievement creation
+const handleAchievementCreation = async (userId, count) => {
+    console.log(`Checking achievements for user ${userId} with count ${count}`);
+    if (count % 3 === 0) {
+        const existingAchievement = await UserAchievement.findOne({
+            userId,
+            name: "Reflection Enthusiast"
+        });
 
-const getAllPublicReflectionEntries = async (req, res, next) => {
-  try {
-    const entries = await ReflectionEntry.find({ isPublic: true }).populate(
-      "userId",
-      "name"
-    );
-    res.json(entries);
-  } catch (error) {
-    next(new CreateError("Failed to fetch public entries", 500));
-  }
-};
-
-const getReflectionById = async (req, res, next) => {
-  try {
-    const { id } = req.params; // Get the reflection ID from URL parameters
-    const reflection = await ReflectionEntry.findById(id).populate(
-      "userId",
-      "name email"
-    ); // Optionally populate user details
-
-    if (!reflection) {
-      return next(new CreateError("Reflection not found", 404)); // No reflection found with the given ID
+        if (!existingAchievement) {
+            console.log(`Creating new achievement for user ${userId}`);
+            user = await User.findById(userId);
+            await UserAchievement.create({
+                userId,
+                userName: user.name,
+                name: "Reflection Enthusiast",
+                description: "Congratulations on creating multiple reflections!"
+            });
+            console.log(`Achievement created for user ${userId}`);
+        } else {
+            console.log(`User ${userId} already has the achievement.`);
+        }
+    } else {
+        console.log(`Count not divisible by 3, no achievement.`);
     }
+};
 
-    // Check if the reflection is public or belongs to the user making the request
-    if (
-      !reflection.isPublic &&
-      reflection.userId._id.toString() !== req.user._id.toString()
-    ) {
-      return next(new CreateError("Access denied", 403)); // User not authorized to access this reflection
+const getAllReflectionEntries = asyncHandler(async (req, res) => {
+    try {
+        const entries = await ReflectionEntry.find({ userId: req.user._id });
+        res.json(entries);
+    } catch (error) {
+        next(new CreateError("Failed to fetch entries", 500));
     }
+});
 
-    res.json(reflection); // Send back the found reflection
-  } catch (error) {
-    console.error("Error fetching reflection:", error);
-    next(new CreateError("Failed to fetch reflection", 500)); // Server error
-  }
-};
-
-const getReflectionsByClassroom = async (req, res) => {
-  const classroomId = req.params.classroomId;
-  try {
-    const reflections = await ReflectionEntry.find({
-      isPublic: true,
-      classrooms: { $in: [classroomId] },
-    }).populate("userId", "name");
-
-    res.json(reflections);
-  } catch (error) {
-    console.error("Error fetching reflections:", error);
-    res.status(500).send({
-      message: "Failed to fetch reflections for the classroom",
-      error: error.message,
-    });
-  }
-};
-
-const getLatestReflection = async (req, res, next) => {
-  try {
-    const latestReflection = await ReflectionEntry.findOne({
-      userId: req.user._id,
-    }).sort({ createdAt: -1 });
-    if (!latestReflection) {
-      return res.status(404).json({ message: "No reflections found" });
+const getAllPublicReflectionEntries = asyncHandler(async (req, res) => {
+    try {
+        const entries = await ReflectionEntry.find({ isPublic: true }).populate("userId", "name");
+        res.json(entries);
+    } catch (error) {
+        next(new CreateError("Failed to fetch public entries", 500));
     }
-    res.json(latestReflection);
-  } catch (error) {
-    next(new CreateError("Failed to fetch the latest reflection", 500));
-  }
-};
+});
 
-const createReflectionEntry = async (req, res, next) => {
-  const { title, body, isPublic, classroomId, isAnonymous } = req.body;
+const createReflectionEntry = async (req, res) => {
+  const { title, body, isPublic, classroomId } = req.body;
   const photo = req.file ? req.file.filename : null;
 
-  if (title.length === 0 || body.length === 0 || !title || !body) {
-    return next(new CreateError("Title and body are required", 400));
-  }
-
-  if (title.length > 20) {
-    return next(new CreateError("Title is too long", 400));
-  }
-
-  if (body.length > 200) {
-    return next(new CreateError("Body is too long", 400));
+  if (!title || !body) {
+      return res.status(400).json({ message: "Title and body are required" });
   }
 
   try {
-    const newEntry = await ReflectionEntry.create({
+      const newEntry = ReflectionEntry.create({
+          userId: req.user._id,
+          title,
+          body,
+          isPublic,
+          photo,
+          classrooms: isPublic && classroomId ? [classroomId] : []
+      });
+
+      res.status(201).json(newEntry);
+  } catch (error) {
+      console.error("Error creating entry:", error);
+      res.status(500).json({ message: "Error creating entry", error: error.toString() });
+  }
+};
+
+const getReflectionById = asyncHandler(async (req, res) => {
+    try {
+        const { id } = req.params;
+        const reflection = await ReflectionEntry.findById(id).populate("userId", "name email");
+
+        if (!reflection) {
+            return next(new CreateError("Reflection not found", 404));
+        }
+        res.json(reflection);
+    } catch (error) {
+        next(new CreateError("Failed to fetch reflection", 500));
+    }
+});
+
+const getReflectionsByClassroom = asyncHandler(async (req, res) => {
+    const { classroomId } = req.params;
+    try {
+        const reflections = await ReflectionEntry.find({
+            isPublic: true,
+            classrooms: { $in: [classroomId] },
+        }).populate("userId", "name");
+        res.json(reflections);
+    } catch (error) {
+        res.status(500).send({
+            message: "Failed to fetch reflections for the classroom",
+            error: error.message,
+        });
+    }
+});
+
+const getLatestReflection = asyncHandler(async (req, res) => {
+    try {
+        const latestReflection = await ReflectionEntry.findOne({ userId: req.user._id }).sort({ createdAt: -1 });
+        if (!latestReflection) {
+            return res.status(404).json({ message: "No reflections found" });
+        }
+        res.json(latestReflection);
+    } catch (error) {
+        next(new CreateError("Failed to fetch the latest reflection", 500));
+    }
+});
+
+  try {
+    const newEntry = ReflectionEntry.create({
       userId: req.user._id,
       title,
       body,
@@ -114,144 +134,94 @@ const createReflectionEntry = async (req, res, next) => {
     res.status(201).json(newEntry);
   } catch (error) {
     console.error("Error creating entry:", error);
-    next(error);
   }
-};
 
-const updateReflectionEntry = async (req, res, next) => {
-  const { title, body, isPublic, classroomId, removePhoto, isAnonymous } =
-    req.body;
+const updateReflectionEntry = asyncHandler(async (req, res, next) => {
+  const { id, title, body, isPublic, classroomId, removePhoto, isAnonymous } = req.body;
   const newPhoto = req.file ? req.file.filename : null;
 
   if (!title || !body) {
-    return next(new CreateError("Title and body are required", 400));
+      return next(new CreateError("Title and body are required", 400));
   }
 
-  try {
-    const existingEntry = await ReflectionEntry.findById(req.params.id);
-    if (!existingEntry) {
+  const existingEntry = await ReflectionEntry.findById(id);
+  if (!existingEntry) {
       return next(new CreateError("Entry not found or permission denied", 404));
-    }
+  }
 
-    const updateFields = {
+  const updateFields = {
       title,
       body,
-      isPublic: isPublic === "true",
+      isPublic,
       isAnonymous,
       ...(isPublic && classroomId && { classrooms: [classroomId] }),
-    };
+      photo: newPhoto || existingEntry.photo
+  };
 
-    if (newPhoto) {
-      updateFields.photo = newPhoto;
-    } else if (removePhoto === "true") {
+  if (removePhoto === "true") {
       updateFields.photo = null;
-    } else {
-      updateFields.photo = existingEntry.photo;
-    }
+      fs.unlink(path.join(__dirname, "../uploads/reflections/", existingEntry.photo), err => {
+          if (err) console.error("Error deleting old photo", err);
+      });
+  }
 
-    const updatedEntry = await ReflectionEntry.findOneAndUpdate(
-      { _id: req.params.id, userId: req.user._id },
-      updateFields,
-      { new: true }
-    );
-
-    if (!updatedEntry) {
+  const updatedEntry = await ReflectionEntry.findOneAndUpdate({ _id: id, userId: req.user._id }, updateFields, { new: true });
+  if (!updatedEntry) {
       return next(new CreateError("Failed to update entry", 404));
-    }
-
-    if (
-      (newPhoto || removePhoto === "true") &&
-      existingEntry.photo &&
-      existingEntry.photo !== newPhoto
-    ) {
-      const oldFilePath = path.join(
-        __dirname,
-        "../uploads/reflections/",
-        existingEntry.photo
-      );
-      fs.unlink(oldFilePath, (err) => {
-        if (err) console.error("Error deleting old photo", err);
-        else console.log("Old photo deleted successfully");
-      });
-    }
-
-    res.json(updatedEntry);
-  } catch (error) {
-    console.error("Error updating entry:", error);
-    next(new CreateError("Failed to update entry", 500));
   }
-};
 
-const deleteReflectionEntry = async (req, res, next) => {
-  try {
-    const entry = await ReflectionEntry.findOneAndDelete({
-      _id: req.params.id,
-      userId: req.user._id,
-    });
+  res.json(updatedEntry);
+});
 
-    if (!entry) {
-      return next(new CreateError("Entry not found or permission denied", 404));
-    }
+const deleteReflectionEntry = asyncHandler(async (req, res) => {
+    try {
+        const entry = await ReflectionEntry.findOneAndDelete({
+            _id: req.params.id,
+            userId: req.user._id,
+        });
 
-    // Check if there's a photo to delete
-    if (entry.photo) {
-      const filePath = path.join(
-        __dirname,
-        "../uploads/reflections/",
-        entry.photo
-      );
-      console.log("Attempting to delete file at:", filePath);
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.error("Failed to delete the image file:", err);
-          // Handle error, maybe you want to log it or notify someone
-        } else {
-          console.log("Image file deleted successfully");
+        if (!entry) {
+            return next(new CreateError("Entry not found or permission denied", 404));
         }
-      });
+
+        res.json({ message: "Entry deleted successfully" });
+    } catch (error) {
+        next(new CreateError("Failed to delete entry", 500));
     }
+});
 
-    res.json({ message: "Entry deleted successfully" });
-  } catch (error) {
-    next(new CreateError("Failed to delete entry", 500));
-  }
-};
+const likeReflectionEntry = asyncHandler(async (req, res) => {
+    try {
+        const reflection = await ReflectionEntry.findById(req.params.id);
 
-const likeReflectionEntry = async (req, res) => {
-  try {
-    const reflection = await ReflectionEntry.findById(req.params.id);
-    if (!reflection) {
-      return res.status(404).json({ message: "Reflection not found" });
+        if (!reflection) {
+            return res.status(404).json({ message: "Reflection not found" });
+        }
+
+        const index = reflection.likedBy.indexOf(req.user._id);
+        if (index === -1) {
+            reflection.likes += 1;
+            reflection.likedBy.push(req.user._id);
+        } else {
+            reflection.likes -= 1;
+            reflection.likedBy.splice(index, 1);
+        }
+
+        await reflection.save();
+        res.json({ likes: reflection.likes, likedBy: reflection.likedBy });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to update likes", error: error.message });
     }
-
-    const index = reflection.likedBy.indexOf(req.user._id);
-    if (index === -1) {
-      // Like the reflection
-      reflection.likes += 1;
-      reflection.likedBy.push(req.user._id);
-    } else {
-      // Unlike the reflection
-      reflection.likes -= 1;
-      reflection.likedBy.splice(index, 1);
-    }
-    await reflection.save();
-
-    res.json({ likes: reflection.likes, likedBy: reflection.likedBy });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Failed to update likes", error: error.message });
-  }
-};
+});
 
 module.exports = {
-  getAllReflectionEntries,
-  getAllPublicReflectionEntries,
-  getReflectionsByClassroom,
-  getReflectionById,
-  getLatestReflection,
-  createReflectionEntry,
-  updateReflectionEntry,
-  deleteReflectionEntry,
-  likeReflectionEntry,
+    getAllReflectionEntries,
+    getAllPublicReflectionEntries,
+    getReflectionsByClassroom,
+    getReflectionById,
+    getLatestReflection,
+    createReflectionEntry,
+    updateReflectionEntry,
+    deleteReflectionEntry,
+    likeReflectionEntry,
 };

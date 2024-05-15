@@ -26,6 +26,7 @@ const userSchema = new mongoose.Schema({
   photo: { type: String },
   passwordResetCode: String,
   passwordResetExpires: Date,
+  isInLeaderboard: { type: Boolean, default: false },
 });
 
 userSchema.pre("save", function (next) {
