@@ -8,6 +8,9 @@ router.get('/:reflectionId', FeedbackController.getFeedbackByReflectionId);
 // Get feedback based on writer id
 router.get('/writer/:writerId', FeedbackController.getFeedbackByWriterId);
 
+// Get feedback based on student id
+router.get('/student/:studentId', FeedbackController.getFeedbackByStudentId);
+
 // Post new feedback
 router.post('/', FeedbackController.createFeedback);
 
