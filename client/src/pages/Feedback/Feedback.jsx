@@ -1,6 +1,6 @@
-import React from 'react';
-import FeedbackWriterContent from '../../components/feedback/feedback';
-import { useAuth } from '../../context/AuthContext'; 
+import React from "react";
+import FeedbackWriterContent from "../../components/Feedback/FeedbackWriterContent";
+import { useAuth } from "../../context/AuthContext";
 
 function Feedback() {
   const { userData, loading } = useAuth();

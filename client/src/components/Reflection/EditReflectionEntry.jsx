@@ -22,7 +22,6 @@ function EditReflectionEntry() {
     selectedClassroom: "",
     isAnonymous: false, // Add isAnonymous field
   });
-  const [initialPhotoUrl, setInitialPhotoUrl] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [classrooms, setClassrooms] = useState([]);
   const [removePhoto, setRemovePhoto] = useState(false);
@@ -41,7 +40,6 @@ function EditReflectionEntry() {
         });
         if (data.photo) {
           const photoUrl = `${process.env.REACT_APP_API_URL}/uploads/reflections/${data.photo}`;
-          setInitialPhotoUrl(photoUrl);
           setPreviewImage(photoUrl); // Display the initial image
           setRemovePhoto(false); // Reset photo removal status
         }
@@ -117,7 +115,7 @@ function EditReflectionEntry() {
     formData.append("title", entry.title);
     formData.append("body", entry.body);
     formData.append("isPublic", entry.isPublic ? "true" : "false");
-    formData.append("isAnonymous", entry.isAnonymous); // Append isAnonymous field
+    formData.append("isAnonymous", entry.isAnonymous);
 
     if (entry.isPublic && entry.selectedClassroom) {
       formData.append("classroomId", entry.selectedClassroom);

@@ -69,7 +69,8 @@ const unFavouriteClassroom = asyncHandler(async (req, res) => {
 });
 
 const getFavouriteClassrooms = asyncHandler(async (req, res) => {
-  const classrooms = await Classroom.find({favourites: req.user._id,
+  const classrooms = await Classroom.find({
+    favourites: req.user._id,
   }).populate("students", "name email");
   res.json(classrooms);
 });

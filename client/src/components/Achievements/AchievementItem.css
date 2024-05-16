@@ -1,0 +1,44 @@
+.achievement-item {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 200px;
+  text-align: center;
+}
+
+.achievement-item img {
+  width: 80%;
+  height: auto;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  transition: transform 0.3s ease;
+}
+
+.achievement-item img:hover {
+  transform: scale(1.05);
+}
+
+.achievement-item strong {
+  font-size: 1.2em;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.achievement-item.locked img {
+  display: none;
+}
+
+.achievement-item.locked .fa-lock {
+  color: #aaa;
+}
+
+.achievement-item.unlocked img {
+  filter: none;
+}
