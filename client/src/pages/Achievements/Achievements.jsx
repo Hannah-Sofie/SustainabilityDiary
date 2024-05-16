@@ -1,158 +1,209 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import "./Achievements.css";
 import { useAuth } from "../../context/AuthContext";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import CustomButton from "../../components/CustomButton/CustomButton";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import AchievementItem from "../../components/Achievements/AchievementItem";
+import LeaderboardItem from "../../components/Achievements/LeaderboardItem";
+import { faSignInAlt, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 
 const Achievements = () => {
   const { isAuthenticated, userData } = useAuth();
   const [achievements, setAchievements] = useState([]);
   const [leaders, setLeaders] = useState([]);
+  const [userRank, setUserRank] = useState(null);
   const [error, setError] = useState("");
   const [isOptedIn, setIsOptedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // Function to fetch achievements and leaderboard data
-  const fetchAchievements = async () => {
+  const fetchAchievements = useCallback(async () => {
     try {
-      const { data } = await axios.get("/api/achievements", {
-        headers: { Authorization: `Bearer ${userData.token}` },
-      });
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/achievements/all`,
+        {
+          headers: { Authorization: `Bearer ${userData.token}` },
+        }
+      );
       setAchievements(data);
     } catch (error) {
       console.error("Error fetching achievements:", error);
       setError("Failed to fetch achievements. Please try again.");
     }
+  }, [userData.token]);
+
+  const fetchLeaderboard = useCallback(async () => {
+    try {
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/achievements/leaderboard`,
+        {
+          headers: { Authorization: `Bearer ${userData.token}` },
+        }
+      );
+
+      const topLeaders = data.slice(0, 5);
+      setLeaders(topLeaders);
+
+      const userRankIndex = data.findIndex(
+        (leader) => leader.userId === userData._id
+      );
+
+      if (userRankIndex >= 5) {
+        setUserRank(data[userRankIndex]);
+      }
+    } catch (error) {
+      console.error("Error fetching leaderboard:", error);
+    }
+  }, [userData.token, userData._id]);
+
+  const fetchOptInStatus = useCallback(async () => {
+    try {
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/achievements/opt-in-status`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${userData.token}` },
+        }
+      );
+      setIsOptedIn(data.isInLeaderboard);
+    } catch (error) {
+      console.error("Error fetching opt-in status:", error);
+    }
+  }, [userData.token]);
+
+  const toggleOptIn = async () => {
+    try {
+      const url = isOptedIn
+        ? `${process.env.REACT_APP_API_URL}/api/achievements/opt-out`
+        : `${process.env.REACT_APP_API_URL}/api/achievements/opt-in`;
+      const { data } = await axios.post(
+        url,
+        {},
+        {
+          headers: { Authorization: `Bearer ${userData.token}` },
+        }
+      );
+      setIsOptedIn(data.isInLeaderboard);
+      toast.success(
+        `Successfully ${
+          isOptedIn ? "opted out of" : "opted into"
+        } the leaderboard.`
+      );
+      fetchLeaderboard();
+    } catch (error) {
+      console.error("Error toggling leaderboard opt-in status:", error);
+      toast.error(
+        `Failed to ${
+          isOptedIn ? "opt out of" : "opt in to"
+        } the leaderboard due to an error.`
+      );
+    }
   };
 
-  const fetchLeaderboard = async () => {
-    try {
-        const response = await axios.get("/api/achievements/leaderboard", {
-            headers: { Authorization: `Bearer ${userData.token}` }
-        });
-        if (response.status === 200) {
-            // Sort the data by achievement count in descending order
-            const sortedLeaders = response.data.sort((a, b) => b.achievementCount - a.achievementCount);
-            setLeaders(sortedLeaders);
-        } else {
-            console.error('Failed to fetch leaderboard');
-        }
-    } catch (error) {
-        console.error("Error fetching leaderboard:", error);
-    }
-};
-
-const toggleOptIn = async () => {
-  try {
-      const url = isOptedIn ? "/api/achievements/opt-out" : "/api/achievements/opt-in";
-      const response = await axios.post(url, {}, {
-          headers: { Authorization: `Bearer ${userData.token}` },
-      });
-      if (response.data.isInLeaderboard !== isOptedIn) {
-          setIsOptedIn(!isOptedIn); // Toggle the state
-          fetchAchievements(); // Refresh data if necessary
-          fetchLeaderboard(); // Refresh leaderboard data
-          toast.success(`Successfully ${isOptedIn ? "opted out of" : "opted into"} the leaderboard.`);
-      } else {
-          toast.error(`Failed to ${isOptedIn ? "opt out of" : "opt in to"} the leaderboard.`);
-      }
-  } catch (error) {
-      console.error("Error toggling leaderboard opt-in status:", error);
-      toast.error(`Failed to ${isOptedIn ? "opt out of" : "opt in to"} the leaderboard due to an error.`);
-  }
-};
-
-
-  // Fetch achievements on mount and auth state change
   useEffect(() => {
-    const fetchData = async () => {
-        if (!isAuthenticated) {
-            return;
-        }
-    
-        try {
-            const achievementsResponse = await axios.get("/api/achievements", {
-                headers: { Authorization: `Bearer ${userData.token}` },
-            });
-            if (achievementsResponse.status === 200) {
-                setAchievements(achievementsResponse.data);
-            } else {
-                setError('Failed to fetch achievements. Please try again.');
-            }
+    if (isAuthenticated) {
+      setLoading(true);
+      Promise.all([fetchAchievements(), fetchLeaderboard(), fetchOptInStatus()])
+        .then(() => setLoading(false))
+        .catch(() => {
+          setLoading(false);
+          setError("Failed to fetch data. Please try again.");
+        });
+    }
+  }, [isAuthenticated, fetchAchievements, fetchLeaderboard, fetchOptInStatus]);
 
-            if (isAuthenticated) {
-                fetchAchievements();
-                fetchLeaderboard(); 
-              }
-
-            if (isOptedIn) {
-                const leaderboardResponse = await axios.get("/api/achievements/leaderboard", {
-                    headers: { Authorization: `Bearer ${userData.token}` },
-                });
-                if (leaderboardResponse.status === 200) {
-                    setLeaders(leaderboardResponse.data);
-                } else {
-                    console.error('Failed to fetch leaderboard data.');
-                }
-            }
-        } catch (error) {
-            console.error("Error fetching data:", error);
-            setError('Failed to fetch data. Please try again.');
-        }
-    };
-
-    fetchData();
-}, [isAuthenticated, userData.token, isOptedIn]);
+  const unlockedAchievements = achievements.filter((ach) => ach.unlocked);
+  const lockedAchievements = achievements.filter((ach) => !ach.unlocked);
 
   return (
     <div className="achievements-container">
-      <section className="achievements-main">
-        <div className="achievements-content">
-          {error && <p className="achievements-error">{error}</p>}
-          <h1 className="achievements-title">Your Achievements</h1>
-          {achievements.length > 0 ? (
-            <ul className="achievements-list">
-              {achievements.map((achievement, index) => (
-                <li key={index} className="achievement-item">
-                  <strong>{achievement.name}</strong> -{" "}
-                  {achievement.description}
-                  <img
-                    src={achievement.image}
-                    alt={achievement.name}
-                    style={{ width: 100, height: "auto" }}
-                  />
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No achievements to display.</p>
-          )}
-        </div>
-      </section>
-      <section className="leaderboard-main">
-        <div className="leaderboard-content">
-    <CustomButton 
-    name={isOptedIn ? "Opt-Out of Leaderboard" : "Opt-In to Leaderboard"} 
-    onClick={toggleOptIn} 
-    backgroundColor={isOptedIn ? "red" : "var(--darker-blue)"} 
-    color={isOptedIn ? "var(--darker-blue)" : "var(--green)"} 
-/>
-<h1 className="leaderboard-title">Leaderboard</h1>
-                {leaders.length > 0 ? (
-                    <ol className="leaderboard-list">
-                        {leaders.map((leader, index) => (
-                            <li key={index} className="leader-item">
-                                <strong>{index + 1}. {leader.username}</strong> {leader.achievementCount} Achievements
-                            </li>
-                        ))}
-                    </ol>
-                ) : (
-                    <p>No leaderboard data available.</p>
-                )}
-        </div>
-      </section>
+      {loading ? (
+        <LoadingIndicator />
+      ) : (
+        <>
+          <section className="leaderboard-main">
+            <div className="leaderboard-content">
+              <h1 className="leaderboard-title">Top 5 Achievers</h1>
+              {leaders.length > 0 ? (
+                <ol className="leaderboard-list">
+                  {leaders.map((leader, index) => (
+                    <LeaderboardItem
+                      key={index}
+                      leader={leader}
+                      index={index}
+                    />
+                  ))}
+                  {userRank && (
+                    <>
+                      <li className="leader-item dots">...</li>
+                      <LeaderboardItem
+                        key={userRank.userId}
+                        leader={userRank}
+                        index={userRank.rank - 1}
+                      />
+                    </>
+                  )}
+                </ol>
+              ) : (
+                <p>No leaderboard data available.</p>
+              )}
+              <CustomButton
+                name={
+                  isOptedIn ? "Opt-Out of Leaderboard" : "Opt-In to Leaderboard"
+                }
+                onClick={toggleOptIn}
+                icon={isOptedIn ? faSignOutAlt : faSignInAlt}
+                backgroundColor="#FFD700"
+                color="#333"
+                hoverBackgroundColor="#FFEC8B"
+                hoverColor="#333"
+                hoverBorderColor="#FFD700"
+                style={{
+                  borderRadius: "25px",
+                  padding: "10px 20px",
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                }}
+              />
+            </div>
+          </section>
+          <section className="achievements-main">
+            <div className="achievements-content">
+              {error && <p className="achievements-error">{error}</p>}
+              <h1 className="achievements-title">Unlocked Achievements</h1>
+              {unlockedAchievements.length > 0 ? (
+                <ul className="achievements-list">
+                  {unlockedAchievements.map((achievement) => (
+                    <AchievementItem
+                      key={achievement.name}
+                      achievement={achievement}
+                      unlocked={achievement.unlocked}
+                    />
+                  ))}
+                </ul>
+              ) : (
+                <p>No achievements to display.</p>
+              )}
+              <h1 className="achievements-title">Locked Achievements</h1>
+              {lockedAchievements.length > 0 ? (
+                <ul className="achievements-list">
+                  {lockedAchievements.map((achievement) => (
+                    <AchievementItem
+                      key={achievement.name}
+                      achievement={achievement}
+                      unlocked={achievement.unlocked}
+                    />
+                  ))}
+                </ul>
+              ) : (
+                <p>All achievements unlocked!</p>
+              )}
+            </div>
+          </section>
+        </>
+      )}
     </div>
   );
 };

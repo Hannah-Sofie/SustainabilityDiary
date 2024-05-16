@@ -12,6 +12,7 @@ import {
 import DefaultImage from "../../assets/img/default-image.jpg";
 import "./ReflectionEntries.css";
 import "./ReflectionSearchbar.css";
+import ReflectionCount from "./ReflectionCount";
 import ReflectionModal from "./ReflectionModal";
 
 function ReflectionEntries() {
@@ -21,8 +22,6 @@ function ReflectionEntries() {
   const [sortOrder, setSortOrder] = useState("newest");
   const [privacyFilter, setPrivacyFilter] = useState("");
   const navigate = useNavigate();
-
-
 
   useEffect(() => {
     fetchEntries();
@@ -73,7 +72,6 @@ function ReflectionEntries() {
     return new Date(dateString).toLocaleDateString("en-GB", options);
   };
 
-  // Truncate text to a maximum length, means to cut off the text after a certain number of characters and add "..." at the end
   const truncateText = (text, maxLength) => {
     return text.length > maxLength
       ? text.substring(0, maxLength) + "..."
@@ -130,7 +128,7 @@ function ReflectionEntries() {
           <option value="false">Private</option>
         </select>
       </div>
-
+      <ReflectionCount count={entries.length} />
       <div className="filtered-entries">
         {sortedAndFilteredEntries.length > 0 ? (
           sortedAndFilteredEntries.map((entry) => (

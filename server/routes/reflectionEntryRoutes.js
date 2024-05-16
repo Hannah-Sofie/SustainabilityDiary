@@ -1,4 +1,3 @@
-// routes/reflectionRoutes.js
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
@@ -51,27 +50,27 @@ router.get("/public", getAllPublicReflectionEntries);
 router.get(
   "/classroom/:classroomId/public",
   verifyToken,
-  getReflectionsByClassroom,
+  getReflectionsByClassroom
 );
 router.get("/latest", verifyToken, getLatestReflection);
 router.get("/:id", verifyToken, getReflectionById);
+
 router.post(
   "/create",
   verifyToken,
   upload.single("photo"),
   validateReflection,
-  createReflectionEntry,
+  createReflectionEntry
 );
-// Assuming you only want to handle files when they are actually included:
+
 router.put(
   "/:id",
   verifyToken,
-  upload.single("photo"), // Handle photo uploads
+  upload.single("photo"),
   validateReflection,
-  updateReflectionEntry,
+  updateReflectionEntry
 );
 
-// gammel: router.put("/:id", verifyToken, validateReflection, updateReflectionEntry);
 router.delete("/:id", verifyToken, deleteReflectionEntry);
 router.post("/:id/like", verifyToken, likeReflectionEntry);
 

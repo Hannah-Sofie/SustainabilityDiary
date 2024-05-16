@@ -1,23 +1,25 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 
 const CustomButton = ({
   name,
   to,
+  icon,
   backgroundColor,
   color,
   hoverBackgroundColor,
   hoverColor,
   hoverBorderColor,
-  onClick, 
+  onClick,
 }) => {
   let navigate = useNavigate();
 
   const handleClick = () => {
     if (onClick) {
-      onClick(); 
+      onClick();
     } else if (to) {
-      navigate(to); 
+      navigate(to);
     }
   };
 
@@ -34,11 +36,15 @@ const CustomButton = ({
         ? hoverBorderColor || hoverColor || color
         : hoverBorderColor || "var(--darker-purple)"
     }`,
-    borderRadius: "120px",
+    borderRadius: "25px",
     cursor: "pointer",
     fontSize: "14px",
     fontWeight: "600",
     textTransform: "uppercase",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "10px",
     transition: "background-color 0.3s, color 0.3s, border-color 0.3s",
   };
 
@@ -50,6 +56,7 @@ const CustomButton = ({
       onMouseLeave={() => setIsHovered(false)}
       style={buttonStyle}
     >
+      {icon && <FontAwesomeIcon icon={icon} />}
       {name}
     </button>
   );

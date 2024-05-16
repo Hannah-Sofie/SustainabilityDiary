@@ -17,12 +17,3 @@
 .new-reflection {
   margin: 0;
 }
-
-.custom-button {
-  padding: 10px 20px;
-  background-color: var(--darker-purple);
-  color: var(--pure-white);
-  border-radius: 20px;
-  border: none;
-  cursor: pointer;
-}

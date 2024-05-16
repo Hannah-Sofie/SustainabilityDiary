@@ -1,0 +1,59 @@
+.leaderboard-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.leader-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.leader-item:hover {
+  transform: scale(1.02);
+}
+
+.leader-rank-icon {
+  flex-shrink: 0;
+  width: 50px;
+  text-align: center;
+  font-size: 2em;
+}
+
+.leader-info {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
+.leader-name {
+  font-size: 1.2em;
+  color: #333;
+}
+
+.leader-achievements {
+  font-size: 1em;
+  color: #666;
+}
+
+.gold-trophy {
+  color: #ffd700;
+}
+
+.silver-medal {
+  color: #c0c0c0;
+}
+
+.bronze-award {
+  color: #cd7f32;
+}
+
+.rank {
+  font-size: 1.2em;
+  color: #333;
+}
