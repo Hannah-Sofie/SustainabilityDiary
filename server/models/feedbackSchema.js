@@ -18,6 +18,11 @@ const FeedbackSchema = new mongoose.Schema({
   content: {
     type: String,
     required: true
+  },
+  studentId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Student',
+    required: true
   }
 });
 

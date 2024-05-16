@@ -5,7 +5,7 @@ import profileImage from "../../assets/img/profile-silhouette.png";
 import "./ReflectionModal.css";
 import { useAuth } from '../../context/AuthContext';
 
-function ReflectionModal({ entry, onClose, user }) {
+function ReflectionModal({ entry, onClose }) {
   const [feedbacks, setFeedbacks] = useState([]);
   const { userData } = useAuth();
 
@@ -32,16 +32,17 @@ function ReflectionModal({ entry, onClose, user }) {
   const handleFeedbackSubmit = async (event) => {
     event.preventDefault();
     const feedback = document.getElementById("feedback").value;
-    if (!user || !user.name) {
+    if (!userData || !userData.name) {
       alert("User name is not available");
       return;
     }
     try {
       await axios.post("/api/feedback", {
         reflectionId: entry._id,
-        writer: user._id,
-        writerName: user.name,
+        writer: userData._id,
+        writerName: userData.name,
         content: feedback,
+        studentId: entry.userId,
       });
       alert("Feedback submitted successfully");
     } catch (error) {
