@@ -2,6 +2,8 @@ const ReflectionEntry = require("../models/reflectionEntrySchema");
 const asyncHandler = require("express-async-handler");
 const CreateError = require("../utils/createError");
 const handleAchievementCreation = require("../utils/handleAchievementCreation");
+const fs = require("fs");
+const path = require("path");
 
 const getAllReflectionEntries = asyncHandler(async (req, res, next) => {
   try {
@@ -25,7 +27,8 @@ const getAllPublicReflectionEntries = asyncHandler(async (req, res, next) => {
 });
 
 const createReflectionEntry = asyncHandler(async (req, res, next) => {
-  const { title, body, isPublic, classroomId } = req.body;
+  const { title, body, isPublic, classroomId, isAnonymous, requestFeedback } =
+    req.body;
   const photo = req.file ? req.file.filename : null;
 
   if (!title || !body) {
@@ -40,6 +43,8 @@ const createReflectionEntry = asyncHandler(async (req, res, next) => {
       body,
       isPublic,
       photo,
+      isAnonymous,
+      requestFeedback,
       classrooms: isPublic && classroomId ? [classroomId] : [],
     });
 
@@ -103,9 +108,16 @@ const getLatestReflection = asyncHandler(async (req, res, next) => {
 });
 
 const updateReflectionEntry = asyncHandler(async (req, res, next) => {
-  const { id } = req.params; // Ensure you are retrieving the id from req.params
-  const { title, body, isPublic, classroomId, removePhoto, isAnonymous } =
-    req.body;
+  const { id } = req.params;
+  const {
+    title,
+    body,
+    isPublic,
+    classroomId,
+    removePhoto,
+    isAnonymous,
+    requestFeedback,
+  } = req.body;
   const newPhoto = req.file ? req.file.filename : null;
 
   if (!id) {
@@ -118,14 +130,12 @@ const updateReflectionEntry = asyncHandler(async (req, res, next) => {
   }
 
   try {
-    // Find the existing entry
     const existingEntry = await ReflectionEntry.findById(id);
     if (!existingEntry) {
       console.error("Entry not found:", id);
       return next(new CreateError("Entry not found or permission denied", 404));
     }
 
-    // Check if the user is the owner of the entry
     if (existingEntry.userId.toString() !== req.user._id.toString()) {
       console.error("Permission denied for user:", req.user._id);
       return next(new CreateError("Entry not found or permission denied", 404));
@@ -136,6 +146,7 @@ const updateReflectionEntry = asyncHandler(async (req, res, next) => {
       body,
       isPublic,
       isAnonymous,
+      requestFeedback,
       ...(isPublic && classroomId && { classrooms: [classroomId] }),
       photo: newPhoto || existingEntry.photo,
     };

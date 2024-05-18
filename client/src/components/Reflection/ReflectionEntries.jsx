@@ -13,7 +13,7 @@ import DefaultImage from "../../assets/img/default-image.jpg";
 import "./ReflectionEntries.css";
 import "./ReflectionSearchbar.css";
 import ReflectionCount from "./ReflectionCount";
-import ReflectionModal from "./ReflectionModal";
+import ReflectionModal from "../Feedback/ReflectionModal";
 
 function ReflectionEntries() {
   const [entries, setEntries] = useState([]);

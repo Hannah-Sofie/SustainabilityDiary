@@ -54,7 +54,6 @@ router.get(
 );
 router.get("/latest", verifyToken, getLatestReflection);
 router.get("/:id", verifyToken, getReflectionById);
-
 router.post(
   "/create",
   verifyToken,

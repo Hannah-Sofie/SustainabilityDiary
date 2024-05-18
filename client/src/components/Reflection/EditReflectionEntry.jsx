@@ -20,7 +20,8 @@ function EditReflectionEntry() {
     isPublic: false,
     photoName: "",
     selectedClassroom: "",
-    isAnonymous: false, // Add isAnonymous field
+    isAnonymous: false,
+    requestFeedback: false,
   });
   const [previewImage, setPreviewImage] = useState(null);
   const [classrooms, setClassrooms] = useState([]);
@@ -36,12 +37,13 @@ function EditReflectionEntry() {
         setEntry({
           ...data,
           selectedClassroom: data.classrooms.length ? data.classrooms[0] : "",
-          isAnonymous: data.isAnonymous || false, // Initialize isAnonymous
+          isAnonymous: data.isAnonymous || false,
+          requestFeedback: data.requestFeedback || false,
         });
         if (data.photo) {
           const photoUrl = `${process.env.REACT_APP_API_URL}/uploads/reflections/${data.photo}`;
-          setPreviewImage(photoUrl); // Display the initial image
-          setRemovePhoto(false); // Reset photo removal status
+          setPreviewImage(photoUrl);
+          setRemovePhoto(false);
         }
       } catch (error) {
         console.error("Failed to fetch entry:", error);
@@ -85,8 +87,7 @@ function EditReflectionEntry() {
         photo: file,
         photoName: file.name,
       }));
-      setRemovePhoto(false); // A new photo will be uploaded
-      // Update preview image
+      setRemovePhoto(false);
       setPreviewImage(URL.createObjectURL(file));
     } else {
       setEntry((prev) => ({ ...prev, [name]: value }));
@@ -100,7 +101,7 @@ function EditReflectionEntry() {
       photoName: "",
     }));
     setRemovePhoto(true);
-    setPreviewImage(null); // Clear the preview image
+    setPreviewImage(null);
   };
 
   const handleSubmit = async (e) => {
@@ -116,16 +117,15 @@ function EditReflectionEntry() {
     formData.append("body", entry.body);
     formData.append("isPublic", entry.isPublic ? "true" : "false");
     formData.append("isAnonymous", entry.isAnonymous);
+    formData.append("requestFeedback", entry.requestFeedback);
 
     if (entry.isPublic && entry.selectedClassroom) {
       formData.append("classroomId", entry.selectedClassroom);
     }
 
-    // Only append 'removePhoto' if the photo is explicitly marked for removal
     if (removePhoto) {
       formData.append("removePhoto", "true");
     } else {
-      // Append photo only if a new one has been chosen
       if (entry.photo && typeof entry.photo === "object") {
         formData.append("photo", entry.photo);
       }
@@ -203,7 +203,7 @@ function EditReflectionEntry() {
             ))}
           </select>
           {entry.selectedClassroom && (
-            <label className="anonymous-option">
+            <label id="anonymous-label" className="anonymous-option">
               <input
                 type="checkbox"
                 name="isAnonymous"
@@ -215,13 +215,13 @@ function EditReflectionEntry() {
                   }))
                 }
               />
-              Post Anonymously
+              Post anonymously
             </label>
           )}
         </div>
         <div className="file-upload">
           <label htmlFor="photo-upload" className="file-upload-label">
-            <FontAwesomeIcon icon={faUpload} /> Upload or Change Photo
+            <FontAwesomeIcon icon={faUpload} /> Upload Photo
           </label>
           <input
             id="photo-upload"
@@ -248,6 +248,31 @@ function EditReflectionEntry() {
               </button>
             </>
           )}
+        </div>
+        <div
+          className={`feedback-request ${
+            entry.requestFeedback ? "disabled" : ""
+          }`}
+        >
+          <p className="feedback-info">
+            Once requested, feedback cannot be unrequested.
+          </p>
+          <label className="custom-checkbox">
+            <input
+              type="checkbox"
+              name="requestFeedback"
+              checked={entry.requestFeedback}
+              onChange={(e) =>
+                setEntry((prev) => ({
+                  ...prev,
+                  requestFeedback: e.target.checked,
+                }))
+              }
+              disabled={entry.requestFeedback}
+            />
+            <span className="checkmark"></span>
+            Request feedback from teacher
+          </label>
         </div>
         <div className="form-actions">
           <button

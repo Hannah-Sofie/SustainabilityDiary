@@ -1,5 +1,6 @@
 const UserAchievement = require("../models/achievementSchema");
 const User = require("../models/userSchema");
+const achievementsConfig = require("./achievementsConfig");
 
 const handleAchievementCreation = async (userId, count) => {
   console.log(`Checking achievements for user ${userId} with count ${count}`);
