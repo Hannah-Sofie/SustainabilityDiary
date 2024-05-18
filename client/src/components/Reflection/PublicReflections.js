@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import ReflectionModal from "./ReflectionModal";
+import ReflectionModal from "../Feedback/ReflectionModal";
 import "./PublicReflections.css";
 import DefaultImage from "../../assets/img/default-image.jpg";
 import { faHeart, faCommentDots } from "@fortawesome/free-solid-svg-icons";
@@ -79,6 +79,14 @@ const PublicReflections = ({ classroomId }) => {
     setSelectedEntry(null);
   };
 
+  const handleFeedbackSubmit = (reflectionId) => {
+    setPublicEntries((prevEntries) =>
+      prevEntries.map((entry) =>
+        entry._id === reflectionId ? { ...entry, isFeedbackGiven: true } : entry
+      )
+    );
+  };
+
   return (
     <div className="public-entries">
       {publicEntries.map((entry) => (
@@ -120,7 +128,11 @@ const PublicReflections = ({ classroomId }) => {
         </div>
       ))}
       {selectedEntry && (
-        <ReflectionModal entry={selectedEntry} onClose={closeModal} />
+        <ReflectionModal
+          entry={selectedEntry}
+          onClose={closeModal}
+          onFeedbackSubmit={handleFeedbackSubmit}
+        />
       )}
     </div>
   );

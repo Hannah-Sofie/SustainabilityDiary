@@ -4,42 +4,49 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .modal {
   background: var(--pure-white);
   padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   width: 90%;
   max-width: 600px;
+  position: relative;
+  overflow-y: auto;
+  max-height: 90vh;
 }
 
 .modal img {
-  width: 50%;
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 20px;
 }
 
-
 .button-cancel {
-  padding: 10px 20px;
-  margin-top: 10px;
+  padding: 8px 16px;
+  margin-top: 20px;
   background-color: var(--bright-red);
   color: var(--pure-white);
   border: none;
-  border-radius: 20px;
+  border-radius: 25px;
   cursor: pointer;
   font-size: 16px;
   font-weight: bold;
   transition: background-color 0.2s, transform 0.2s;
+  display: block;
+  width: 20%;
 }
 
 .button-cancel:hover {
   background-color: var(--red);
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .button-cancel:focus {
@@ -47,57 +54,72 @@
   box-shadow: 0 0 0 2px rgba(211, 47, 47, 0.5);
 }
 
-.modal_splitline {
-  margin: 20px 0;
-  border-bottom: 1px solid #ccc;
-}
-
 #feedback-container {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 20px;
+}
+
+#feedback-container div {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #feedback-container div .feedback-container_author {
-  font-size: 12px;
+  font-size: 14px;
   font-style: italic;
-  color: #888;
-  margin-top: auto;
+  color: #666;
+  margin-top: 10px;
 }
 
 #feedback-form img {
-  width: 30px;
+  width: 40px;
   border-radius: 50%;
 }
 
 #feedback-form div {
   display: flex;
   align-items: center;
-  margin: 10px 0;
+  margin-top: 20px;
 }
 
 #feedback-form textarea {
   width: 100%;
-  padding: 10px;
-  margin: 10px 0 0 0;
+  padding: 15px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 10px;
   resize: none;
+  font-size: 14px;
 }
 
 #feedback-form button {
-  padding: 5px 10px;
+  padding: 10px 20px;
   background-color: var(--green);
   color: var(--pure-white);
   border: none;
-  border-radius: 20px;
+  border-radius: 25px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
   transition: background-color 0.2s, transform 0.2s;
+  display: block;
+  width: 40%;
+  margin-left: 310px;
 }
 
 #feedback-form button:hover {
   background-color: var(--dark-green);
-  transform: scale(1.05);
+  transform: scale(1.02);
+}
+
+#feedback-form button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(34, 139, 34, 0.5);
+}
+
+.modal_splitline {
+  margin: 20px 0;
+  border-bottom: 1px solid #ddd;
 }

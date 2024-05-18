@@ -1,20 +1,21 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const FeedbackController = require('../controllers/feedbackController');
+const { verifyToken } = require("../utils/verifyToken");
 
-// Get feedback based on reflection id
-router.get('/:reflectionId', FeedbackController.getFeedbackByReflectionId);
+const {
+    getAllRequestedFeedbackEntries,
+  getFeedbackByReflectionId,
+  giveFeedback,
+  getStudentRequestedFeedbackReflections,
+} = require("../controllers/feedbackController");
 
-// Get feedback based on writer id
-router.get('/writer/:writerId', FeedbackController.getFeedbackByWriterId);
-
-// Get feedback based on student id
-router.get('/student/:studentId', FeedbackController.getFeedbackByStudentId);
-
-// Post new feedback
-router.post('/', FeedbackController.createFeedback);
-
-// Delete feedback
-router.delete('/:id', FeedbackController.deleteFeedback);
+router.get("/requested-feedback", verifyToken, getAllRequestedFeedbackEntries);
+router.get("/reflection/:reflectionId", verifyToken, getFeedbackByReflectionId);
+router.post("/give-feedback", verifyToken, giveFeedback);
+router.get(
+  "/student-requested-feedback",
+  verifyToken,
+  getStudentRequestedFeedbackReflections
+);
 
 module.exports = router;

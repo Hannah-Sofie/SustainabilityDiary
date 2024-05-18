@@ -1,22 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import DefaultImage from "../../assets/img/default-image.jpg";
 import profileImage from "../../assets/img/profile-silhouette.png";
+import "react-toastify/dist/ReactToastify.css";
 import "./ReflectionModal.css";
-import { useAuth } from '../../context/AuthContext';
+import { toast } from "react-toastify";
+import { useAuth } from "../../context/AuthContext";
 
-function ReflectionModal({ entry, onClose }) {
+function ReflectionModal({ entry, onClose, onFeedbackSubmit }) {
   const [feedbacks, setFeedbacks] = useState([]);
   const { userData } = useAuth();
-
 
   useEffect(() => {
     const fetchFeedbacks = async () => {
       try {
-        const res = await axios.get(`/api/feedback/${entry._id}`);
+        const res = await axios.get(`/api/feedback/reflection/${entry._id}`);
         setFeedbacks(res.data);
       } catch (error) {
         console.error("Error fetching feedbacks:", error);
+        toast.error("Error fetching feedbacks.");
       }
     };
 
@@ -31,22 +33,44 @@ function ReflectionModal({ entry, onClose }) {
 
   const handleFeedbackSubmit = async (event) => {
     event.preventDefault();
-    const feedback = document.getElementById("feedback").value;
+    const feedbackField = document.getElementById("feedback");
+    const feedback = feedbackField.value;
+
     if (!userData || !userData.name) {
-      alert("User name is not available");
+      toast.error("User name is not available.");
       return;
     }
-    try {
-      await axios.post("/api/feedback", {
-        reflectionId: entry._id,
-        writer: userData._id,
+
+    const newFeedback = {
+      reflectionId: entry._id,
+      content: feedback,
+    };
+
+    // Optimistic UI update
+    setFeedbacks((prevFeedbacks) => [
+      ...prevFeedbacks,
+      {
+        ...newFeedback,
         writerName: userData.name,
-        content: feedback,
-        studentId: entry.userId,
-      });
-      alert("Feedback submitted successfully");
+        writer: userData._id,
+      },
+    ]);
+
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/feedback/give-feedback`,
+        newFeedback
+      );
+      toast.success("Feedback submitted successfully.");
+      feedbackField.value = ""; // Clear the comment field
+      onFeedbackSubmit(entry._id); // Update feedback status in the parent component
     } catch (error) {
       console.error("Error submitting feedback:", error);
+      toast.error("Error submitting feedback.");
+      // Rollback optimistic UI update in case of error
+      setFeedbacks((prevFeedbacks) =>
+        prevFeedbacks.filter((fb) => fb.content !== feedback)
+      );
     }
   };
 
@@ -59,7 +83,7 @@ function ReflectionModal({ entry, onClose }) {
         <div className="modal_splitline"></div>
         <div id="feedback-container">
           {feedbacks.map((feedback) => (
-            <div key={feedback._id}>
+            <div key={feedback._id || feedback.content}>
               <p>{feedback.content}</p>
               <p className="feedback-container_author">
                 Written by: {feedback.writerName}

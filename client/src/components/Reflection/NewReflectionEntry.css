@@ -147,7 +147,6 @@ label.anonymous-option {
   border-radius: 5px;
   cursor: pointer;
   display: inline-block;
-  margin-bottom: 20px;
   font-size: 0.9rem;
 }
 
@@ -238,4 +237,90 @@ label.anonymous-option {
   background-color: #c4c2c2;
   color: var(--gray);
   cursor: not-allowed;
+}
+
+/* Feedback request styling */
+.feedback-request {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 1rem;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  flex-direction: column;
+}
+
+.feedback-request.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.feedback-request.disabled input {
+  pointer-events: none;
+}
+
+.feedback-request label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #333;
+}
+
+.feedback-request .custom-checkbox {
+  position: relative;
+  padding-left: 35px;
+  margin-right: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  user-select: none;
+}
+
+.feedback-request .custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.feedback-request .custom-checkbox .checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #ccc;
+  border-radius: 5px;
+}
+
+.feedback-request .custom-checkbox:hover input ~ .checkmark {
+  background-color: #bbb;
+}
+
+.feedback-request .custom-checkbox input:checked ~ .checkmark {
+  background-color: var(--darker-purple);
+}
+
+.feedback-request .custom-checkbox .checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.feedback-request .custom-checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.feedback-request .custom-checkbox .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+.feedback-info {
+  font-size: 0.9rem;
+  color: var(--red);
+  margin-bottom: 5px;
 }

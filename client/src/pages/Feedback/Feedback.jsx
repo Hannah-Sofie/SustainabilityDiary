@@ -1,19 +1,17 @@
 import React from "react";
-import FeedbackWriterContent from "../../components/Feedback/FeedbackWriterContent";
 import { useAuth } from "../../context/AuthContext";
+import FeedbackTeacher from "../../components/Feedback/FeedbackTeacher";
+import FeedbackStudent from "../../components/Feedback/FeedbackStudent";
 
 function Feedback() {
-  const { userData, loading } = useAuth();
+  const { userData } = useAuth();
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!userData) {
-    return <div>No user data available</div>;
-  }
-
-  return <FeedbackWriterContent user={userData} />;
+  // Determine which dashboard to render based on the user's role
+  return (
+    <div>
+      {userData?.role === "teacher" ? <FeedbackTeacher /> : <FeedbackStudent />}
+    </div>
+  );
 }
 
 export default Feedback;

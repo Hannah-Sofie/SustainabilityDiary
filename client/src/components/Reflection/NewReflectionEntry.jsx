@@ -18,7 +18,8 @@ function NewReflectionEntry() {
     photo: null,
     photoName: "",
     selectedClassroom: "",
-    isAnonymous: false, // Added isAnonymous field
+    isAnonymous: false,
+    requestFeedback: false,
   });
   const [previewImage, setPreviewImage] = useState(null);
   const [classrooms, setClassrooms] = useState([]);
@@ -60,7 +61,6 @@ function NewReflectionEntry() {
         photo: file,
         photoName: file.name,
       }));
-      // Create a local URL for preview
       setPreviewImage(URL.createObjectURL(file));
     } else {
       setEntry((prev) => ({ ...prev, [name]: value }));
@@ -73,7 +73,8 @@ function NewReflectionEntry() {
     formData.append("title", entry.title);
     formData.append("body", entry.body);
     formData.append("isPublic", entry.isPublic);
-    formData.append("isAnonymous", entry.isAnonymous); // Append isAnonymous field
+    formData.append("isAnonymous", entry.isAnonymous);
+    formData.append("requestFeedback", entry.requestFeedback);
 
     if (entry.isPublic) {
       formData.append("classroomId", entry.selectedClassroom);
@@ -81,8 +82,6 @@ function NewReflectionEntry() {
     if (entry.photo) {
       formData.append("photo", entry.photo);
     }
-    // log data sent during form submission
-    console.log("Data sent:", [...formData.entries()]);
 
     try {
       await axios.post(
@@ -204,6 +203,32 @@ function NewReflectionEntry() {
               )}
             </>
           )}
+        </div>
+
+        <div
+          className={`feedback-request ${
+            entry.requestFeedback ? "disabled" : ""
+          }`}
+        >
+          <p className="feedback-info">
+            Once requested, feedback cannot be unrequested.
+          </p>
+          <label className="custom-checkbox">
+            <input
+              type="checkbox"
+              name="requestFeedback"
+              checked={entry.requestFeedback}
+              onChange={(e) =>
+                setEntry((prev) => ({
+                  ...prev,
+                  requestFeedback: e.target.checked,
+                }))
+              }
+              disabled={entry.requestFeedback}
+            />
+            <span className="checkmark"></span>
+            Request feedback from teacher
+          </label>
         </div>
         <div className="form-actions">
           <button

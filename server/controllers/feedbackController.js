@@ -1,58 +1,88 @@
-const Feedback = require('../models/feedbackSchema');
+const Feedback = require("../models/feedbackSchema");
+const ReflectionEntry = require("../models/reflectionEntrySchema");
+const CreateError = require("../utils/createError");
+const asyncHandler = require("express-async-handler");
 
-exports.getFeedbackByReflectionId = async (req, res) => {
+const getFeedbackByReflectionId = asyncHandler(async (req, res, next) => {
   try {
-    const feedback = await Feedback.find({ reflectionId: req.params.reflectionId });
+    const feedback = await Feedback.find({
+      reflectionId: req.params.reflectionId,
+    });
+    if (!feedback) {
+      return next(new CreateError("Feedback not found", 404));
+    }
     res.status(200).json(feedback);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    next(new CreateError(err.message, 500));
   }
-};
+});
 
-exports.getFeedbackByWriterId = async (req, res) => {
-  try {
-    const feedbacks = await Feedback.find({ writer: req.params.writerId });
-    res.json(feedbacks);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+const giveFeedback = asyncHandler(async (req, res, next) => {
+  const { reflectionId, content } = req.body;
+  const userId = req.user._id;
+  const userName = req.user.name;
+
+  if (!reflectionId || !content) {
+    return next(new CreateError("Reflection ID and content are required", 400));
   }
-};
-
-exports.getFeedbackByStudentId = async (req, res) => {
-  try {
-    const feedbacks = await Feedback.find({ studentId: req.params.studentId });
-    res.json(feedbacks);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
-exports.createFeedback = async (req, res) => {
-  const feedback = new Feedback({
-    reflectionId: req.body.reflectionId,
-    writer: req.body.writer,
-    writerName: req.body.writerName,
-    content: req.body.content,
-    studentId: req.body.studentId  
-  });
 
   try {
-    const newFeedback = await feedback.save();
-    res.status(201).json(newFeedback);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-};
+    const reflection = await ReflectionEntry.findById(reflectionId);
 
-exports.deleteFeedback = async (req, res) => {
-  try {
-    const result = await Feedback.deleteOne({ _id: req.params.id });
-    if (result.deletedCount === 0) {
-      res.status(404).json({ message: 'No feedback with this id found' });
-    } else {
-      res.status(200).json({ message: 'Feedback deleted' });
+    if (!reflection) {
+      return next(new CreateError("Reflection not found", 404));
     }
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+
+    const feedback = new Feedback({
+      reflectionId,
+      writer: userId,
+      writerName: userName,
+      content,
+      studentId: reflection.userId,
+    });
+
+    await feedback.save();
+
+    reflection.feedbackGiven = true; // Update feedbackGiven field
+    await reflection.save();
+
+    res.status(201).json({ feedback });
+  } catch (error) {
+    console.error("Failed to give feedback:", error);
+    next(new CreateError("Failed to give feedback", 500));
   }
+});
+
+const getAllRequestedFeedbackEntries = asyncHandler(async (req, res, next) => {
+  try {
+    const entries = await ReflectionEntry.find({ requestFeedback: true })
+      .populate("userId", "name")
+      .select("title body photo feedbackGiven userId");
+    res.json(entries);
+  } catch (error) {
+    next(new CreateError("Failed to fetch entries requesting feedback", 500));
+  }
+});
+
+const getStudentRequestedFeedbackReflections = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const reflections = await ReflectionEntry.find({
+        userId: req.user._id,
+        requestFeedback: true,
+      })
+        .populate("userId", "name")
+        .select("title body photo feedbackGiven userId");
+      res.json(reflections);
+    } catch (error) {
+      next(new CreateError("Failed to fetch reflections", 500));
+    }
+  }
+);
+
+module.exports = {
+  getAllRequestedFeedbackEntries,
+  getFeedbackByReflectionId,
+  giveFeedback,
+  getStudentRequestedFeedbackReflections,
 };

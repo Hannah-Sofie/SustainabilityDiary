@@ -14,6 +14,14 @@ const reflectionEntrySchema = new Schema(
     ],
     likes: { type: Number, default: 0 },
     likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    requestFeedback: {
+      type: Boolean,
+      default: false,
+    },
+    feedbackGiven: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
