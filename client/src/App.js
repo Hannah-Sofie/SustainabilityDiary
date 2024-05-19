@@ -15,7 +15,6 @@ import ReflectionEntries from "./components/Reflection/ReflectionEntries";
 import EditReflectionEntry from "./components/Reflection/EditReflectionEntry";
 import CreateClassroom from "./components/Classroom/CreateClassroom";
 import ClassroomDetail from "./components/Classroom/ClassroomDetail";
-// import PasswordResetWithToken from "./components/PasswordResetWithToken/PasswordResetWithToken";
 
 // Lazy load pages
 const Dashboard = lazy(() => import("./pages/Dashboard/Dashboard"));
@@ -55,10 +54,6 @@ function App() {
           <Route path="register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-          {/* <Route
-            path="/password-reset-with-token/:token"
-            element={<PasswordResetWithToken />}
-          /> */}
           <Route path="*" element={<NotFound />} />
 
           {/* Nested routes within Layout for other pages */}
