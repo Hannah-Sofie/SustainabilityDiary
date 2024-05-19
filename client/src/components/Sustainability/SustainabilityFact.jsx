@@ -4,23 +4,31 @@ import facts from "./sustainabilityFacts";
 import "./SustainabilityFact.css";
 
 function SustainabilityFact() {
+  // State to manage the current sustainability fact
   const [fact, setFact] = useState("");
-  const [factIndex, setFactIndex] = useState(null); // To track the index of the current fact
+  // State to track the index of the current fact
+  const [factIndex, setFactIndex] = useState(null);
+  // State to track if the user has responded to the fact
   const [hasResponded, setHasResponded] = useState(false);
+  // State to track the user's response (true if they knew the fact, false otherwise)
   const [response, setResponse] = useState(null);
+  // State to manage the statistics for the current fact
   const [stats, setStats] = useState({ knew: 0, didNotKnow: 0 });
 
+  // Effect to randomly select a fact when the component mounts
   useEffect(() => {
     const index = Math.floor(Math.random() * facts.length);
     setFact(facts[index]);
     setFactIndex(index);
   }, []);
 
+  // Function to handle the user's response
   const handleResponse = async (didKnow) => {
     setResponse(didKnow);
     setHasResponded(true);
 
     try {
+      // Send the user's response to the server and update stats
       const { data } = await axios.post("/api/facts/stats", {
         factIndex: factIndex,
         didKnow: didKnow,

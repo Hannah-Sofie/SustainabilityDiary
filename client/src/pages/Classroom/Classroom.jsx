@@ -8,16 +8,21 @@ import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator
 import "./Classroom.css";
 
 function Classroom() {
+  // State for managing the modal visibility
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // State for storing the list of classrooms
   const [classrooms, setClassrooms] = useState([]);
+  // Access authentication status and user data from the Auth context
   const { isAuthenticated, userData, loading } = useAuth();
 
+  // Fetch classrooms when the user is authenticated
   useEffect(() => {
     if (isAuthenticated) {
       fetchClassrooms();
     }
   }, [isAuthenticated]);
 
+  // Function to fetch classrooms from the server
   const fetchClassrooms = async () => {
     try {
       const response = await axios.get(
@@ -29,14 +34,17 @@ function Classroom() {
     }
   };
 
+  // Handle the addition of a new classroom
   const handleNewClassroom = (newClassroom) => {
     setClassrooms([...classrooms, newClassroom]);
   };
 
+  // Handle the successful joining of a classroom
   const handleJoinSuccess = (joinedClassroom) => {
     setClassrooms([...classrooms, joinedClassroom]);
   };
 
+  // Display a loading indicator while fetching data
   if (loading) {
     return <LoadingIndicator />;
   }
@@ -45,9 +53,11 @@ function Classroom() {
     <div className="classroom-container">
       <h1>Classrooms</h1>
       <div className="top-controls">
+        {/* Component for joining a classroom */}
         <div className="join-classroom">
           <JoinClassroom onJoinSuccess={handleJoinSuccess} />
         </div>
+        {/* Button to open the modal for creating a new classroom, visible only to teachers */}
         {userData && userData.role === "teacher" && (
           <div className="button-container">
             <button onClick={() => setIsModalOpen(true)}>
@@ -56,8 +66,9 @@ function Classroom() {
           </div>
         )}
       </div>
+      {/* Component to display the list of classrooms */}
       <Classes classrooms={classrooms} />
-
+      {/* Modal for creating a new classroom */}
       {isModalOpen && (
         <CreateClassroom
           closeModal={() => setIsModalOpen(false)}

@@ -36,14 +36,14 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-// Initialize Multer
+// Initialize Multer Multer is a node.js middleware for handling multipart/form-data
 const upload = multer({
   storage,
   limits: { fileSize: 1024 * 1024 * 5 }, // 5MB limit
   fileFilter,
 });
 
-// Define your routes
+// Routes
 router.post("/register", (req, res, next) => {
   ("register called");
   registerUser(req, res, next);

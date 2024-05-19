@@ -5,20 +5,26 @@ import DefaultImage from "../../assets/img/default-profilepic.png";
 import { toast } from "react-toastify";
 
 function StudentList() {
+  // State to manage the list of students
   const [students, setStudents] = useState([]);
+  // State to manage which student is currently being edited
   const [editing, setEditing] = useState(null);
+  // State to manage the form data for editing a student
   const [editFormData, setEditFormData] = useState({ name: "", email: "" });
 
+  // Fetch the list of students when the component mounts
   useEffect(() => {
     fetchStudents();
   }, []);
 
+  // Function to fetch students from the server
   const fetchStudents = async () => {
     try {
       const { data } = await axios.get(
         `${process.env.REACT_APP_API_URL}/api/users/students`,
         { withCredentials: true }
       );
+      // Sort students by name and update state
       setStudents(data.sort((a, b) => a.name.localeCompare(b.name)));
     } catch (error) {
       console.error("Failed to fetch students:", error);
@@ -26,20 +32,24 @@ function StudentList() {
     }
   };
 
+  // Function to handle clicking the edit button for a student
   const handleEditClick = (student) => {
-    setEditing(student._id);
-    setEditFormData({ name: student.name, email: student.email });
+    setEditing(student._id); // Set the current editing student
+    setEditFormData({ name: student.name, email: student.email }); // Populate the form with existing student data
   };
 
+  // Function to handle canceling the edit
   const handleCancelClick = () => {
-    setEditing(null);
+    setEditing(null); // Reset the editing state
   };
 
+  // Function to handle changes in the edit form
   const handleFormChange = (event) => {
     const { name, value } = event.target;
-    setEditFormData({ ...editFormData, [name]: value });
+    setEditFormData({ ...editFormData, [name]: value }); // Update the form data state
   };
 
+  // Function to handle saving the edited student details
   const handleSaveClick = async () => {
     try {
       const { data } = await axios.put(
@@ -47,18 +57,20 @@ function StudentList() {
         editFormData,
         { withCredentials: true }
       );
+      // Update the students state with the edited details
       const newStudents = students.map((student) =>
         student._id === editing ? { ...student, ...data.user } : student
       );
       setStudents(newStudents);
       toast.success("Student details updated successfully!");
-      setEditing(null);
+      setEditing(null); // Reset the editing state
     } catch (error) {
       console.error("Failed to update student details:", error);
       toast.error("Failed to update student details. Please try again.");
     }
   };
 
+  // Function to get the URL of the student's photo
   const getStudentPhotoUrl = (photo) => {
     return photo
       ? `${process.env.REACT_APP_API_URL}/uploads/profilepics/${photo}`

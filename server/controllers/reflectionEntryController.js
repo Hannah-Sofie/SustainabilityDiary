@@ -5,6 +5,7 @@ const handleAchievementCreation = require("../utils/handleAchievementCreation");
 const fs = require("fs");
 const path = require("path");
 
+// Get all reflection entries for the authenticated user
 const getAllReflectionEntries = asyncHandler(async (req, res, next) => {
   try {
     const entries = await ReflectionEntry.find({ userId: req.user._id });
@@ -14,6 +15,7 @@ const getAllReflectionEntries = asyncHandler(async (req, res, next) => {
   }
 });
 
+// Get all public reflection entries
 const getAllPublicReflectionEntries = asyncHandler(async (req, res, next) => {
   try {
     const entries = await ReflectionEntry.find({ isPublic: true }).populate(
@@ -26,6 +28,7 @@ const getAllPublicReflectionEntries = asyncHandler(async (req, res, next) => {
   }
 });
 
+// Create a new reflection entry
 const createReflectionEntry = asyncHandler(async (req, res, next) => {
   const { title, body, isPublic, classroomId, isAnonymous, requestFeedback } =
     req.body;
@@ -63,6 +66,7 @@ const createReflectionEntry = asyncHandler(async (req, res, next) => {
   }
 });
 
+// Get a reflection entry by ID
 const getReflectionById = asyncHandler(async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -80,6 +84,7 @@ const getReflectionById = asyncHandler(async (req, res, next) => {
   }
 });
 
+// Get reflections for a specific classroom
 const getReflectionsByClassroom = asyncHandler(async (req, res, next) => {
   const { classroomId } = req.params;
   try {
@@ -93,6 +98,7 @@ const getReflectionsByClassroom = asyncHandler(async (req, res, next) => {
   }
 });
 
+// Get the latest reflection entry for the authenticated user
 const getLatestReflection = asyncHandler(async (req, res, next) => {
   try {
     const latestReflection = await ReflectionEntry.findOne({
@@ -107,6 +113,7 @@ const getLatestReflection = asyncHandler(async (req, res, next) => {
   }
 });
 
+// Update an existing reflection entry
 const updateReflectionEntry = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const {
@@ -179,6 +186,7 @@ const updateReflectionEntry = asyncHandler(async (req, res, next) => {
   }
 });
 
+// Delete a reflection entry
 const deleteReflectionEntry = asyncHandler(async (req, res, next) => {
   try {
     const entry = await ReflectionEntry.findOneAndDelete({
@@ -196,6 +204,7 @@ const deleteReflectionEntry = asyncHandler(async (req, res, next) => {
   }
 });
 
+// Like or unlike a reflection entry
 const likeReflectionEntry = asyncHandler(async (req, res, next) => {
   try {
     const reflection = await ReflectionEntry.findById(req.params.id);

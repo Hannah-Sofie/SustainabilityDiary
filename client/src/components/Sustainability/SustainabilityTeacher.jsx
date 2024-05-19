@@ -5,10 +5,14 @@ import "react-toastify/dist/ReactToastify.css";
 import "./SustainabilityTeacher.css";
 
 function SustainabilityTeacher() {
+  // State to manage form data
   const [formData, setFormData] = useState({ title: "", link: "" });
+  // State to manage the list of sustainability resources
   const [resources, setResources] = useState([]);
+  // State to manage the ID of the resource being edited
   const [editingId, setEditingId] = useState(null);
 
+  // Function to fetch resources from the server
   const fetchResources = async () => {
     try {
       const { data } = await axios.get(
@@ -21,15 +25,18 @@ function SustainabilityTeacher() {
     }
   };
 
+  // Effect to fetch resources when the component mounts
   useEffect(() => {
     fetchResources();
   }, []);
 
+  // Handle changes in the form inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Handle form submission to add or update a resource
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.title || !formData.link) {
@@ -59,11 +66,13 @@ function SustainabilityTeacher() {
     }
   };
 
+  // Handle edit button click to set the form data for editing
   const handleEdit = (resource) => {
     setEditingId(resource._id);
     setFormData({ title: resource.title, link: resource.link });
   };
 
+  // Handle delete button click to delete a resource
   const handleDelete = async (id) => {
     try {
       await axios.delete(

@@ -8,7 +8,7 @@ const sendEmail = async (templateParams) => {
       templateParams,
       process.env.REACT_APP_EMAILJS_PUBLIC_KEY
     );
-    ('Email sent successfully:', response.status, response.text);
+    console.log('Email sent successfully:', response.status, response.text);
   } catch (error) {
     throw error;
   }

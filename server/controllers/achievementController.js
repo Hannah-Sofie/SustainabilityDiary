@@ -4,11 +4,10 @@ const asyncHandler = require("express-async-handler");
 const CreateError = require("../utils/createError");
 const achievementsConfig = require("../utils/achievementsConfig");
 
+// Get all achievements for the authenticated user
 const getAllAchievements = asyncHandler(async (req, res, next) => {
   try {
-    const userAchievements = await UserAchievement.find({
-      userId: req.user._id,
-    });
+    const userAchievements = await UserAchievement.find({ userId: req.user._id });
     const userAchievementNames = userAchievements.map((a) => a.name);
 
     const achievements = achievementsConfig.map((achievement) => ({
@@ -23,6 +22,7 @@ const getAllAchievements = asyncHandler(async (req, res, next) => {
   }
 });
 
+// Create a new achievement for a user
 const createAchievement = asyncHandler(async (req, res, next) => {
   const { userId, name, description, image } = req.body;
 
@@ -42,9 +42,7 @@ const createAchievement = asyncHandler(async (req, res, next) => {
       userName: user.name,
       name,
       description,
-      image:
-        image ||
-        `${process.env.BASE_URL}/uploads/achievements/default_award.jpg`,
+      image: image || `${process.env.BASE_URL}/uploads/achievements/default_award.jpg`,
     });
     res.status(201).json(newAchievement);
   } catch (error) {
@@ -52,6 +50,7 @@ const createAchievement = asyncHandler(async (req, res, next) => {
   }
 });
 
+// Check achievements for the authenticated user
 const checkAchievements = asyncHandler(async (req, res, next) => {
   try {
     const achievements = await UserAchievement.find({ userId: req.user._id });
@@ -61,6 +60,7 @@ const checkAchievements = asyncHandler(async (req, res, next) => {
   }
 });
 
+// Opt-in to the leaderboard
 const optInLeaderboard = asyncHandler(async (req, res, next) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
@@ -80,6 +80,7 @@ const optInLeaderboard = asyncHandler(async (req, res, next) => {
   }
 });
 
+// Opt-out of the leaderboard
 const optOutLeaderboard = asyncHandler(async (req, res, next) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
@@ -99,6 +100,7 @@ const optOutLeaderboard = asyncHandler(async (req, res, next) => {
   }
 });
 
+// Get opt-in status for the authenticated user
 const getOptInStatus = asyncHandler(async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id).select("isInLeaderboard");
@@ -111,6 +113,7 @@ const getOptInStatus = asyncHandler(async (req, res, next) => {
   }
 });
 
+// Get the leaderboard with users' achievements count
 const getLeaderboard = asyncHandler(async (req, res, next) => {
   try {
     const leaderboard = await User.aggregate([

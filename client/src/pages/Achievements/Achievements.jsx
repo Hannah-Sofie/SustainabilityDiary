@@ -19,6 +19,7 @@ const Achievements = () => {
   const [isOptedIn, setIsOptedIn] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // Fetch achievements from the server
   const fetchAchievements = useCallback(async () => {
     try {
       const { data } = await axios.get(
@@ -34,6 +35,7 @@ const Achievements = () => {
     }
   }, [userData.token]);
 
+  // Fetch leaderboard data from the server
   const fetchLeaderboard = useCallback(async () => {
     try {
       const { data } = await axios.get(
@@ -43,9 +45,11 @@ const Achievements = () => {
         }
       );
 
+      // Extract top 5 leaders
       const topLeaders = data.slice(0, 5);
       setLeaders(topLeaders);
 
+      // Find the current user's rank
       const userRankIndex = data.findIndex(
         (leader) => leader.userId === userData._id
       );
@@ -58,6 +62,7 @@ const Achievements = () => {
     }
   }, [userData.token, userData._id]);
 
+  // Fetch opt-in status for the leaderboard
   const fetchOptInStatus = useCallback(async () => {
     try {
       const { data } = await axios.post(
@@ -73,6 +78,7 @@ const Achievements = () => {
     }
   }, [userData.token]);
 
+  // Toggle opt-in status for the leaderboard
   const toggleOptIn = async () => {
     try {
       const url = isOptedIn
@@ -102,6 +108,7 @@ const Achievements = () => {
     }
   };
 
+  // Effect to fetch data when the component mounts and when dependencies change
   useEffect(() => {
     if (isAuthenticated) {
       setLoading(true);
@@ -114,6 +121,7 @@ const Achievements = () => {
     }
   }, [isAuthenticated, fetchAchievements, fetchLeaderboard, fetchOptInStatus]);
 
+  // Separate unlocked and locked achievements
   const unlockedAchievements = achievements.filter((ach) => ach.unlocked);
   const lockedAchievements = achievements.filter((ach) => !ach.unlocked);
 

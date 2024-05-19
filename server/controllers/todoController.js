@@ -1,8 +1,10 @@
 const Todo = require("../models/todoSchema");
 const CreateError = require("../utils/createError");
 
+// Get all todos for the authenticated user
 const getAllTodos = async (req, res, next) => {
   try {
+    // Find todos by the user ID from the request
     const todos = await Todo.find({ userId: req.user._id });
     res.json(todos);
   } catch (error) {
@@ -10,8 +12,10 @@ const getAllTodos = async (req, res, next) => {
   }
 };
 
+// Get a single todo by its ID
 const getTodoById = async (req, res, next) => {
   try {
+    // Find the todo by ID from the request parameters
     const todo = await Todo.findById(req.params.id);
     if (!todo) {
       return next(new CreateError("Todo not found", 404));
@@ -22,10 +26,12 @@ const getTodoById = async (req, res, next) => {
   }
 };
 
+// Create a new todo
 const createTodo = async (req, res, next) => {
   const { title, description } = req.body;
 
   try {
+    // Create a new todo with the user ID from the request
     const newTodo = await Todo.create({
       userId: req.user._id,
       title,
@@ -37,10 +43,12 @@ const createTodo = async (req, res, next) => {
   }
 };
 
+// Update an existing todo by its ID
 const updateTodo = async (req, res, next) => {
   const { title, description, completed } = req.body;
 
   try {
+    // Find and update the todo by ID from the request parameters
     const updatedTodo = await Todo.findByIdAndUpdate(
       req.params.id,
       { title, description, completed },
@@ -55,8 +63,10 @@ const updateTodo = async (req, res, next) => {
   }
 };
 
+// Delete a todo by its ID
 const deleteTodo = async (req, res, next) => {
   try {
+    // Find and delete the todo by ID from the request parameters
     const todo = await Todo.findByIdAndDelete(req.params.id);
     if (!todo) {
       return next(new CreateError("Todo not found", 404));

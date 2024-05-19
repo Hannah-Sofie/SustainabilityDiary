@@ -3,6 +3,7 @@ const ReflectionEntry = require("../models/reflectionEntrySchema");
 const CreateError = require("../utils/createError");
 const asyncHandler = require("express-async-handler");
 
+// Get feedback for a specific reflection entry by its ID
 const getFeedbackByReflectionId = asyncHandler(async (req, res, next) => {
   try {
     const feedback = await Feedback.find({
@@ -17,6 +18,7 @@ const getFeedbackByReflectionId = asyncHandler(async (req, res, next) => {
   }
 });
 
+// Give feedback to a specific reflection entry
 const giveFeedback = asyncHandler(async (req, res, next) => {
   const { reflectionId, content } = req.body;
   const userId = req.user._id;
@@ -43,7 +45,8 @@ const giveFeedback = asyncHandler(async (req, res, next) => {
 
     await feedback.save();
 
-    reflection.feedbackGiven = true; // Update feedbackGiven field
+    // Mark the reflection as having received feedback
+    reflection.feedbackGiven = true;
     await reflection.save();
 
     res.status(201).json({ feedback });
@@ -53,6 +56,7 @@ const giveFeedback = asyncHandler(async (req, res, next) => {
   }
 });
 
+// Get all reflection entries that have requested feedback
 const getAllRequestedFeedbackEntries = asyncHandler(async (req, res, next) => {
   try {
     const entries = await ReflectionEntry.find({ requestFeedback: true })
@@ -64,6 +68,7 @@ const getAllRequestedFeedbackEntries = asyncHandler(async (req, res, next) => {
   }
 });
 
+// Get all feedback-requested reflections of the authenticated student
 const getStudentRequestedFeedbackReflections = asyncHandler(
   async (req, res, next) => {
     try {
