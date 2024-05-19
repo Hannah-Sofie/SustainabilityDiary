@@ -1,9 +1,7 @@
-// src/pages/ForgotPassword/ForgotPassword.jsx
-
 import React, { useState } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import emailjs from '@emailjs/browser';
 import "./ForgotPassword.css";
 import CustomButton from "../../components/CustomButton/CustomButton";
 
@@ -12,15 +10,25 @@ function ForgotPassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}/forgot-password`, {
-        email,
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/request-reset-code`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
       });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error);
+      }
+
       toast.success("Password reset code sent to your email.");
     } catch (error) {
-      toast.error(
-        error.response?.data?.error || "An unexpected error occurred."
-      );
+      toast.error(error.message || "An unexpected error occurred.");
     }
   };
 

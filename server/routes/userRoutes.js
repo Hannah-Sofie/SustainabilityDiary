@@ -8,6 +8,9 @@ const {
   fetchStudents,
   updateUser,
   updateStudentDetails,
+  requestResetCode,
+  verifyPasswordResetToken,
+  resetPassword
 } = require("../controllers/userController");
 const { verifyToken } = require("../utils/verifyToken");
 const { status } = require("../utils/status");
@@ -51,5 +54,8 @@ router.get("/status", verifyToken, status);
 router.get("/students", verifyToken, fetchStudents);
 router.put("/students/:id", verifyToken, updateStudentDetails);
 router.put("/update", verifyToken, upload.single("photo"), updateUser);
+router.post('/request-reset-code', requestResetCode);
+router.post('/reset-password', resetPassword);
+router.get('/verify-token/:token', verifyPasswordResetToken);
 
 module.exports = router;

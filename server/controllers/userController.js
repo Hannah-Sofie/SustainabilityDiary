@@ -4,8 +4,8 @@ const createError = require("../utils/createError");
 const { hashPassword, comparePassword } = require("../utils/password");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
+const emailjs = require('@emailjs/nodejs');
 
-// Register user
 const registerUser = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
@@ -223,6 +223,79 @@ const updateStudentDetails = async (req, res) => {
   }
 };
 
+const requestResetCode = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ error: 'No account found with that email.' });
+    }
+
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.RESET_PASSWORD_KEY,
+      { expiresIn: '20m' }
+    );
+
+    const resetUrl = `${process.env.FRONTEND_URL}/password-reset-with-token/${token}?email=${encodeURIComponent(email)}`;
+    const templateParams = {
+      to_email: email,
+      reset_url: resetUrl
+    };
+
+    await emailjs.send(
+      process.env.EMAILJS_SERVICE_ID,
+      process.env.EMAILJS_TEMPLATE_ID,
+      templateParams,
+      {
+        publicKey: process.env.EMAILJS_PUBLIC_KEY,
+        privateKey: process.env.EMAILJS_PRIVATE_KEY,
+      }
+    );
+
+    res.status(200).json({ message: 'Password reset link sent to your email.' });
+  } catch (error) {
+    console.error('Error sending password reset email:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+
+// Reset password after receiving the email
+const resetPassword = async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+    const decoded = jwt.verify(token, process.env.RESET_PASSWORD_KEY);
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(404).json({ error: 'Invalid token or user not found.' });
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+
+    res.status(200).json({ message: 'Password successfully updated.' });
+  } catch (error) {
+    console.error('Reset Password Error:', error);
+    res.status(500).json({ error: error.message || 'Failed to reset password.' });
+  }
+};
+
+// Verify the password reset token
+const verifyPasswordResetToken = (req, res) => {
+  const { token } = req.params;
+  try {
+    jwt.verify(token, process.env.RESET_PASSWORD_KEY);
+    res.status(200).json({ message: "Valid token" });
+  } catch (error) {
+    res.status(400).json({ error: "Invalid or expired token" });
+  }
+};
+
+
+
 module.exports = {
   registerUser,
   loginUser,
@@ -230,4 +303,7 @@ module.exports = {
   fetchStudents,
   updateUser,
   updateStudentDetails,
+  requestResetCode,
+  verifyPasswordResetToken,
+  resetPassword
 };
