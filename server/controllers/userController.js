@@ -237,7 +237,7 @@ const requestResetCode = async (req, res) => {
       { expiresIn: '20m' }
     );
 
-    const resetUrl = `${process.env.FRONTEND_URL}/password-reset-with-token/${token}?email=${encodeURIComponent(email)}`;
+    const resetUrl = `${process.env.FRONTEND_URL}/password-reset-with-token/${token}`;
     const templateParams = {
       to_email: email,
       reset_url: resetUrl
@@ -259,6 +259,7 @@ const requestResetCode = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 
 
