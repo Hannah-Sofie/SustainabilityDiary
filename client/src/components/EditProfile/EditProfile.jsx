@@ -18,18 +18,17 @@ function Profile() {
   const [photo, setPhoto] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
 
+  // Initialize user info when the component mounts
   useEffect(() => {
-    // Update user info with existing data
     setUserInfo({ name: userData?.name, email: userData?.email });
-    // Set previewImage to null initially since no new photo is being uploaded
     setPreviewImage(null);
   }, [userData]);
 
+  // Handle changes to the photo input
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     setPhoto(file);
 
-    // Update the preview image only if a file is selected
     if (file) {
       setPreviewImage(URL.createObjectURL(file));
     } else {
@@ -37,19 +36,19 @@ function Profile() {
     }
   };
 
+  // Handle changes to text inputs
   const handleChange = (e) => {
     setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
   };
 
+  // Handle form submission for profile update
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Create a FormData object to handle file uploads
     const formData = new FormData();
     formData.append("name", userInfo.name);
     formData.append("password", userInfo.password);
 
-    // Add the photo file if one is selected
     if (photo) {
       formData.append("photo", photo);
     }
@@ -68,10 +67,7 @@ function Profile() {
 
       if (response.data.status === "success") {
         toast.success("Profile updated successfully!");
-
-        // Update user data context to reflect new information
         setUserData(response.data.user);
-
         setEditMode(false);
       } else {
         throw new Error(response.data.message);

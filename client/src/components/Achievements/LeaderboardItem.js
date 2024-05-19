@@ -3,7 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrophy, faMedal, faAward } from "@fortawesome/free-solid-svg-icons";
 import "./LeaderboardItem.css";
 
+// LeaderboardItem component to display individual leaderboard entries
 const LeaderboardItem = ({ leader, index }) => {
+  // Function to get the appropriate icon based on the position in the leaderboard
   const getIcon = (position) => {
     switch (position) {
       case 0:
@@ -19,9 +21,12 @@ const LeaderboardItem = ({ leader, index }) => {
 
   return (
     <li className="leader-item">
+      {/* Display the rank icon */}
       <div className="leader-rank-icon">{getIcon(index)}</div>
       <div className="leader-info">
+        {/* Display the leader's username */}
         <div className="leader-name">{leader.username}</div>
+        {/* Display the number of achievements */}
         <div className="leader-achievements">
           {leader.achievementCount} Achievements
         </div>

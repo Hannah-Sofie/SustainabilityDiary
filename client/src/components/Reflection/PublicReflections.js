@@ -9,11 +9,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAuth } from "../../context/AuthContext";
 
 const PublicReflections = ({ classroomId }) => {
+  // State to hold the public reflections
   const [publicEntries, setPublicEntries] = useState([]);
+  // State to hold the selected entry for the modal
   const [selectedEntry, setSelectedEntry] = useState(null);
+  // State to manage the loading state
   const [loading, setLoading] = useState(true);
+  // Get user data from the Auth context
   const { userData } = useAuth();
 
+  // Fetch public reflections when the component mounts or classroomId/userData changes
   useEffect(() => {
     const fetchPublicEntries = async () => {
       if (classroomId) {
@@ -40,14 +45,17 @@ const PublicReflections = ({ classroomId }) => {
     fetchPublicEntries();
   }, [classroomId, userData?._id]);
 
+  // Show loading message while data is being fetched
   if (loading) {
     return <p>Loading reflections...</p>;
   }
 
+  // Show message if no public reflections are available
   if (publicEntries.length === 0) {
     return <p>No public reflections posted yet.</p>;
   }
 
+  // Handle the like functionality
   const handleLike = async (id) => {
     try {
       const response = await axios.post(
@@ -71,14 +79,17 @@ const PublicReflections = ({ classroomId }) => {
     }
   };
 
+  // Open the reflection modal
   const openModal = (entry) => {
     setSelectedEntry(entry);
   };
 
+  // Close the reflection modal
   const closeModal = () => {
     setSelectedEntry(null);
   };
 
+  // Handle the submission of feedback
   const handleFeedbackSubmit = (reflectionId) => {
     setPublicEntries((prevEntries) =>
       prevEntries.map((entry) =>

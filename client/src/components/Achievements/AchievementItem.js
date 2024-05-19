@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import "./AchievementItem.css";
 
+// AchievementItem component to display individual achievements
 const AchievementItem = ({ achievement, unlocked }) => (
   <li className={`achievement-item ${unlocked ? "unlocked" : "locked"}`}>
     {unlocked ? (

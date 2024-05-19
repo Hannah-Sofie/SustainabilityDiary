@@ -10,7 +10,7 @@ describe('Get Students', () => {
       .get('/api/users/students')
       .set('Authorization', `Bearer ${token}`);
 
-    console.log(res.body);
+    (res.body);
 
     expect(res.statusCode).toEqual(200);
     expect(Array.isArray(res.body)).toBe(true);

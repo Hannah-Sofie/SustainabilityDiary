@@ -29,7 +29,7 @@ describe("Authentication Flow Tests", () => {
     await page.setViewport({ width: 1440, height: 1000 });
     // Detailed console and error logging
     page.on("console", (message) =>
-      console.log(`Browser Console: ${message.text()}`)
+      (`Browser Console: ${message.text()}`)
     );
     page.on("pageerror", (error) =>
       console.error(`Browser Error: ${error.message}`)

@@ -14,14 +14,14 @@ import puppeteer from "puppeteer";
   // Perform login by typing credentials and submitting the form
   await page.type("#email", "jonhsk@ntnu.no");
   await page.type("#password", "Jonhels1!");
-  console.log("Typing credentials done");
+  ("Typing credentials done");
 
   // Perform the click on the submit button and wait for navigation to complete
   await Promise.all([
     page.waitForNavigation(), // Waits for the next page to load after the button click
     page.click('[type="submit"]'), // Clicks the login button
   ]);
-  console.log("Login done");
+  ("Login done");
 
   // Function to navigate to different pages by their path
   const navigateTo = async (path) => {
@@ -30,16 +30,16 @@ import puppeteer from "puppeteer";
       page.click(`a[href="${path}"]`), // Clicks the link that matches the given path
     ]);
   };
-  console.log("Navigating to different pages");
+  ("Navigating to different pages");
 
   // Navigate through different sections using a function to simplify the code
   await navigateTo("/profile");
-  console.log("Navigating to profile done");
+  ("Navigating to profile done");
   await navigateTo("/students");
-  console.log("Navigating to students done");
+  ("Navigating to students done");
   await navigateTo("/dashboard");
-  console.log("Navigating to dashboard done");
+  ("Navigating to dashboard done");
 
-  console.log("Test completed");
+  ("Test completed");
   await browser.close();
 })();

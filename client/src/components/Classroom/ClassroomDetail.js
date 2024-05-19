@@ -17,6 +17,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 function ClassroomDetail() {
+  // Get the classroom ID from URL parameters
   const { id } = useParams();
   const navigate = useNavigate();
   const [classroom, setClassroom] = useState(null);
@@ -24,6 +25,7 @@ function ClassroomDetail() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { userData } = useAuth();
 
+  // Fetch classroom details on component mount
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -37,20 +39,24 @@ function ClassroomDetail() {
     fetchData();
   }, [id]);
 
+  // Show loading indicator if classroom data is not yet available
   if (!classroom) {
     return <LoadingIndicator />;
   }
 
+  // Handlers for modals
   const handleViewStudents = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const openEditModal = () => setIsEditModalOpen(true);
   const closeEditModal = () => setIsEditModalOpen(false);
 
+  // Update classroom details locally after editing
   const onClassroomUpdated = (updatedClassroom) => {
     setClassroom(updatedClassroom);
-    closeEditModal(); // Close the modal
+    closeEditModal();
   };
 
+  // Remove student from the classroom
   const removeStudent = async (studentId) => {
     try {
       const response = await axios.delete(
@@ -67,12 +73,14 @@ function ClassroomDetail() {
     }
   };
 
+  // Get student photo URL or use default image
   const getStudentPhotoUrl = (photo) => {
     return photo
       ? `${process.env.REACT_APP_API_URL}/uploads/profilepics/${photo}`
       : DefaultImage;
   };
 
+  // Handle favoriting and unfavoriting a classroom
   const handleFavourite = async () => {
     try {
       const response = await axios.post(`/api/classrooms/fave/${id}`);
@@ -93,9 +101,12 @@ function ClassroomDetail() {
 
   return (
     <div className="classroom-detail-container">
+      {/* Back button to navigate to the previous page */}
       <button className="back-button" onClick={() => navigate(-1)}>
         <FontAwesomeIcon icon={faArrowLeft} className="fa-icon" /> Go Back
       </button>
+
+      {/* Classroom header with background image */}
       <div
         className="classroom-header"
         style={{
@@ -114,6 +125,8 @@ function ClassroomDetail() {
         >
           {classroom.classStatus ? "Active" : "Finished"}
         </span>
+
+        {/* Favourite icon toggle */}
         <div className="favourite-icon">
           {userData && !classroom.favourites.includes(userData._id) && (
             <FontAwesomeIcon
@@ -131,6 +144,8 @@ function ClassroomDetail() {
           )}
         </div>
       </div>
+
+      {/* Classroom details section */}
       <div className="classroom-content">
         <div className="classroom-info">
           <p className="classroom-detail-text">
@@ -159,6 +174,8 @@ function ClassroomDetail() {
             </button>
           )}
         </div>
+
+        {/* Edit classroom modal */}
         <Modal isOpen={isEditModalOpen} closeModal={closeEditModal}>
           <EditClassroom
             classroom={classroom}
@@ -166,6 +183,8 @@ function ClassroomDetail() {
             onClassroomUpdated={onClassroomUpdated}
           />
         </Modal>
+
+        {/* View students modal */}
         <Modal isOpen={isModalOpen} closeModal={closeModal}>
           <h2 className="students-in">Students in {classroom.title}</h2>
           <div className="student-table">
@@ -204,6 +223,8 @@ function ClassroomDetail() {
             )}
           </div>
         </Modal>
+
+        {/* Display public reflections related to the classroom */}
         <h1>Public Reflections</h1>
         <PublicReflections classroomId={id} />
       </div>

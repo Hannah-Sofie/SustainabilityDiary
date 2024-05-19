@@ -29,7 +29,7 @@ describe('User Registration and Login', () => {
       });
 
     expect(res.statusCode).toEqual(200);
-    console.log(res.body);
+    (res.body);
   });
 
   it('should reject an email that does not end with @ntnu.no', async () => {

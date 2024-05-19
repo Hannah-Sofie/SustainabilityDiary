@@ -9,37 +9,40 @@ import DefaultImage from "../../assets/img/default-image.jpg";
 import { useAuth } from "../../context/AuthContext";
 
 function FeedbackTeacher() {
-  const { userData } = useAuth();
-  const [reflections, setReflections] = useState([]);
-  const [selectedReflection, setSelectedReflection] = useState(null);
-  const [loadingReflection, setLoadingReflection] = useState(false);
-  const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState("All");
+  const { userData } = useAuth(); // Access user data from the authentication context
+  const [reflections, setReflections] = useState([]); // State to store reflections
+  const [selectedReflection, setSelectedReflection] = useState(null); // State to store the selected reflection
+  const [loadingReflection, setLoadingReflection] = useState(false); // State to handle loading state
+  const [search, setSearch] = useState(""); // State to store search input
+  const [filter, setFilter] = useState("All"); // State to store filter type
 
+  // Fetch reflections data from the API
   const fetchData = useCallback(async () => {
     if (userData && userData._id) {
       try {
         const res = await axios.get(`/api/feedback/requested-feedback`, {
           withCredentials: true,
         });
-        setReflections(res.data);
+        setReflections(res.data); // Set reflections state with fetched data
       } catch (error) {
         console.error("Error fetching data:", error);
-        toast.error("Failed to fetch reflections.");
+        toast.error("Failed to fetch reflections."); // Display error toast
       }
     } else {
       console.log("User or user._id is undefined");
     }
   }, [userData]);
 
+  // Fetch data when the component mounts or when userData changes
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
+  // Handle card click to view reflection details
   const handleCardClick = (reflection) => {
     setLoadingReflection(true);
     try {
-      setSelectedReflection(reflection);
+      setSelectedReflection(reflection); // Set the selected reflection
     } catch (error) {
       console.error("Error fetching reflection:", error);
       toast.error("Failed to fetch reflection.");
@@ -48,14 +51,17 @@ function FeedbackTeacher() {
     }
   };
 
+  // Handle search input change
   const handleSearch = (event) => {
     setSearch(event.target.value.toLowerCase());
   };
 
+  // Handle filter change
   const handleFilterChange = (filterType) => {
     setFilter(filterType);
   };
 
+  // Update reflections state when feedback is submitted
   const handleFeedbackSubmit = (reflectionId) => {
     setReflections((prevReflections) =>
       prevReflections.map((reflection) =>
@@ -66,6 +72,7 @@ function FeedbackTeacher() {
     );
   };
 
+  // Filter and search reflections based on search input and filter type
   const filteredAndSearchedReflections = reflections.filter((reflection) => {
     const matchesSearch = reflection.title.toLowerCase().includes(search);
 
