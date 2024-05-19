@@ -76,7 +76,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start the server
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => (`Server running on port ${PORT}`));
 
 // Export the app for testing
 module.exports = app;
@@ -84,13 +84,13 @@ module.exports = app;
 // Function to start the server, exported for testing purposes
 module.exports.start = function () {
   const PORT = process.env.PORT || 8002;
-  return app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  return app.listen(PORT, () => (`Server running on port ${PORT}`));
 };
 
 // Graceful shutdown
 process.on("SIGINT", async () => {
-  console.log("Shutting down gracefully...");
+  ("Shutting down gracefully...");
   await mongoose.connection.close();
-  console.log("MongoDB connection closed.");
+  ("MongoDB connection closed.");
   process.exit(0);
 });

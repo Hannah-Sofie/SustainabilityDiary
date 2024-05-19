@@ -33,7 +33,7 @@ before(async () => {
         "../../debug-compose.yaml"
       )} up -d test-mongodb-debug`
     );
-    console.log("MongoDB container is up");
+    ("MongoDB container is up");
   } catch (error) {
     console.error("Error starting MongoDB container:", error);
     throw error;
@@ -48,7 +48,7 @@ before(async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log("Connected to MongoDB");
+    ("Connected to MongoDB");
   } catch (error) {
     console.error("Failed to connect to MongoDB", error);
     throw error;
@@ -58,9 +58,9 @@ before(async () => {
 after(async () => {
   try {
     await mongoClient.db(TEST_DB_NAME).dropDatabase();
-    console.log("Test database dropped");
+    ("Test database dropped");
     await mongoClient.close();
-    console.log("MongoDB connection closed");
+    ("MongoDB connection closed");
   } catch (error) {
     console.error("Error during database cleanup:", error);
     throw error;
@@ -74,7 +74,7 @@ after(async () => {
         "../../debug-compose.yaml"
       )} down`
     );
-    console.log("MongoDB container is down");
+    ("MongoDB container is down");
   } catch (error) {
     console.error("Error stopping MongoDB container:", error);
     throw error;

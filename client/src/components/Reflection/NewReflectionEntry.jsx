@@ -11,6 +11,7 @@ import {
 import "./NewReflectionEntry.css";
 
 function NewReflectionEntry() {
+  // State to hold the reflection entry details
   const [entry, setEntry] = useState({
     title: "",
     body: "",
@@ -21,10 +22,17 @@ function NewReflectionEntry() {
     isAnonymous: false,
     requestFeedback: false,
   });
+
+  // State for previewing the uploaded image
   const [previewImage, setPreviewImage] = useState(null);
+
+  // State for storing classrooms fetched from the server
   const [classrooms, setClassrooms] = useState([]);
+
+  // Hook for navigation
   const navigate = useNavigate();
 
+  // Fetch classrooms on component mount
   useEffect(() => {
     const fetchClassrooms = async () => {
       try {
@@ -42,6 +50,7 @@ function NewReflectionEntry() {
     fetchClassrooms();
   }, []);
 
+  // Toggle public/private status of the entry
   const togglePublic = () => {
     setEntry((prev) => ({
       ...prev,
@@ -52,6 +61,7 @@ function NewReflectionEntry() {
     );
   };
 
+  // Handle changes in form inputs
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "photo" && files.length > 0) {
@@ -67,6 +77,7 @@ function NewReflectionEntry() {
     }
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -102,6 +113,7 @@ function NewReflectionEntry() {
     }
   };
 
+  // Handle cancel action
   const handleCancel = () => {
     if (
       window.confirm(

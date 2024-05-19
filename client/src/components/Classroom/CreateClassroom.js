@@ -6,6 +6,7 @@ import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import "./CreateClassroom.css";
 
 function CreateClassroom({ closeModal, onNewClassroom }) {
+  // Initialize state for form data, file, and preview image
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -14,18 +15,20 @@ function CreateClassroom({ closeModal, onNewClassroom }) {
   const [file, setFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
 
+  // Handle form input changes
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "photo" && files.length > 0) {
       const file = files[0];
       setFile(file);
-      // Create a local URL for preview
+      // Create a local URL for image preview
       setPreviewImage(URL.createObjectURL(file));
     } else {
       setFormData({ ...formData, [name]: value });
     }
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData();
@@ -33,14 +36,14 @@ function CreateClassroom({ closeModal, onNewClassroom }) {
     data.append("description", formData.description);
     data.append("learningGoals", formData.learningGoals);
     if (file) {
-      data.append("photo", file); // This will be stored as the classroom icon
+      data.append("photo", file); // Append the file if it exists
     }
 
     try {
       const response = await axios.post("/api/classrooms/create", data);
       toast.success("Classroom created successfully!");
       onNewClassroom(response.data);
-      closeModal();
+      closeModal(); // Close the modal after successful creation
     } catch (error) {
       toast.error(
         "Failed to create classroom: " +

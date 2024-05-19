@@ -8,29 +8,32 @@ import { toast } from "react-toastify";
 import { useAuth } from "../../context/AuthContext";
 
 function ReflectionModal({ entry, onClose, onFeedbackSubmit }) {
-  const [feedbacks, setFeedbacks] = useState([]);
-  const { userData } = useAuth();
+  const [feedbacks, setFeedbacks] = useState([]); // State to store feedbacks for the reflection
+  const { userData } = useAuth(); // Access user data from the authentication context
 
   useEffect(() => {
+    // Fetch feedbacks for the given reflection when the component mounts or entry._id changes
     const fetchFeedbacks = async () => {
       try {
         const res = await axios.get(`/api/feedback/reflection/${entry._id}`);
-        setFeedbacks(res.data);
+        setFeedbacks(res.data); // Set the fetched feedbacks in state
       } catch (error) {
         console.error("Error fetching feedbacks:", error);
-        toast.error("Error fetching feedbacks.");
+        toast.error("Error fetching feedbacks."); // Display error toast
       }
     };
 
     fetchFeedbacks();
   }, [entry._id]);
 
-  if (!entry) return null;
+  if (!entry) return null; // Return null if no entry is provided
 
+  // Determine the image URL for the reflection
   const imageUrl = entry.photo
     ? `${process.env.REACT_APP_API_URL}/uploads/reflections/${entry.photo}`
     : DefaultImage;
 
+  // Handle feedback submission
   const handleFeedbackSubmit = async (event) => {
     event.preventDefault();
     const feedbackField = document.getElementById("feedback");

@@ -12,12 +12,12 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        console.log("Checking authentication status...");
+        ("Checking authentication status...");
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/users/status`,
           { withCredentials: true }
         );
-        console.log("Auth status response:", response);
+        ("Auth status response:", response);
 
         if (response.data.isAuthenticated) {
           const role = response.data.user.email.endsWith("@ntnu.no")

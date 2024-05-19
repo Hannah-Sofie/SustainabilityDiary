@@ -45,7 +45,7 @@ const upload = multer({
 
 // Define your routes
 router.post("/register", (req, res, next) => {
-  console.log("register called");
+  ("register called");
   registerUser(req, res, next);
 });
 router.post("/login", loginUser);

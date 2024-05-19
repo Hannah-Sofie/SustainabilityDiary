@@ -8,6 +8,7 @@ import RegisterImage from "../../assets/img/register-img.png";
 import CustomButton from "../CustomButton/CustomButton";
 
 function Register() {
+  // State variables to manage form data and loading state
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -16,10 +17,12 @@ function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Handle input field changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -44,6 +47,7 @@ function Register() {
   return (
     <div>
       <div className="main-register">
+        {/* Home button to navigate back to the homepage */}
         <div className="home-button">
           <CustomButton
             name="⬅ Back to home"
@@ -56,9 +60,11 @@ function Register() {
           />
         </div>
         <div className="container-register">
+          {/* Registration image */}
           <div className="register-pic">
             <img src={RegisterImage} alt="Register" />
           </div>
+          {/* Registration form */}
           <div className="register">
             <h1>Sign Up</h1>
             <hr />
@@ -100,7 +106,6 @@ function Register() {
               <button type="submit" disabled={isLoading}>
                 {isLoading ? "Registering..." : "Register"}
               </button>
-
               <p className="have-account">
                 Already have an account?
                 <br />

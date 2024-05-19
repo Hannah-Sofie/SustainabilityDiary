@@ -7,65 +7,62 @@ import { faSearch, faStar } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 
-// Replace with your environment variable or direct API URL if not using env variables.
+// Base URL for API requests
 const baseURL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
 function Classes({ classrooms: initialClassrooms }) {
-  // Add a search state
+  // State to manage search input
   const [search, setSearch] = useState("");
-  // State to filter the classrooms out based on type we choose
+  // State to manage filter type
   const [filter, setFilter] = useState("All");
-  const [filteredClassrooms, setFilteredClassrooms] = useState(
-    initialClassrooms || []
-  );
-
+  // State to manage filtered classrooms
+  const [filteredClassrooms, setFilteredClassrooms] = useState(initialClassrooms || []);
   const { userData } = useAuth();
 
+  // Update filtered classrooms when initial classrooms change
   useEffect(() => {
     setFilteredClassrooms(initialClassrooms);
   }, [initialClassrooms]);
 
-  // Add a search handler
+  // Handle search input change
   const handleSearch = (event) => {
     setSearch(event.target.value.toLowerCase());
   };
 
+  // Handle filter type change
   const handleFilterChange = (filterType) => {
     setFilter(filterType);
   };
 
+  // Handle favoriting a classroom
   const handleFavourite = async (id) => {
     try {
       const response = await axios.post(
         `${baseURL}/api/classrooms/fave/${id}`,
         {},
-        {
-          headers: { Authorization: `Bearer ${userData.token}` },
-        }
+        { headers: { Authorization: `Bearer ${userData.token}` } }
       );
-      // Update the classroom's favourites list locally
       updateClassroomFavourites(response.data);
     } catch (error) {
       console.error("Error favoriting classroom:", error);
     }
   };
 
+  // Handle unfavoriting a classroom
   const handleUnfavourite = async (id) => {
     try {
       const response = await axios.post(
         `${baseURL}/api/classrooms/unfave/${id}`,
         {},
-        {
-          headers: { Authorization: `Bearer ${userData.token}` },
-        }
+        { headers: { Authorization: `Bearer ${userData.token}` } }
       );
-      // Update the classroom's favourites list locally
       updateClassroomFavourites(response.data);
     } catch (error) {
       console.error("Error unfavoriting classroom:", error);
     }
   };
 
+  // Update the list of classrooms with new favorites
   const updateClassroomFavourites = (updatedClassroom) => {
     setFilteredClassrooms((prevClassrooms) =>
       prevClassrooms.map((classroom) =>
@@ -74,8 +71,7 @@ function Classes({ classrooms: initialClassrooms }) {
     );
   };
 
-  // Filter the classrooms based on the search input, search on the classroom title
-  // Ensure classrooms is an array before filtering to avoid errors in dashboard
+  // Filter and search classrooms
   const filteredAndSearchedClassrooms = Array.isArray(filteredClassrooms)
     ? filteredClassrooms.filter((classroom) => {
         const matchesSearch = classroom.title.toLowerCase().includes(search);
@@ -94,6 +90,7 @@ function Classes({ classrooms: initialClassrooms }) {
       })
     : [];
 
+  // Display message if no classrooms are available
   if (!initialClassrooms || !initialClassrooms.length) {
     return (
       <div className="no-classrooms">
@@ -107,6 +104,7 @@ function Classes({ classrooms: initialClassrooms }) {
       <section className="container-class">
         <div className="class-box">
           <div className="classesHeader">
+            {/* Filter options */}
             <ul className="class-filter">
               <li
                 className={filter === "All" ? "active" : ""}
@@ -134,7 +132,7 @@ function Classes({ classrooms: initialClassrooms }) {
               </li>
             </ul>
 
-            {/* Add a search input */}
+            {/* Search input */}
             <div className="inputSearch">
               <FontAwesomeIcon icon={faSearch} className="fa-search-icon" />
               <input
@@ -146,9 +144,8 @@ function Classes({ classrooms: initialClassrooms }) {
           </div>
 
           <div className="class">
-            {/*Map over the filtered classrooms*/}
+            {/* Map over the filtered classrooms */}
             {filteredAndSearchedClassrooms.map((classroom, index) => {
-              // Use the baseURL with the classroom's `iconPhotoUrl`
               const iconUrl = classroom.iconPhotoUrl
                 ? `${baseURL}${classroom.iconPhotoUrl}`
                 : DefaultImage;

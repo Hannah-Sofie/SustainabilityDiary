@@ -12,12 +12,14 @@ function DashboardTeacher() {
   const [classrooms, setClassrooms] = useState([]);
   const { isAuthenticated } = useAuth();
 
+  // Fetch classrooms when the user is authenticated
   useEffect(() => {
     if (isAuthenticated) {
       fetchClassrooms();
     }
   }, [isAuthenticated]);
 
+  // Function to fetch classrooms data from the server
   const fetchClassrooms = async () => {
     try {
       const response = await axios.get("/api/classrooms");
@@ -30,28 +32,30 @@ function DashboardTeacher() {
   return (
     <div className="dashboard-container">
       <div className="panel-container">
-      <div className="left-panel">
-        <Greeting />
+        {/* Left Panel */}
+        <div className="left-panel">
+          <Greeting />
 
-        <div className="sustainability-facts">
-          <h2>Today's sustainability fact</h2>
-          <SustainabilityFact />
+          <div className="sustainability-facts">
+            <h2>Today's sustainability fact</h2>
+            <SustainabilityFact />
+          </div>
+        </div>
+
+        {/* Right Panel */}
+        <div className="right-panel">
+          <div className="date-display">
+            <DateDisplay />
+          </div>
+          <TodoList />
         </div>
       </div>
-      <div className="right-panel">
-        <div className="date-display">
-          <DateDisplay />
-        </div>
-        <TodoList />
+
+      {/* Favourite Classrooms Section */}
+      <div className="classrooms">
+        <h2>Favourite classrooms</h2>
+        <FavouriteClasses classrooms={classrooms} setClassrooms={setClassrooms} />
       </div>
-      </div>
-        <div className="classrooms">
-          <h2>Favourite classrooms</h2>
-          <FavouriteClasses
-            classrooms={classrooms}
-            setClassrooms={setClassrooms}
-          />
-        </div>
     </div>
   );
 }

@@ -3,7 +3,7 @@ const User = require("../models/userSchema");
 const achievementsConfig = require("./achievementsConfig");
 
 const handleAchievementCreation = async (userId, count) => {
-  console.log(`Checking achievements for user ${userId} with count ${count}`);
+  (`Checking achievements for user ${userId} with count ${count}`);
 
   for (const achievement of achievementsConfig) {
     if (count === achievement.count) {
@@ -13,7 +13,7 @@ const handleAchievementCreation = async (userId, count) => {
       });
 
       if (!existingAchievement) {
-        console.log(
+        (
           `Creating "${achievement.name}" achievement for user ${userId}`
         );
         const user = await User.findById(userId);
@@ -26,11 +26,11 @@ const handleAchievementCreation = async (userId, count) => {
           image: achievement.image,
         });
         await newAchievement.save();
-        console.log(
+        (
           `"${achievement.name}" achievement created for user ${userId}`
         );
       } else {
-        console.log(
+        (
           `User ${userId} already has the "${achievement.name}" achievement.`
         );
       }
@@ -61,13 +61,13 @@ const handleAchievementCreation = async (userId, count) => {
       image: `${process.env.BASE_URL}/uploads/achievements/achievement_master_award.jpg`,
     });
     await masterAchievement.save();
-    console.log(`"Achievement Master" achievement created for user ${userId}`);
+    (`"Achievement Master" achievement created for user ${userId}`);
   } else if (hasAllAchievements) {
-    console.log(
+    (
       `User ${userId} already has the "Achievement Master" achievement.`
     );
   } else {
-    console.log(`User ${userId} does not have all achievements yet.`);
+    (`User ${userId} does not have all achievements yet.`);
   }
 };
 

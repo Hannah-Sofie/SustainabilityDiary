@@ -16,6 +16,7 @@ import ReflectionCount from "./ReflectionCount";
 import ReflectionModal from "../Feedback/ReflectionModal";
 
 function ReflectionEntries() {
+  // State variables for managing reflection entries, selected entry, search query, sort order, and privacy filter
   const [entries, setEntries] = useState([]);
   const [selectedEntry, setSelectedEntry] = useState(null);
   const [search, setSearch] = useState("");
@@ -23,10 +24,12 @@ function ReflectionEntries() {
   const [privacyFilter, setPrivacyFilter] = useState("");
   const navigate = useNavigate();
 
+  // Fetch reflection entries when the component mounts
   useEffect(() => {
     fetchEntries();
   }, []);
 
+  // Function to fetch reflection entries from the server
   const fetchEntries = async () => {
     try {
       const { data } = await axios.get(
@@ -40,15 +43,18 @@ function ReflectionEntries() {
     }
   };
 
+  // Handle search input changes
   const handleSearch = (event) => {
     setSearch(event.target.value.toLowerCase());
   };
 
+  // Handle edit button click
   const handleEdit = (id, event) => {
     event.stopPropagation();
     navigate(`/edit-reflection/${id}`);
   };
 
+  // Handle delete button click
   const deleteEntry = async (id, event) => {
     event.stopPropagation();
     if (window.confirm("Are you sure you want to delete this reflection?")) {
@@ -67,17 +73,20 @@ function ReflectionEntries() {
     }
   };
 
+  // Format date to a readable format
   const formatDate = (dateString) => {
     const options = { day: "2-digit", month: "2-digit", year: "numeric" };
     return new Date(dateString).toLocaleDateString("en-GB", options);
   };
 
+  // Truncate text if it exceeds the maximum length
   const truncateText = (text, maxLength) => {
     return text.length > maxLength
       ? text.substring(0, maxLength) + "..."
       : text;
   };
 
+  // Filter and sort entries based on search query, privacy filter, and sort order
   const sortedAndFilteredEntries = entries
     .filter((entry) => {
       return (

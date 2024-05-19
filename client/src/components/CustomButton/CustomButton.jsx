@@ -13,8 +13,9 @@ const CustomButton = ({
   hoverBorderColor,
   onClick,
 }) => {
-  let navigate = useNavigate();
+  let navigate = useNavigate(); // Hook for programmatic navigation
 
+   // Handle button click: navigate if `to` is provided, else execute `onClick`
   const handleClick = () => {
     if (onClick) {
       onClick();
