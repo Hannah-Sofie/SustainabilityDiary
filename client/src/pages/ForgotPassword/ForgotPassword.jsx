@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import emailjs from '@emailjs/browser';
 import "./ForgotPassword.css";
 import CustomButton from "../../components/CustomButton/CustomButton";
 
