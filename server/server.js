@@ -21,6 +21,9 @@ const whitelist = [
   "http://localhost:3000",
   "http://localhost:8083",
   "http://team3.sustainability.it.ntnu.no",
+  "http://team3-api.sustainability.it.ntnu.no",
+  "https://team3.sustainability.it.ntnu.no",
+  "https://team3-api.sustainability.it.ntnu.no",
 ];
 const corsOptions = {
   origin: (origin, callback) => {
