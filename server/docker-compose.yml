@@ -34,7 +34,7 @@ services:
       context: ./server
       dockerfile: Dockerfile
     ports:
-      - ${BACKEND_PORT}:${BACKEND_PORT}
+      - 8093:8093
     environment:
       MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/mongo_admin_pwd
     restart: on-failure
