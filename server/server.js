@@ -18,9 +18,11 @@ if (!process.env.MONGO_URI) {
 
 // CORS configuration for different environments
 const whitelist = [
+
   "http://localhost:3000",
   "http://localhost:8083",
   "http://team3.sustainability.it.ntnu.no",
+
 ];
 const corsOptions = {
   origin: (origin, callback) => {
