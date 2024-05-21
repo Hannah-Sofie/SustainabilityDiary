@@ -14,7 +14,7 @@ const whitelist = [
   "http://localhost:3000", // for local development
   "http://localhost:8083", // if you run locally on this port
   "https://team3.sustainability.it.ntnu.no", // external access
-  "http://client:3000", // Docker internal network address
+  "https://client:3000", // Docker internal network address
   "http://server:8093", // Docker internal network address
 ];
 
