@@ -7,14 +7,16 @@ const morgan = require("morgan");
 const path = require("path");
 const connectDB = require("./dbconnect");
 const app = express();
-const PORT = process.env.PORT || 8002;
+const PORT = process.env.PORT || 8093;
 
 // CORS configuration for different environments
 const whitelist = [
-  "http://localhost:3000",
-  "http://localhost:8083",
-  "https://team3.sustainability.it.ntnu.no",
+  "http://localhost:3000", // for local development
+  "http://localhost:8083", // if you run locally on this port
+  "https://team3.sustainability.it.ntnu.no", // external access
+  "http://client:3000", // Docker internal network address
 ];
+
 const corsOptions = {
   origin: (origin, callback) => {
     if (whitelist.includes(origin) || !origin) {
@@ -43,7 +45,7 @@ app.use(
       res.setHeader("Access-Control-Allow-Origin", "*");
       res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
     },
-  })
+  }),
 );
 
 // Routes
@@ -76,7 +78,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start the server
-app.listen(PORT, () => (`Server running on port ${PORT}`));
+app.listen(PORT, () => `Server running on port ${PORT}`);
 
 // Export the app for testing
 module.exports = app;
@@ -84,7 +86,7 @@ module.exports = app;
 // Function to start the server, exported for testing purposes
 module.exports.start = function () {
   const PORT = process.env.PORT || 8002;
-  return app.listen(PORT, () => (`Server running on port ${PORT}`));
+  return app.listen(PORT, () => `Server running on port ${PORT}`);
 };
 
 // Graceful shutdown
