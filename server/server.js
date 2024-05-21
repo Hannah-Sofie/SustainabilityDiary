@@ -16,6 +16,7 @@ const whitelist = [
   "https://team3.sustainability.it.ntnu.no", // external access
   "http://client:3000", // Docker internal network address
   "http://server:8093", // Docker internal network address
+  "https://team3.sustainability.it.ntnu.no/api",
 ];
 
 const corsOptions = {
