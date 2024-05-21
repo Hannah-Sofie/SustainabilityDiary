@@ -21,6 +21,7 @@ const whitelist = [
 
   "http://localhost:3000",
   "http://localhost:8083",
+  "http://localhost:8093",
   "http://team3.sustainability.it.ntnu.no",
   "http://team3-api.sustainability.it.ntnu.no",
   "https://team3.sustainability.it.ntnu.no",
