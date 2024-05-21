@@ -5,20 +5,25 @@ const helmet = require("helmet");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const path = require("path");
+const mongoose = require("mongoose");
 const connectDB = require("./dbconnect");
 const app = express();
-const PORT = process.env.PORT || 8093;
-//hehe
+const PORT = process.env.PORT || 8002;
+
+// Check for required environment variables
+if (!process.env.MONGO_URI) {
+  console.error("FATAL ERROR: MONGO_URI is not defined.");
+  process.exit(1);
+}
+
 // CORS configuration for different environments
 const whitelist = [
-  "http://localhost:3000", // for local development
-  "http://localhost:8083", // if you run locally on this port
-  "https://team3.sustainability.it.ntnu.no", // external access
-  "http://client:3000", // Docker internal network address
-  "http://server:8093", // Docker internal network address
-  "https://team3.sustainability.it.ntnu.no/api",
-];
 
+  "http://localhost:3000",
+  "http://localhost:8083",
+  "http://team3.sustainability.it.ntnu.no",
+
+];
 const corsOptions = {
   origin: (origin, callback) => {
     if (whitelist.includes(origin) || !origin) {
@@ -37,7 +42,12 @@ app.use(cookieParser());
 app.use(morgan("tiny"));
 
 // Connect to MongoDB
-connectDB();
+connectDB().then(() => {
+  // Start the server only after the database connection is established
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+});
 
 // Static file serving for uploaded images with custom CORS
 app.use(
@@ -47,7 +57,7 @@ app.use(
       res.setHeader("Access-Control-Allow-Origin", "*");
       res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
     },
-  }),
+  })
 );
 
 // Routes
@@ -79,8 +89,16 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start the server
-app.listen(PORT, () => `Server running on port ${PORT}`);
+// Graceful shutdown
+const gracefulShutdown = async () => {
+  console.log("Shutting down gracefully...");
+  await mongoose.connection.close();
+  console.log("MongoDB connection closed.");
+  process.exit(0);
+};
+
+process.on("SIGINT", gracefulShutdown);
+process.on("SIGTERM", gracefulShutdown);
 
 // Export the app for testing
 module.exports = app;
@@ -88,13 +106,7 @@ module.exports = app;
 // Function to start the server, exported for testing purposes
 module.exports.start = function () {
   const PORT = process.env.PORT || 8002;
-  return app.listen(PORT, () => `Server running on port ${PORT}`);
+  return app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
 };
-
-// Graceful shutdown
-process.on("SIGINT", async () => {
-  ("Shutting down gracefully...");
-  await mongoose.connection.close();
-  ("MongoDB connection closed.");
-  process.exit(0);
-});
