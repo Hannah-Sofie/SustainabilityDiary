@@ -7,16 +7,15 @@ const morgan = require("morgan");
 const path = require("path");
 const mongoose = require("mongoose");
 const connectDB = require("./dbconnect");
+
 const app = express();
 const PORT = process.env.PORT || 8002;
 
-// Check for required environment variables
 if (!process.env.MONGO_URI) {
   console.error("FATAL ERROR: MONGO_URI is not defined.");
   process.exit(1);
 }
 
-// CORS configuration for different environments
 const whitelist = [
   "http://localhost:3000",
   "http://localhost:8083",
@@ -24,15 +23,21 @@ const whitelist = [
   "https://team3.sustainability.it.ntnu.no",
   "https://team3-api.sustainability.it.ntnu.no",
 ];
+
 const corsOptions = {
   origin: (origin, callback) => {
+    console.log(`CORS request from origin: ${origin}`);
     if (whitelist.includes(origin) || !origin) {
+      console.log("CORS allowed");
       callback(null, true);
     } else {
+      console.log("CORS not allowed");
       callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: "Origin,X-Requested-With,Content-Type,Accept,Authorization",
 };
 
 app.use(cors(corsOptions));
@@ -41,15 +46,12 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("tiny"));
 
-// Connect to MongoDB
 connectDB().then(() => {
-  // Start the server only after the database connection is established
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
 });
 
-// Static file serving for uploaded images with custom CORS
 app.use(
   "/uploads",
   express.static(path.join(__dirname, "./uploads"), {
@@ -60,7 +62,6 @@ app.use(
   })
 );
 
-// Routes
 const userRoutes = require("./routes/userRoutes");
 const reflectionEntryRoutes = require("./routes/reflectionEntryRoutes");
 const classroomRoutes = require("./routes/classroomRoutes");
@@ -79,7 +80,6 @@ app.use("/api/feedback", feedbackRoutes);
 app.use("/api/todos", todoRoutes);
 app.use("/api/achievements", achievementRoutes);
 
-// Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err);
   const statusCode = err.statusCode || 500;
@@ -89,7 +89,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Graceful shutdown
 const gracefulShutdown = async () => {
   console.log("Shutting down gracefully...");
   await mongoose.connection.close();
@@ -100,10 +99,8 @@ const gracefulShutdown = async () => {
 process.on("SIGINT", gracefulShutdown);
 process.on("SIGTERM", gracefulShutdown);
 
-// Export the app for testing
 module.exports = app;
 
-// Function to start the server, exported for testing purposes
 module.exports.start = function () {
   const PORT = process.env.PORT || 8002;
   return app.listen(PORT, () => {
