@@ -10,7 +10,7 @@ const connectDB = require("./dbconnect");
 
 const app = express();
 
-const PORT = process.env.PORT || 8093;
+const PORT = process.env.PORT || 8093; // 8003
 
 if (!process.env.MONGO_URI) {
   console.error("FATAL ERROR: MONGO_URI is not defined.");
