@@ -57,7 +57,7 @@ app.use(
     },
   }),
 );
-
+// root route
 app.get("/", (req, res) => {
   const htmlContent = `
     <h1>API for Sustainability App</h1>
