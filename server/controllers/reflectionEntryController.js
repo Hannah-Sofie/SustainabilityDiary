@@ -225,6 +225,7 @@ const likeReflectionEntry = asyncHandler(async (req, res, next) => {
     await reflection.save();
     res.json({ likes: reflection.likes, likedBy: reflection.likedBy });
   } catch (error) {
+    console.error("Error in likeReflectionEntry:", error); // Log the error
     next(new CreateError("Failed to update likes", 500));
   }
 });

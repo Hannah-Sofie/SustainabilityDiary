@@ -10,7 +10,7 @@ const connectDB = require("./dbconnect");
 
 const app = express();
 
-const PORT = 8093;
+const PORT = process.env.PORT || 8093; // 8003
 
 if (!process.env.MONGO_URI) {
   console.error("FATAL ERROR: MONGO_URI is not defined.");
@@ -27,18 +27,13 @@ const whitelist = [
 
 const corsOptions = {
   origin: (origin, callback) => {
-    console.log(`CORS request from origin: ${origin}`);
-    if (whitelist.includes(origin) || !origin) {
-      console.log("CORS allowed");
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
-      console.log("CORS not allowed");
       callback(new Error("Not allowed by CORS"));
     }
   },
-  credentials: true,
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  allowedHeaders: "Origin,X-Requested-With,Content-Type,Accept,Authorization",
+  credentials: true, // This is important for cookies, authorization headers with HTTPS
 };
 
 app.use(cors(corsOptions));
@@ -60,7 +55,7 @@ app.use(
       res.setHeader("Access-Control-Allow-Origin", "*");
       res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
     },
-  }),
+  })
 );
 
 const userRoutes = require("./routes/userRoutes");

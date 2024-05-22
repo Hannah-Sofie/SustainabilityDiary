@@ -1,44 +1,42 @@
 import React, { lazy } from "react";
 import { Route } from "react-router-dom";
-import Layout from "../components/Layout/Layout";
-import ProtectedRoute from "../components/ProtectedRoute";
+import Layout from "./components/Layout/Layout";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 // Lazy load pages
-const Dashboard = lazy(() => import("../pages/Dashboard/Dashboard"));
-const Home = lazy(() => import("../pages/Home/Home"));
-const Login = lazy(() => import("../pages/Login/Login"));
-const Register = lazy(() => import("../pages/Register/Register"));
-const NotFound = lazy(() => import("../pages/NotFound/NotFound"));
-const Reflections = lazy(() => import("../pages/Reflections/Reflections"));
-const Classroom = lazy(() => import("../pages/Classroom/Classroom"));
+const Dashboard = lazy(() => import("./pages/Dashboard/Dashboard"));
+const Home = lazy(() => import("./pages/Home/Home"));
+const Login = lazy(() => import("./pages/Login/Login"));
+const Register = lazy(() => import("./pages/Register/Register"));
+const NotFound = lazy(() => import("./pages/NotFound/NotFound"));
+const Reflections = lazy(() => import("./pages/Reflections/Reflections"));
+const Classroom = lazy(() => import("./pages/Classroom/Classroom"));
 const ForgotPassword = lazy(() =>
-  import("../pages/ForgotPassword/ForgotPassword")
+  import("./pages/ForgotPassword/ForgotPassword")
 );
-const ResetPassword = lazy(() =>
-  import("../pages/ResetPassword/ResetPassword")
-);
-const Students = lazy(() => import("../pages/Students/Students"));
-const Profile = lazy(() => import("../pages/Profile/Profile"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword/ResetPassword"));
+const Students = lazy(() => import("./pages/Students/Students"));
+const Profile = lazy(() => import("./pages/Profile/Profile"));
 const Sustainability = lazy(() =>
-  import("../pages/Sustainability/Sustainability")
+  import("./pages/Sustainability/Sustainability")
 );
-const Achievements = lazy(() => import("../pages/Achievements/Achievements"));
-const Feedback = lazy(() => import("../pages/Feedback/Feedback"));
-const Help = lazy(() => import("../pages/Help/Help"));
+const Achievements = lazy(() => import("./pages/Achievements/Achievements"));
+const Feedback = lazy(() => import("./pages/Feedback/Feedback"));
+const Help = lazy(() => import("./pages/Help/Help"));
 const NewReflectionEntry = lazy(() =>
-  import("../components/Reflection/NewReflectionEntry")
+  import("./components/Reflection/NewReflectionEntry")
 );
 const ReflectionEntries = lazy(() =>
-  import("../components/Reflection/ReflectionEntries")
+  import("./components/Reflection/ReflectionEntries")
 );
 const EditReflectionEntry = lazy(() =>
-  import("../components/Reflection/EditReflectionEntry")
+  import("./components/Reflection/EditReflectionEntry")
 );
 const CreateClassroom = lazy(() =>
-  import("../components/Classroom/CreateClassroom")
+  import("./components/Classroom/CreateClassroom")
 );
 const ClassroomDetail = lazy(() =>
-  import("../components/Classroom/ClassroomDetail")
+  import("./components/Classroom/ClassroomDetail")
 );
 
 const AppRoutes = (
