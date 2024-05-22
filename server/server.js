@@ -9,7 +9,9 @@ const mongoose = require("mongoose");
 const connectDB = require("./dbconnect");
 
 const app = express();
-const PORT = 8093;
+
+const PORT = process.env.PORT || 8003;
+
 
 if (!process.env.MONGO_URI) {
   console.error("FATAL ERROR: MONGO_URI is not defined.");
@@ -102,7 +104,7 @@ process.on("SIGTERM", gracefulShutdown);
 module.exports = app;
 
 module.exports.start = function () {
-  const PORT = process.env.PORT || 8002;
+  const PORT = process.env.PORT || 8003;
   return app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });

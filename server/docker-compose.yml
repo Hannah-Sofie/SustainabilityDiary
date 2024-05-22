@@ -11,7 +11,7 @@ services:
       context: ./client
       dockerfile: Dockerfile
     ports:
-      - ${APP_PORT}:${APP_PORT}
+      - 8083:8083
     restart: on-failure
     env_file:
       - .env

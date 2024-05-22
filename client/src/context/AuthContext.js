@@ -17,13 +17,12 @@ export const AuthProvider = ({ children }) => {
       try {
         // Log checking authentication status
         console.log("Checking authentication status...");
-        
+
         // Make a request to check authentication status
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/users/status`,
           { withCredentials: true }
         );
-        console.log("Auth status response:", response);
 
         // Set user data and authentication status based on response
         if (response.data.isAuthenticated) {
@@ -57,7 +56,7 @@ export const AuthProvider = ({ children }) => {
         credentials,
         { withCredentials: true }
       );
-      
+
       // If login is successful, set user data and authentication status
       if (response.data.status === "success") {
         const role = response.data.user.email.endsWith("@ntnu.no")
