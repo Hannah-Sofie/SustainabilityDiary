@@ -58,6 +58,16 @@ app.use(
   }),
 );
 
+app.get("/", (req, res) => {
+  const htmlContent = `
+    <h1>API for Sustainability App</h1>
+    <p>Welcome to the Team 3 backend service</p>
+    <p>API is available at /api</p>
+    <p>CORS is enabled for the following origins: ${whitelist.join(", ")}</p>
+  `;
+  res.send(htmlContent);
+});
+
 const userRoutes = require("./routes/userRoutes");
 const reflectionEntryRoutes = require("./routes/reflectionEntryRoutes");
 const classroomRoutes = require("./routes/classroomRoutes");
