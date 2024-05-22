@@ -4,8 +4,8 @@ const { Schema } = mongoose;
 const reflectionEntrySchema = new Schema(
   {
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    title: { type: String, required: true, maxlength: 20 },
-    body: { type: String, required: true, maxlength: 200 },
+    title: { type: String, required: true, maxlength: 50 },
+    body: { type: String, required: true, maxlength: 1000 },
     isPublic: { type: Boolean, default: false },
     isAnonymous: { type: Boolean, default: false },
     photo: { type: String },
