@@ -59,7 +59,7 @@ app.use(
       res.setHeader("Access-Control-Allow-Origin", "*");
       res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
     },
-  })
+  }),
 );
 
 const userRoutes = require("./routes/userRoutes");
