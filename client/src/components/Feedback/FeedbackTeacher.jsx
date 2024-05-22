@@ -143,7 +143,10 @@ function FeedbackTeacher() {
                     />
                   </div>
                   <h3>{reflection.title}</h3>
-                  <p>Student: {reflection.userId.name}</p>
+                  <p>
+                    Student:{" "}
+                    {reflection.userId ? reflection.userId.name : "Unknown"}
+                  </p>
                 </div>
               </div>
             ))
