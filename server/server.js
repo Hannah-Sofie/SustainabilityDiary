@@ -9,7 +9,9 @@ const mongoose = require("mongoose");
 const connectDB = require("./dbconnect");
 
 const app = express();
+
 const PORT = process.env.PORT || 8003;
+
 
 if (!process.env.MONGO_URI) {
   console.error("FATAL ERROR: MONGO_URI is not defined.");
@@ -59,7 +61,7 @@ app.use(
       res.setHeader("Access-Control-Allow-Origin", "*");
       res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
     },
-  })
+  }),
 );
 
 const userRoutes = require("./routes/userRoutes");
